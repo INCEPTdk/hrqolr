@@ -13,32 +13,20 @@
 #' @examples
 #'
 generate_mortality_funs <- function(
-    cum_mortality = 0.5,
+    cum_mortality = NULL,
     censoring_value = 181,
     censoring_threshold = NULL
 ) {
 
-  df <- tibble::tribble(
-    ~ label, ~ t_days, ~ n_alive,
-    "baseline", 0, 451,
-    "icu_discharge", 15, 345,
-    "hosp_discharge", 33, 280,
-    "fu_90_days", 90, 257,
-    "fu_180_days", 180, 252
-  )
-  df$prop_dead <- with(df, 1 - n_alive / max(n_alive))
+  cdf <- with(classic_cum_mortality_curve, create_trajectory(t, p_death))
+	cum_mortality <- cum_mortality %||% max(cdf$y)
 
-  cdf <- create_trajectory(df$t_days, df$prop_dead)
+	cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))
 
-  for (i in 2:nrow(cdf)) {
-    cdf[i, "y"] <- max(cdf[i, "y"], cdf[i-1, "y"])
-  }
-
-  cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))
-  censoring_threshold <- censoring_threshold %||% max(cdf$y)
+	censoring_threshold <- censoring_threshold %||% max(cdf$y)
 
   pemp <- function(q) {
-    approxfun(cdf$x, cdf$y, method = "constant")(q)
+    approxfun(cdf$x, cdf$y, method = "linear")(q)
   }
 
   demp <- function(t) {
