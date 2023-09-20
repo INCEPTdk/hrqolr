@@ -1,13 +1,10 @@
 #' Title
 #'
-#' @inheritParams DBI::dbWriteTable
-#' @param db_append logical, should simulation engine append new results to old ones? Default is to start over
-#' @param n_patients_per_arm int vector, if more than one trial sample size is
-#'   simulated, use a vector to tell that the run_simulations
-#' @param n_trials_per_scenario int
+#' @param n_patients_per_arm int scalar
+#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given by the elements.
 #' @param start_hrqol_ctrl double
 #' @param final_hrqol_ctrl double
-#' @param relative_improvement_hrqol_actv doublne
+#' @param relative_improvement_hrqol_actv double
 #' @param sampling_frequency int
 #' @param acceleration_hrqol_actv
 #' @param mortality_ctrl
@@ -23,11 +20,8 @@
 #' @import data.table
 #'
 simulate_trials <- function(
-		conn = NULL,
-		db_append = FALSE,
-
+		n_trials = 100000L,
 		n_patients_per_arm = 100L,
-		n_trials_per_scenario = 100000L,
 
 		start_hrqol_ctrl = 0.1,
 		final_hrqol_ctrl = 0.75,
@@ -36,69 +30,126 @@ simulate_trials <- function(
 		acceleration_hrqol_actv = 0.1,
 
 		mortality_ctrl = 0.3,
-		relative_mortality_actv = 0.95,
+		relative_mortality_reduction_actv = 0.05,
 		mortality_dampening = 0.7,
 		mortality_trajectory = "exp_decay",
 		prop_mortality_benefitters_actv = 0.1,
 
 		n_digits = 2,
 		seed = NULL,
-		n_trials_per_batch = NULL
+		n_patients_ground_truth = 100000L
 ) {
 
-	set.seed(seed %||% digest::digest2int(paste(match.call(), collapse = ", ")))
+	start_time <- Sys.time()
 
+	# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
+	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
+	set.seed(seed)
+
+	# Constants
 	MIN_EQ5D5L_DK <- -0.757 # lowest possible EQ-5D-5L index value in Denmark
-	DB_TABLE_NAME <- "results"
+	ALPHA <- 0.05 # = 1.0 - significance level
 
+	# Setup
 	mortality_funs <- list(
 		ctrl = generate_mortality_funs(mortality_ctrl),
-		actv = generate_mortality_funs(mortality_ctrl * relative_mortality_actv)
+		actv = generate_mortality_funs(mortality_ctrl * (1 - relative_mortality_reduction_actv))
 	)
 
-	ticks <- .POSIXct(double(n_trials_per_scenario) + 1)
-	ticks[1] <- Sys.time()
+	n_patients_per_batch <- n_patients_per_arm * n_trials
+	trial_ids_per_batch <- split(
+		seq_len(sum(n_trials)),
+		rep(seq_along(n_trials), n_trials)
+	)
 
-	n_trials_per_batch <- n_trials_per_batch %||% n_trials_per_scenario
-	res <- list()
+	results <- list(
+		summary_stats = list(),
+		mean_diffs = list()
+	)
 
-	if (isFALSE(db_append)) {
-		try(
-			DBI::dbExecute(conn, sprintf("DELETE FROM %s", DB_TABLE_NAME)),
-			silent = TRUE
-		)
-	}
+	ground_truth <- list()
 
-	trial_results <- list()
-	n_batches <- ceiling(n_patients_per_arm * n_trials_per_scenario / n_trials_per_batch)
-	message("No. batches: ", n_batches)
+	for (batch_idx in seq_along(n_patients_per_batch)) {
+		log_timediff(start_time, paste("STARTING BATCH", batch_idx))
+		n_patients <- n_patients_per_batch[[batch_idx]]
 
-	n_patients <- min(n_patients_per_arm * n_trials_per_scenario, n_trials_per_batch)
+		batch_res <- list()
 
-	for (arm in c("actv", "ctrl")) {
-		acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
+		for (arm in c("actv", "ctrl")) {
+			start_time_arm_in_batch <- Sys.time()
 
-		for (batch in seq_len(n_batches)) {
+			acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
 			relative_improvement_hrqol <- 1L + relative_improvement_hrqol_actv * (arm == "actv")
 			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_hrqol, n_digits)
 			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_hrqol, n_digits)
-
 			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_hrqol / 1.96
-			start_hrqol_patients <- round(
-				rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd),
-				digits = n_digits
-			)
 
-			t_icu_discharge <- ceiling(rlnorm(
-				n = n_patients,
-				meanlog = log(5),
-				sdlog = log(2) * 1.4826
-			))
+			if (batch_idx == 1) {
+				log_timediff(start_time, paste("Estimating ground truth of arm", arm)) # hence, the _gt prefix
+
+				old_seed <- .Random.seed
+				set.seed(digest::digest2int(paste(c(match.call(), arm), collapse = ", ")))
+
+				gt_t_icu_discharge <- sample_t_icu_discharge(n_patients_ground_truth)
+				gt_t_death <- mortality_funs[[arm]]$r(n_patients_ground_truth)
+				gt_is_mortality_benefitter <- (arm == "actv") &
+					(runif(n_patients_ground_truth) < prop_mortality_benefitters_actv)
+				gt_start_hrqol_patients <- round(
+					rnorm(n_patients_ground_truth, start_hrqol_arm, inter_patient_noise_sd),
+					digits = n_digits
+				)
+
+				gt_patients <- data.table::data.table(
+					gt_t_icu_discharge,
+					gt_start_hrqol_patient = pmin(pmax(gt_start_hrqol_patients, MIN_EQ5D5L_DK), 1L),
+					gt_t_death,
+					gt_is_mortality_benefitter
+				)
+
+				gt_unique_patient_types <- gt_patients[, .(n = .N), by = names(gt_patients)]
+
+				gt_tmp <- with(
+					gt_unique_patient_types,
+					mapply(
+						function(arg1, arg2, arg3, arg4) {
+							compute_estimates(
+								t_icu_discharge = arg1,
+								start_hrqol_patient = arg2,
+								t_death = arg3,
+								is_mortality_benefitter = arg4,
+								acceleration_hrqol = acceleration_hrqol
+							)
+						},
+						gt_t_icu_discharge,
+						gt_start_hrqol_patient,
+						gt_t_death,
+						gt_is_mortality_benefitter,
+						SIMPLIFY = FALSE
+					)
+				)
+
+				gt_res <- data.table::as.data.table(do.call(rbind, gt_tmp))
+				gt_res[, n_patients_with_type := gt_unique_patient_types$n]
+				gt_res <- gt_res[rep(1:.N, n_patients_with_type)] # "un-count"
+				gt_res[, n_patients_with_type := NULL]
+				ground_truth[[arm]] <- gt_res[
+					,
+					c(
+						setNames(lapply(.SD, function(col) mean(col, na.rm = TRUE)), paste0("surv__", names(.SD))),
+						setNames(lapply(.SD, function(col) mean(replace_na(col, 0))), paste0("all__", names(.SD)))
+					),
+					.SDcols = names(gt_res)
+				]
+
+				rm(gt_patients, gt_unique_patient_types, gt_res, gt_tmp)
+				set.seed(old_seed)
+			}
+
+			t_icu_discharge <- sample_t_icu_discharge(n_patients)
 			t_death <- mortality_funs[[arm]]$r(n_patients)
-			is_mortality_benefitter <- (arm == "actv") &
-				(runif(n_patients) < prop_mortality_benefitters_actv)
+			is_mortality_benefitter <- (arm == "actv") & (runif(n_patients) < prop_mortality_benefitters_actv)
+			start_hrqol_patients <- round(rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd), n_digits)
 
-			start_time <- Sys.time()
 			patients <- data.table::data.table(
 				t_icu_discharge,
 				start_hrqol_patient = pmin(pmax(start_hrqol_patients, MIN_EQ5D5L_DK), 1L),
@@ -108,28 +159,28 @@ simulate_trials <- function(
 
 			unique_patient_types <- patients[, .(n = .N), by = names(patients)]
 
-			log_timediff(start_time)
-			message(sprintf(
-				"%i (%.1f%%) unique patient types of %i patients in batch",
-				nrow(unique_patient_types),
-				100 * nrow(unique_patient_types)/nrow(patients),
-				nrow(patients)
-			))
-
-			apply_helper <- function(t_icu_discharge, start_hrqol_patient, t_death, is_mortality_benefitter) {
-				compute_estimates(
-					t_icu_discharge = t_icu_discharge,
-					start_hrqol_patient = start_hrqol_patient,
-					t_death = t_death,
-					is_mortality_benefitter = is_mortality_benefitter,
-					acceleration_hrqol = acceleration_hrqol
+			log_timediff(
+				start_time_arm_in_batch,
+				sprintf(
+					"%i (%.1f%%) unique patient types of %i patients in batch",
+					nrow(unique_patient_types),
+					100 * nrow(unique_patient_types)/nrow(patients),
+					nrow(patients)
 				)
-			}
+			)
 
 			tmp <- with(
 				unique_patient_types,
 				mapply(
-					apply_helper,
+					function(arg1, arg2, arg3, arg4) {
+						compute_estimates(
+							t_icu_discharge = arg1,
+							start_hrqol_patient = arg2,
+							t_death = arg3,
+							is_mortality_benefitter = arg4,
+							acceleration_hrqol = acceleration_hrqol
+						)
+					},
 					t_icu_discharge,
 					start_hrqol_patient,
 					t_death,
@@ -137,61 +188,146 @@ simulate_trials <- function(
 					SIMPLIFY = FALSE
 				)
 			)
-			log_timediff(start_time)
 
-			# Assign trial id's, keeping track of how many have been assigned in other batches
-			# to enforce same trial sizes across the board
-			if (batch == 1) {
-				trial_id_weights <- data.table::data.table(
-					trial_id = seq_len(n_trials_per_scenario),
-					start_weight = n_patients_per_arm,
-					updated_weight = n_patients_per_arm
-				)
-			} else {
-				trial_id_weights <- merge(
-					trial_id_weights,
-					trial_results[[arm]][, .(n_used = .N), by = "trial_id"],
-					by = "trial_id",
-					all = TRUE
-				)
+			log_timediff(start_time_arm_in_batch, "Un-counting and assigning trial id's")
+			res <- data.table::as.data.table(do.call(rbind, tmp))
+			res[, n_patients_with_type := unique_patient_types$n]
+			res <- res[rep(1:.N, n_patients_with_type)] # "un-count"
+			res[, `:=`(
+				trial_id = sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm)),
+				n_patients_with_type = NULL
+			)]
 
-				trial_id_weights[, `:=`(
-					updated_weight = start_weight - ifelse(is.na(n_used), 0, n_used),
-					n_used = NULL
-				)]
-			}
+			batch_res[[arm]] <- res
 
-			trial_ids <- sample(
-				x = rep(trial_id_weights$trial_id, trial_id_weights$updated_weight),
-				size = n_patients,
-			)
-
-			batch_result <- data.table::as.data.table(do.call(rbind, tmp))
-			batch_result[, n_patients_with_type := unique_patient_types$n]
-			batch_result <- batch_result[rep(1:.N, n_patients_with_type)] # "un-count"
-			batch_result[, `:=`(trial_id = trial_ids, n_patients_with_type = NULL)]
-
-			if (is.null(conn)) {
-				trial_results[[arm]] <- rbind(trial_results[[arm]], batch_result)
-			} else {
-				DBI::dbWriteTable(
-					conn = conn,
-					name = DB_TABLE_NAME,
-					value = batch_result,
-					append = TRUE
-				)
-			}
-
-			log_timediff(start_time)
+			log_timediff(start_time_arm_in_batch, sprintf("Finished %s arm in batch", arm))
 		}
+
+		batch_res <- data.table::rbindlist(batch_res, idcol = "arm")
+
+		# Compute trial-level results
+		cols <- paste0(
+			rep(c("primary", "secondary1", "secondary2"), each = 2),
+			c("__hrqol_at_eof", "__hrqol_auc")
+		)
+
+		# Arm-level summary statistics
+		summary_stats <- batch_res[
+			,
+			c(
+				setNames(lapply(.SD, function(col) mean(col, na.rm = TRUE)), paste0("surv__", cols, "__mean")),
+				setNames(lapply(.SD, function(col) mean(replace_na(col, 0))), paste0("all__", cols, "__mean"))
+			),
+			.SDcols = cols, by = c("trial_id", "arm")
+		]
+
+		# Put into human-friendly format (essentially pivot data table)
+		results$summary_stats[[batch_idx]] <- data.table::dcast(
+			data.table::melt(
+				summary_stats,
+				id.vars = c("trial_id", "arm"),
+				variable.name = "outcome"
+			),
+			trial_id + outcome ~ arm, value.var = "value"
+		)
+
+		# Trial-level effect estimates
+		mean_diffs <- batch_res[
+			,
+			c(
+				list(statistic = names(welch_t_test(1, 1))),
+				setNames(lapply(.SD, welch_t_test, grps = arm), paste0("surv__", cols)),
+				setNames(lapply(.SD, welch_t_test, grps = arm, na_replacement = 0), paste0("all__", cols))
+			),
+			.SDcols = cols, by = "trial_id"
+		]
+
+		# Put into human-friendly format (essentially pivot data table)
+		results$mean_diffs[[batch_idx]] <- data.table::dcast(
+			data.table::melt(
+				mean_diffs,
+				id.vars = c("trial_id", "statistic"),
+				variable.name = "outcome"
+			),
+			trial_id + outcome ~ statistic, value.var = "value"
+		)
+
+		rm(summary_stats, mean_diffs, batch_res)
+		gc()
+
+		log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
-	final_result <- data.table::rbindlist(trial_results, idcol = "arm")
+	log_timediff(start_time, "Resetting large caches")
+	memoise::forget(compute_estimates)
+	memoise::forget(construct_arm_level_trajectory)
+	memoise::forget(construct_final_trajectories)
+	memoise::forget(construct_patient_trajectory)
+	memoise::forget(generate_mortality_funs)
 
-	if (is.null(conn)) {
-		final_result
-	} else {
-		DBI::dbExecute(conn, sprintf("CREATE INDEX on %s (trial_id);", DB_TABLE_NAME))
-		sprintf("results saved to table '%s' in database '%s'", DB_TABLE_NAME, conn@dbname)
-	}
+	log_timediff(start_time, "Combining data into final return struct")
+
+	results <- lapply(results, data.table::rbindlist)
+
+	# Combine ground truth value into a single data.table
+	ground_truth <- data.table::rbindlist(ground_truth, idcol = "arm")
+	ground_truth <- data.table::dcast(
+		data.table::melt(ground_truth, id.vars = "arm", variable.name = "outcome"),
+		outcome ~ arm, value.var = "value"
+	)
+	ground_truth[, `:=`(mean_diff = actv - ctrl, actv = NULL, ctrl = NULL)]
+
+	# Summarise across trials
+	summary_stats <- results$summary_stats[
+		,
+		.(statistic = names(summarise_var(1)), actv = summarise_var(actv), ctrl = summarise_var(ctrl)),
+		by = "outcome"
+	]
+	summary_stats <- data.table::dcast(
+		data.table::melt(summary_stats, id.vars = c("outcome", "statistic"), variable.name = "arm"),
+		outcome + arm ~ statistic, value.var = "value"
+	)
+
+	comparisons <- merge(results$mean_diffs, ground_truth, by = "outcome")[
+		,
+		.(
+			statistic = c(
+				names(summarise_var(1)),
+				"n_sim",
+				names(compute_performance_metrics(1, 1, 1, 1, 1))
+			),
+			value = c(
+				summarise_var(est),
+				.N,
+				compute_performance_metrics(est, mean_diff, p_value, ci_lo, ci_hi, alpha = ALPHA)
+			)
+		),
+		by = "outcome"
+	]
+
+	comparisons <- merge(
+		data.table::dcast(comparisons, outcome ~ statistic, value.var = "value"),
+		ground_truth[, c("outcome", "mean_diff")],
+		by = "outcome"
+	)
+	data.table::setnames(comparisons, "mean_diff", "mean_ground_truth")
+	data.table::setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
+
+	# Prepare arguments for inclusion in function output
+	args <- formals() # start with default values
+	called_args <- as.list(match.call())[-1]
+	args[names(called_args)] <- called_args
+	args$seed <- seed
+
+	log_timediff(start_time, "Wrapping out, returning output")
+
+	structure(
+		list(
+			summary_stats = summary_stats,
+			comparisons = comparisons,
+			args = args,
+			elapsed_time = Sys.time() - start_time
+		),
+		class = c("hrqolr_results", "list")
+	)
 }
