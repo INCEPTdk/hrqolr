@@ -1,24 +1,23 @@
-
-#' Title
+#' Construct arm-level trajectory
 #'
-#' Uses dynamic caching (powered by memoise package) for increased performance. Default setting correspond to control-arm settings.
+#' Default arguments correspond to control-arm settings. All patient trajectories, within a given
+#' trial, are based on this.
 #'
+#' @inheritParams simulate_trials
 #' @param t_icu_discharge scalar, time of ICU discharge
-#' @param mortality_dampening scalar, dampening effect of HRQoL at ICU discharge in patients who die before end of follow-up
-#' @param sampling_frequency int, for span between samplings from patients
-#' @param acceleration_hrqol_actv scalar,
-#' @param start_hrqol scalar, HRQoL at ICU discharge
-#' @param min_hrqol sclar HRQoL at end of follow-up
+#' @param acceleration_hrqol_actv scalar, acceleration of HRQoL improvement in active-arm patients
+#' @param start_hrqol_arm scalar, HRQoL at ICU discharge (at arm level)
+#' @param final_hrqol_arm scalar HRQoL at end of follow-up (at arm level)
 #'
-#' @return A matrix with two columns: x is time and y the corresponding HRQoL values.
 #' @keywords internal
+#' @return A matrix with two columns: x is time and y the corresponding HRQoL values.
 #'
 construct_arm_level_trajectory <- function(
 		t_icu_discharge,
 		sampling_frequency = 14L,
 		acceleration_hrqol = 0.0,
-		start_hrqol = 0.1,
-		final_hrqol = 0.75
+		start_hrqol_arm = 0.1,
+		final_hrqol_arm = 0.75
 ) {
 
 	# Base trajectory
@@ -33,7 +32,7 @@ construct_arm_level_trajectory <- function(
 
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
-	y_tmp <- cumsum(c(0.0, dy * (final_hrqol - start_hrqol))) + start_hrqol
+	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - start_hrqol_arm))) + start_hrqol
 	traj$y <- y_tmp * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp))
 
 	rbind(c(x = 0L, y = 0L), as.matrix(traj))

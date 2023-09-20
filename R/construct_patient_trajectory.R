@@ -1,18 +1,13 @@
-#' Title
+#' Construct the full (primary) HRQoL trajectory for a patient
 #'
 #' @inheritParams construct_arm_level_trajectory
-#' @param acceleration_hrqol
-#' @param start_hrqol_arm
-#' @param start_hrqol_patient
-#' @param final_hrqol
-#' @param t_death
-#' @param is_mortality_benefitter
-#' @param mortality_trajectory
-#' @param mortality_dampening
-#' @param n_digits int, the number of digits of HRQoL values
+#' @inheritParams construct_mortality_trajectory
+#' @inheritParams simulate_trials
+#' @param start_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
+#' @param is_mortality_benefitter logical, is patient a mortality benefitters? Defaults to FALSE.
 #'
-#' @return
-#' @export
+#' @keywords internal
+#' @inherit construct_final_trajectories return
 #'
 construct_patient_trajectory <- function(
 		t_icu_discharge = NULL,
@@ -24,10 +19,10 @@ construct_patient_trajectory <- function(
 
 		t_death = Inf,
 		is_mortality_benefitter = FALSE,
-		mortality_trajectory = "exp_decay",
+		mortality_trajectory_shape = "exp_decay",
 		mortality_dampening = 0.0,
 
-		n_digits = 3
+		n_digits = 2
 ) {
 
 	if (is.na(t_death)) {
@@ -36,8 +31,8 @@ construct_patient_trajectory <- function(
 			t_icu_discharge = t_icu_discharge,
 			sampling_frequency = sampling_frequency,
 			acceleration_hrqol = acceleration_hrqol,
-			start_hrqol = start_hrqol_arm,
-			final_hrqol = final_hrqol_arm
+			start_hrqol_arm = start_hrqol_arm,
+			final_hrqol_arm = final_hrqol_arm
 		)
 
 		# Enforce between-patient noise throughout trajectory
@@ -53,7 +48,7 @@ construct_patient_trajectory <- function(
 			t_death = t_death,
 			t_icu_discharge = t_icu_discharge,
 			start_hrqol = start_hrqol_patient * (1 - mortality_dampening * (start_hrqol_patient > 0)),
-			shape = mortality_trajectory,
+			mortality_trajectory_shape = mortality_trajectory_shape,
 			resolution = 100
 		)
 	}

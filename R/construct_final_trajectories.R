@@ -30,7 +30,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 	out$primary <- if (eof >= t_icu_discharge) {
 		x_grid <- create_xout(t_icu_discharge, eof, sampling_frequency)
 		matrix(
-			c(x_grid, fast_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))
@@ -42,7 +42,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 	out$secondary1 <- if (eof >= t_hosp_discharge) {
 		x_grid <- create_xout(t_hosp_discharge, eof, sampling_frequency)
 		matrix(
-			c(x_grid, fast_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))
@@ -54,7 +54,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 	out$secondary2 <- if (eof >= 90) {
 		x_grid <- create_xout(90, eof, sampling_frequency)
 		matrix(
-			c(x_grid, fast_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))

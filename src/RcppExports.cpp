@@ -24,9 +24,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fast_auc
+Rcpp::NumericVector fast_auc(Rcpp::NumericVector x, Rcpp::NumericVector y);
+RcppExport SEXP _hrqolr_fast_auc(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_auc(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// linear_approx
+std::vector<double> linear_approx(std::vector<double> x, std::vector<double> y, std::vector<double> xout);
+RcppExport SEXP _hrqolr_linear_approx(SEXP xSEXP, SEXP ySEXP, SEXP xoutSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type xout(xoutSEXP);
+    rcpp_result_gen = Rcpp::wrap(linear_approx(x, y, xout));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hrqolr_bootstrap_mean_diffs", (DL_FUNC) &_hrqolr_bootstrap_mean_diffs, 4},
+    {"_hrqolr_fast_auc", (DL_FUNC) &_hrqolr_fast_auc, 2},
+    {"_hrqolr_linear_approx", (DL_FUNC) &_hrqolr_linear_approx, 3},
     {NULL, NULL, 0}
 };
 

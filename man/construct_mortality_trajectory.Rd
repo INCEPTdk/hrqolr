@@ -2,13 +2,13 @@
 % Please edit documentation in R/construct_mortality_trajectory.R
 \name{construct_mortality_trajectory}
 \alias{construct_mortality_trajectory}
-\title{Title}
+\title{Construct mortality trajectory for a patient}
 \usage{
 construct_mortality_trajectory(
   t_death,
   t_icu_discharge,
   start_hrqol = 0,
-  shape = "exp_decay",
+  mortality_trajectory_shape = "exp_decay",
   resolution = 100
 )
 }
@@ -18,10 +18,8 @@ patient was still alive at end of follow-up)}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
-\item{start_hrqol}{scalar, HRQoL at ICU discharge}
-
-\item{shape}{string, should be any of the following four: `"exp_decay"` (default), `"linear"`,
-`"constant"`, `"reflected_exp_decay"`}
+\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
+(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
 
 \item{resolution}{int, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death}
@@ -30,6 +28,7 @@ and time of death}
 Two-column matrix: x is time, y is the HRQoL.
 }
 \description{
-Title
+If a patient dies in the follow-up period, they will follow the HRQoL trajectory produced by this
+function.
 }
 \keyword{internal}

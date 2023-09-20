@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_trials.R
 \name{simulate_trials}
 \alias{simulate_trials}
-\title{Title}
+\title{Simulate trials}
 \usage{
 simulate_trials(
   n_trials = 100000L,
@@ -12,10 +12,10 @@ simulate_trials(
   relative_improvement_hrqol_actv = 0.1,
   sampling_frequency = 14L,
   acceleration_hrqol_actv = 0.1,
-  mortality_ctrl = 0.3,
+  mortality_ctrl = 0.4,
   relative_mortality_reduction_actv = 0.05,
   mortality_dampening = 0.7,
-  mortality_trajectory = "exp_decay",
+  mortality_trajectory_shape = "exp_decay",
   prop_mortality_benefitters_actv = 0.1,
   n_digits = 2,
   seed = NULL,
@@ -23,23 +23,49 @@ simulate_trials(
 )
 }
 \arguments{
-\item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given by the elements.}
+\item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given
+by the elements.}
 
 \item{n_patients_per_arm}{int scalar}
 
-\item{start_hrqol_ctrl}{double}
+\item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
+follow-up in the control arm, respectively}
 
-\item{final_hrqol_ctrl}{double}
+\item{relative_improvement_hrqol_actv}{scalar numeric, e.g. `0.10` means that the HRQoL at end of
+follow-up in the active arm will be increased by 10\% compared to the control arm}
 
-\item{relative_improvement_hrqol_actv}{double}
+\item{sampling_frequency}{int, for span between samplings from patients}
 
-\item{sampling_frequency}{int}
+\item{acceleration_hrqol_actv}{scalar, relative acceleration of HRQoL improvement in the active
+arm}
 
-\item{seed}{}
+\item{mortality_ctrl}{numeric scalar, the mortality in the control group at end of follow-up}
+
+\item{relative_mortality_reduction_actv}{numeric scalar, e.g. `0.10` means that the mortality in
+the active arm is 90\% of that in the control arm}
+
+\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
+before end of follow-up}
+
+\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
+(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
+
+\item{prop_mortality_benefitters_actv}{scalar numeric in `[0, 1]`, the proportion of patients in
+the active arm who are so-called mortality benefitters.}
+
+\item{n_digits}{int, the number of digits of HRQoL values}
+
+\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).}
+
+\item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
+truth}
 }
 \value{
-A string indicating where results were saved (if to a database) or a data.table (otherwise)
+An object of class `hrqolr_results`, which is a specialised list with four elements:
+  summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
+  elapsed time.
 }
 \description{
-Title
+This is the key user-facing function for simulating trials.
 }

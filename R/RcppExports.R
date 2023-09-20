@@ -16,3 +16,32 @@ bootstrap_mean_diffs <- function(vals, grps, B = 2000L, fixed_seed = 4131L) {
     .Call(`_hrqolr_bootstrap_mean_diffs`, vals, grps, B, fixed_seed)
 }
 
+#' Area under the curve
+#'
+#' @param x,y numeric vectors of coordinates
+#' @return Area under the curve as a scalar.
+#'
+#' @export
+fast_auc <- function(x, y) {
+    .Call(`_hrqolr_fast_auc`, x, y)
+}
+
+#'
+NULL
+
+#' Interpolate multiple values
+#'
+#' User-facing, stripped-down version of approx.c from the stats package (which is around twice
+#' as fast as this one).
+#' Yields somewhere around 10x speed-up compared to using stats::approx().
+#'
+#' @param x,y coordinates for known observationa
+#' @param xout vector or scalar with value(s) where interpolation should happen
+#'
+#' @return Interpolated values
+#' @export
+#'
+linear_approx <- function(x, y, xout) {
+    .Call(`_hrqolr_linear_approx`, x, y, xout)
+}
+

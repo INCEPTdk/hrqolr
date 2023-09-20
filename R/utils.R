@@ -23,6 +23,7 @@ compute_hosp_discharge <- function(t_icu_discharge) {
 #'
 #' @param a,b arbitrary vectors
 #' @keywords internal
+#' @name OR
 #'
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -138,18 +139,18 @@ welch_t_test <- function (vals, grps, na_replacement = NULL, alpha = 0.05) {
 
 	nx <- length(x)
 	mx <- mean(x)
-	stderrx <- sqrt(var(x) / nx)
+	stderrx <- sqrt(stats::var(x) / nx)
 
 	ny <- length(y)
 	my <- mean(y)
-	stderry <- sqrt(var(y) / ny)
+	stderry <- sqrt(stats::var(y) / ny)
 
 	stderr <- sqrt(stderrx^2 + stderry^2)
 
 	df <- stderr^4 / (stderrx^4 / (nx - 1) + stderry^4 / (ny - 1))
 	tstat <- (mx - my) / stderr
-	p_value <- 2 * pt(-abs(tstat), df)
-	conf_int <- stderr * (tstat + c(-1, 1) * qt(1 - alpha * 0.5, df))
+	p_value <- 2 * stats::pt(-abs(tstat), df)
+	conf_int <- stderr * (tstat + c(-1, 1) * stats::qt(1 - alpha * 0.5, df))
 
 	setNames(c(mx - my, p_value, conf_int), c("est", "p_value", "ci_lo", "ci_hi"))
 }
@@ -184,9 +185,9 @@ bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 
 	# boot_samples <- sapply(seq_len(n_samples), bootstrap_fun, idx = seq_along(vals))
 
 	est <- mean(vals[grps == "actv"]) - mean(vals[grps == "ctrl"])
-	wald_statistic <- (mean(boot_samples) - est)^2 / var(boot_samples)
-	p_value <- 1 - pchisq(wald_statistic, df = 1)
-	conf_int <- quantile(boot_samples, c(alpha/2, 1 - alpha/2))
+	wald_statistic <- (mean(boot_samples) - est)^2 / stats::var(boot_samples)
+	p_value <- 1 - stats::pchisq(wald_statistic, df = 1)
+	conf_int <- stats::quantile(boot_samples, c(alpha/2, 1 - alpha/2))
 
 	setNames(c(est, conf_int, p_value), c("point_est", "ci_lo", "ci_hi", "p_values"))
 }
@@ -244,7 +245,7 @@ compute_performance_metrics <- function(theta_hat, theta, p_value, ci_lo, ci_hi,
 #' @keywords internal
 #'
 sample_t_icu_discharge <- function(n) {
-	ceiling(rlnorm(n = n, meanlog = log(5), sdlog = log(2) * 1.4826))
+	ceiling(stats::rlnorm(n = n, meanlog = log(5), sdlog = log(2) * 1.4826))
 }
 
 
@@ -262,26 +263,9 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 	if (isTRUE(na_rm)) x <- x[!is.na(x)]
 
 	setNames(
-		c(quantile(x, probs = probs), mean(x), sd(x), sd(x)/sqrt(length(x))),
+		c(stats::quantile(x, probs = probs), mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
 		c(paste0("p", 100 * probs), "mean", "sd", "se")
 	)
-}
-
-
-#' Fast approximation function
-#'
-#' This function essentially strips unnecessary housekeeping from
-#' stats::approx() to yield some 30x speed-up. Note that this function call
-#' non-exported code from the stats package.
-#'
-#' @inheritParams stats::approx
-#' @param method int, 1 = linear, 2 = constant
-#'
-#' @keywords internal
-#' @return interpolated value(s) corresponding to `xout`
-#'
-fast_approx <- function(x, y, xout, method = 1, na.rm = TRUE) {
-	.Call(stats:::C_Approx, x, y, xout, method, NA, NA, 0, na.rm)
 }
 
 
@@ -307,26 +291,50 @@ auc <- function(x, y) {
 	)
 }
 
-#' Title
+
+# Legacy (to be removed later) ====
+
+#' Fast approximation function
+#'
+#' This function essentially strips unnecessary housekeeping from
+#' stats::approx() to yield some 30x speed-up. Note that this function call
+#' non-exported code from the stats package, so I've made a C++ equivalent (otherwise the package
+#' will go get on CRAN).
+#'
+#' @inheritParams stats::approx
+#' @param method int, 1 = linear, 2 = constant
+#'
+#' @keywords internal
+#' @noRd
+#' @return interpolated value(s) corresponding to `xout`
+#'
+fast_approx <- function(x, y, xout, method = 1, na.rm = TRUE) {
+	# .Call(stats:::C_Approx, x, y, xout, method, NA, NA, 0, na.rm)
+}
+
+
+#' Plot simulations
+#'
+#' NB! This is an old function that might be useful and, thus, kept.
 #'
 #' @param sim_object
 #'
-#' @importFrom ggplot2 ggplot aes geom_line geom_point theme_minimal stat_ecdf after_stat
+# @importFrom ggplot2 ggplot aes geom_line geom_point theme_minimal stat_ecdf after_stat
 # @importFrom patchwork / + plot_layout
-#' @importFrom dplyr filter group_by slice_max
+# @importFrom dplyr filter group_by slice_max
 #'
 #' @noRd
 #'
-plot_sim <- function(sim_object) {
-	p_trajectories <- ggplot(sim, aes(x, y)) +
-		geom_line(aes(colour = arm, group = patient_id), linewidth = 0.3) +
-		geom_point(aes(colour = arm, group = patient_id), ~ filter(group_by(., patient_id), n() == 1)) +
-		theme_minimal()
-
-	p_at_risk <- ggplot(slice_max(group_by(sim, patient_id), x), aes(x, colour = arm)) +
-		stat_ecdf(aes(y = after_stat(1 - y)), pad = FALSE, show.legend = FALSE) +
-		theme_minimal()
-
-	p_trajectories / p_at_risk +
-		plot_layout(heights = c(5, 1), guides = "collect")
-}
+# plot_sim <- function(sim_object) {
+# 	p_trajectories <- ggplot(sim, aes(x, y)) +
+# 		geom_line(aes(colour = arm, group = patient_id), linewidth = 0.3) +
+# 		geom_point(aes(colour = arm, group = patient_id), ~ filter(group_by(., patient_id), n() == 1)) +
+# 		theme_minimal()
+#
+# 	p_at_risk <- ggplot(slice_max(group_by(sim, patient_id), x), aes(x, colour = arm)) +
+# 		stat_ecdf(aes(y = after_stat(1 - y)), pad = FALSE, show.legend = FALSE) +
+# 		theme_minimal()
+#
+# 	p_trajectories / p_at_risk +
+# 		plot_layout(heights = c(5, 1), guides = "collect")
+# }

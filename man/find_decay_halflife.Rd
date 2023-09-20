@@ -6,15 +6,25 @@
 \usage{
 find_decay_halflife(
   t_diff = 180 - 1,
-  t_start = 0,
-  t_end = 180,
+  min_halflife = 0,
+  max_halflife = 180,
   res = 0.1,
   tol = 0.001
 )
 }
 \arguments{
-\item{tol}{}
+\item{t_diff}{int, the span in days that the decay should span}
+
+\item{min_halflife, max_halflife}{integers, shortest and longets half lives to consider}
+
+\item{res}{scalar numeric, grid size in half-life values to be checked}
+
+\item{tol}{scalar, low number reflecting the tolerance for find}
+}
+\value{
+The best half-life
 }
 \description{
 The notion of this function is to find the largest half-life that yields a almost-zero decay factor (as per `tol` argument) at `grid_end`.
 }
+\keyword{internal}

@@ -1,23 +1,39 @@
-#' Title
+#' Simulate trials
+#'
+#' This is the key user-facing function for simulating trials.
 #'
 #' @param n_patients_per_arm int scalar
-#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given by the elements.
-#' @param start_hrqol_ctrl double
-#' @param final_hrqol_ctrl double
-#' @param relative_improvement_hrqol_actv double
-#' @param sampling_frequency int
-#' @param acceleration_hrqol_actv
-#' @param mortality_ctrl
-#' @param relative_mortality_actv
-#' @param mortality_dampening
-#' @param mortality_trajectory
-#' @param prop_mortality_benefitters_actv
-#' @param seed
+#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
+#'   by the elements.
+#' @param start_hrqol_ctrl,final_hrqol_ctrl numeric scalars, the HRQoL at ICU discharge and end of
+#'   follow-up in the control arm, respectively
+#' @param relative_improvement_hrqol_actv scalar numeric, e.g. `0.10` means that the HRQoL at end of
+#'   follow-up in the active arm will be increased by 10\% compared to the control arm
+#' @param sampling_frequency int, for span between samplings from patients
+#' @param acceleration_hrqol_actv scalar, relative acceleration of HRQoL improvement in the active
+#'   arm
+#' @param mortality_ctrl numeric scalar, the mortality in the control group at end of follow-up
+#' @param relative_mortality_reduction_actv numeric scalar, e.g. `0.10` means that the mortality in
+#'   the active arm is 90\% of that in the control arm
+#' @param mortality_dampening scalar, dampening effect of HRQoL at ICU discharge in patients who die
+#'   before end of follow-up
+#' @param mortality_trajectory_shape string, should be any of the following four: `"exp_decay"`
+#'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`
+#' @param prop_mortality_benefitters_actv scalar numeric in `[0, 1]`, the proportion of patients in
+#'   the active arm who are so-called mortality benefitters.
+#' @param seed int, optional seed for reproducible pseudo-random number generation. Defaults to a
+#'   deterministic value based on the arguments given (ensuring reproducibility by default).
+#' @param n_digits int, the number of digits of HRQoL values
+#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#'   truth
 #'
-#' @return A string indicating where results were saved (if to a database) or a data.table (otherwise)
+#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
+#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
+#'   elapsed time.
+#'
 #' @export
-#'
 #' @import data.table
+#' @importFrom stats setNames
 #'
 simulate_trials <- function(
 		n_trials = 100000L,
@@ -29,10 +45,10 @@ simulate_trials <- function(
 		sampling_frequency = 14L,
 		acceleration_hrqol_actv = 0.1,
 
-		mortality_ctrl = 0.3,
+		mortality_ctrl = 0.4,
 		relative_mortality_reduction_actv = 0.05,
 		mortality_dampening = 0.7,
-		mortality_trajectory = "exp_decay",
+		mortality_trajectory_shape = "exp_decay",
 		prop_mortality_benefitters_actv = 0.1,
 
 		n_digits = 2,
@@ -93,9 +109,9 @@ simulate_trials <- function(
 				gt_t_icu_discharge <- sample_t_icu_discharge(n_patients_ground_truth)
 				gt_t_death <- mortality_funs[[arm]]$r(n_patients_ground_truth)
 				gt_is_mortality_benefitter <- (arm == "actv") &
-					(runif(n_patients_ground_truth) < prop_mortality_benefitters_actv)
+					(stats::runif(n_patients_ground_truth) < prop_mortality_benefitters_actv)
 				gt_start_hrqol_patients <- round(
-					rnorm(n_patients_ground_truth, start_hrqol_arm, inter_patient_noise_sd),
+					stats::rnorm(n_patients_ground_truth, start_hrqol_arm, inter_patient_noise_sd),
 					digits = n_digits
 				)
 
@@ -117,7 +133,8 @@ simulate_trials <- function(
 								start_hrqol_patient = arg2,
 								t_death = arg3,
 								is_mortality_benefitter = arg4,
-								acceleration_hrqol = acceleration_hrqol
+								acceleration_hrqol = acceleration_hrqol,
+								mortality_trajectory_shape = mortality_trajectory_shape
 							)
 						},
 						gt_t_icu_discharge,
@@ -147,8 +164,12 @@ simulate_trials <- function(
 
 			t_icu_discharge <- sample_t_icu_discharge(n_patients)
 			t_death <- mortality_funs[[arm]]$r(n_patients)
-			is_mortality_benefitter <- (arm == "actv") & (runif(n_patients) < prop_mortality_benefitters_actv)
-			start_hrqol_patients <- round(rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd), n_digits)
+			is_mortality_benefitter <- (arm == "actv") &
+				(stats::runif(n_patients) < prop_mortality_benefitters_actv)
+			start_hrqol_patients <- round(
+				stats::rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd),
+				n_digits
+			)
 
 			patients <- data.table::data.table(
 				t_icu_discharge,

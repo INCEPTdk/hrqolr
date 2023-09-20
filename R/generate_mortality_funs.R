@@ -1,29 +1,25 @@
-#' Generate density, probability, quantile and random generation functions for
-#' (scaled) empirical mortality distribution
+#' Generate density, probability, quantile and random generation functions for (scaled) empirical
+#' mortality distribution
 #'
-#' @param cum_mortality
-#' @param censoring_value
-#' @param censoring_threshold
+#' The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
+#' to achieve a desired mortality at end of follow-up
 #'
-#' @return
-#' @export
+#' @param cum_mortality scalar in [0, 1], the cumulative mortality at end of follow-up (= time of
+#'   censoring)
+#' @param censoring_value the value assigned when a patient is censored, default is `NA`
 #'
-#' @importFrom magrittr %>%
-#'
-#' @examples
+#' @return A list with the four functions, named `d`, `p`, `q` and `r` to follow R conventions (see,
+#'   e.g., `?rnorm`)
 #'
 generate_mortality_funs <- function(
     cum_mortality = NULL,
-    censoring_value = 181,
-    censoring_threshold = NULL
+    censoring_value = NA
 ) {
 
   cdf <- with(CLASSIC_cum_mortality_curve, create_smooth_trajectory(t, p_death))
 	cum_mortality <- cum_mortality %||% max(cdf$y)
 
 	cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))
-
-	censoring_threshold <- censoring_threshold %||% max(cdf$y)
 
   pemp <- function(q) {
     approxfun(cdf$x, cdf$y, method = "linear")(q)
@@ -34,16 +30,10 @@ generate_mortality_funs <- function(
   }
 
   qemp <- function(p) {
-    out <- fast_approx(cdf$y, cdf$x, xout = p)
-    out[p >= censoring_threshold] <- NA
+    out <- linear_approx(cdf$y, cdf$x, xout = p)
+    out[p > max(cdf$y)] <- censoring_value
     out[p == 0] <- 0.0
     out
-
-    # if (p >= censoring_threshold) {
-    #   return(censoring_value)
-    # } else {
-    #   if (p == 0) return(0)
-    # }
 
     # Sampling between x values instead of linear interpolation because the latter
     # will push the eCDF curve upward (aka yielding too many early sampled t_days values)
@@ -52,7 +42,7 @@ generate_mortality_funs <- function(
   }
 
   remp <- function(n) {
-  	ceiling(qemp(runif(n)))
+  	ceiling(qemp(stats::runif(n)))
   }
 
   list(

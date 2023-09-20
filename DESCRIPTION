@@ -6,14 +6,19 @@ Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: GPL (>= 3)
+Language: en-GB
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 2.10)
-Import:
+Imports:
+		cachem (>= 1.0.8),
 		data.table (>= 1.14.2),
+		digest (>= 0.6.33), 
+		memoise (>= 2.0.1),
 		Rcpp (>= 1.0.11)
 LinkingTo: Rcpp
 SystemRequirements: C++11
+NeedsCompilation: yes

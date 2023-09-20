@@ -2,14 +2,14 @@
 % Please edit documentation in R/construct_arm_level_trajectory.R
 \name{construct_arm_level_trajectory}
 \alias{construct_arm_level_trajectory}
-\title{Title}
+\title{Construct arm-level trajectory}
 \usage{
 construct_arm_level_trajectory(
   t_icu_discharge,
   sampling_frequency = 14L,
   acceleration_hrqol = 0,
-  start_hrqol = 0.1,
-  final_hrqol = 0.75
+  start_hrqol_arm = 0.1,
+  final_hrqol_arm = 0.75
 )
 }
 \arguments{
@@ -17,18 +17,17 @@ construct_arm_level_trajectory(
 
 \item{sampling_frequency}{int, for span between samplings from patients}
 
-\item{start_hrqol}{scalar, HRQoL at ICU discharge}
+\item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
-\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die before end of follow-up}
+\item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{acceleration_hrqol_actv}{scalar,}
-
-\item{min_hrqol}{sclar HRQoL at end of follow-up}
+\item{acceleration_hrqol_actv}{scalar, acceleration of HRQoL improvement in active-arm patients}
 }
 \value{
 A matrix with two columns: x is time and y the corresponding HRQoL values.
 }
 \description{
-Uses dynamic caching (powered by memoise package) for increased performance. Default setting correspond to control-arm settings.
+Default arguments correspond to control-arm settings. All patient trajectories, within a given
+trial, are based on this.
 }
 \keyword{internal}

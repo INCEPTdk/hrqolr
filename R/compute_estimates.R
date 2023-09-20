@@ -1,19 +1,11 @@
-#' Title
+#' Compute outcome estimates for a given patient
 #'
-#' @param t_icu_discharge
-#' @param sampling_frequency
-#' @param acceleration_hrqol
-#' @param start_hrqol_arm
-#' @param start_hrqol_patient
-#' @param final_hrqol_arm
-#' @param t_death
-#' @param is_mortality_benefitter
-#' @param mortality_trajectory
-#' @param mortality_dampening
-#' @param n_digits
+#' @inheritParams construct_patient_trajectory
+#' @inheritParams construct_final_trajectories
 #'
 #' @keywords internal
-#' @return
+#' @return A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area
+#'   under the HRQoL trajectory for the primary and the two secondary analyses.
 #'
 compute_estimates <- function(
 		t_icu_discharge = NULL,
@@ -25,7 +17,7 @@ compute_estimates <- function(
 
 		t_death = Inf,
 		is_mortality_benefitter = FALSE,
-		mortality_trajectory = "exp_decay",
+		mortality_trajectory_shape = "exp_decay",
 		mortality_dampening = 0.0,
 
 		n_digits = 2
@@ -40,7 +32,7 @@ compute_estimates <- function(
 
 		t_death = t_death,
 		is_mortality_benefitter = is_mortality_benefitter,
-		mortality_trajectory = mortality_trajectory,
+		mortality_trajectory_shape = mortality_trajectory_shape,
 		mortality_dampening = mortality_dampening,
 
 		n_digits = n_digits
