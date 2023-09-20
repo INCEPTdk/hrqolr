@@ -18,7 +18,7 @@ generate_mortality_funs <- function(
     censoring_threshold = NULL
 ) {
 
-  cdf <- with(classic_cum_mortality_curve, create_trajectory(t, p_death))
+  cdf <- with(CLASSIC_cum_mortality_curve, create_smooth_trajectory(t, p_death))
 	cum_mortality <- cum_mortality %||% max(cdf$y)
 
 	cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))
@@ -34,19 +34,25 @@ generate_mortality_funs <- function(
   }
 
   qemp <- function(p) {
-    if (p >= censoring_threshold) {
-      return(censoring_value)
-    } else {
-      if (p == 0) return(0)
-    }
+    out <- fast_approx(cdf$y, cdf$x, xout = p)
+    out[p >= censoring_threshold] <- NA
+    out[p == 0] <- 0.0
+    out
+
+    # if (p >= censoring_threshold) {
+    #   return(censoring_value)
+    # } else {
+    #   if (p == 0) return(0)
+    # }
 
     # Sampling between x values instead of linear interpolation because the latter
-    # will push the ECDF curve upward (aka yielding too many early sampled t_days values)
-    runif(1, tail(cdf[cdf$y <= p, ]$x, 1), head(cdf[cdf$y >= p, ]$x, 1))
+    # will push the eCDF curve upward (aka yielding too many early sampled t_days values)
+    # runif(1, tail(cdf[cdf$y <= p, ]$x, 1), head(cdf[cdf$y >= p, ]$x, 1))
+
   }
 
   remp <- function(n) {
-    purrr:::map_dbl(runif(n), qemp)
+  	ceiling(qemp(runif(n)))
   }
 
   list(
