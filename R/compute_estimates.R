@@ -1,3 +1,20 @@
+#' Title
+#'
+#' @param t_icu_discharge
+#' @param sampling_frequency
+#' @param acceleration_hrqol
+#' @param start_hrqol_arm
+#' @param start_hrqol_patient
+#' @param final_hrqol_arm
+#' @param t_death
+#' @param is_mortality_benefitter
+#' @param mortality_trajectory
+#' @param mortality_dampening
+#' @param n_digits
+#'
+#' @keywords internal
+#' @return
+#'
 compute_estimates <- function(
 		t_icu_discharge = NULL,
 		sampling_frequency = 14L,
@@ -11,7 +28,7 @@ compute_estimates <- function(
 		mortality_trajectory = "exp_decay",
 		mortality_dampening = 0.0,
 
-		n_digits = 3
+		n_digits = 2
 ) {
 	patient_trajs <- construct_patient_trajectory(
 		t_icu_discharge = t_icu_discharge,
@@ -29,9 +46,18 @@ compute_estimates <- function(
 		n_digits = n_digits
 	)
 
-	purrr::map_dfr(
-		patient_traj,
-		~ with(., c(hrqol_at_eoc = y[length(y)], hrqol_auc = auc(x, y, min_y = 0.0))),
-		.id = "analysis"
+	res <- numeric(6)
+	names(res) <- paste(
+		rep(names(patient_trajs), each = 2),
+		rep(c("hrqol_at_eof", "hrqol_auc"), 3),
+		sep = "__"
 	)
+
+	for (i in seq_along(patient_trajs)) {
+		this_traj <- patient_trajs[[i]]
+		res[2 * i - 1] <- this_traj[nrow(this_traj), "y"]
+		res[2 * i] <- auc(this_traj[, "x"], this_traj[, "y"])
+	}
+
+	return(res)
 }
