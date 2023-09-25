@@ -101,54 +101,25 @@ simulate_trials <- function(
 			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_hrqol / 1.96
 
 			if (batch_idx == 1) {
-				log_timediff(start_time, paste("Estimating ground truth of arm", arm)) # hence, the _gt prefix
+				log_timediff(start_time, paste("Estimating ground truth of arm", arm))
 
 				old_seed <- .Random.seed
 				set.seed(digest::digest2int(paste(c(match.call(), arm), collapse = ", ")))
 
-				gt_t_icu_discharge <- sample_t_icu_discharge(n_patients_ground_truth)
-				gt_t_death <- mortality_funs[[arm]]$r(n_patients_ground_truth)
-				gt_is_mortality_benefitter <- (arm == "actv") &
-					(stats::runif(n_patients_ground_truth) < prop_mortality_benefitters_actv)
-				gt_start_hrqol_patients <- round(
-					stats::rnorm(n_patients_ground_truth, start_hrqol_arm, inter_patient_noise_sd),
-					digits = n_digits
+				gt_res <- estimation_helper(
+					n_patients = n_patients_ground_truth,
+					arm = arm,
+					prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
+					start_hrqol_arm = start_hrqol_arm,
+					inter_patient_noise_sd = inter_patient_noise_sd,
+					acceleration_hrqol = acceleration_hrqol,
+					mortality_trajectory_shape = mortality_trajectory_shape,
+					mortality_dampening = mortality_dampening,
+					mortality_rng = mortality_funs[[arm]]$r,
+					n_digits = n_digits,
+					min_valid_hrqol = MIN_EQ5D5L_DK
 				)
 
-				gt_patients <- data.table::data.table(
-					gt_t_icu_discharge,
-					gt_start_hrqol_patient = pmin(pmax(gt_start_hrqol_patients, MIN_EQ5D5L_DK), 1L),
-					gt_t_death,
-					gt_is_mortality_benefitter
-				)
-
-				gt_unique_patient_types <- gt_patients[, .(n = .N), by = names(gt_patients)]
-
-				gt_tmp <- with(
-					gt_unique_patient_types,
-					mapply(
-						function(arg1, arg2, arg3, arg4) {
-							compute_estimates(
-								t_icu_discharge = arg1,
-								start_hrqol_patient = arg2,
-								t_death = arg3,
-								is_mortality_benefitter = arg4,
-								acceleration_hrqol = acceleration_hrqol,
-								mortality_trajectory_shape = mortality_trajectory_shape
-							)
-						},
-						gt_t_icu_discharge,
-						gt_start_hrqol_patient,
-						gt_t_death,
-						gt_is_mortality_benefitter,
-						SIMPLIFY = FALSE
-					)
-				)
-
-				gt_res <- data.table::as.data.table(do.call(rbind, gt_tmp))
-				gt_res[, n_patients_with_type := gt_unique_patient_types$n]
-				gt_res <- gt_res[rep(1:.N, n_patients_with_type)] # "un-count"
-				gt_res[, n_patients_with_type := NULL]
 				ground_truth[[arm]] <- gt_res[
 					,
 					c(
@@ -158,66 +129,25 @@ simulate_trials <- function(
 					.SDcols = names(gt_res)
 				]
 
-				rm(gt_patients, gt_unique_patient_types, gt_res, gt_tmp)
+				rm(gt_res); gc()
 				set.seed(old_seed)
 			}
 
-			t_icu_discharge <- sample_t_icu_discharge(n_patients)
-			t_death <- mortality_funs[[arm]]$r(n_patients)
-			is_mortality_benefitter <- (arm == "actv") &
-				(stats::runif(n_patients) < prop_mortality_benefitters_actv)
-			start_hrqol_patients <- round(
-				stats::rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd),
-				n_digits
+			res <- estimation_helper(
+				n_patients = n_patients,
+				arm = arm,
+				prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
+				start_hrqol_arm = start_hrqol_arm,
+				inter_patient_noise_sd = inter_patient_noise_sd,
+				acceleration_hrqol = acceleration_hrqol,
+				mortality_trajectory_shape = mortality_trajectory_shape,
+				mortality_dampening = mortality_dampening,
+				mortality_rng = mortality_funs[[arm]]$r,
+				n_digits = n_digits,
+				min_valid_hrqol = MIN_EQ5D5L_DK
 			)
 
-			patients <- data.table::data.table(
-				t_icu_discharge,
-				start_hrqol_patient = pmin(pmax(start_hrqol_patients, MIN_EQ5D5L_DK), 1L),
-				t_death,
-				is_mortality_benefitter
-			)
-
-			unique_patient_types <- patients[, .(n = .N), by = names(patients)]
-
-			log_timediff(
-				start_time_arm_in_batch,
-				sprintf(
-					"%i (%.1f%%) unique patient types of %i patients in batch",
-					nrow(unique_patient_types),
-					100 * nrow(unique_patient_types)/nrow(patients),
-					nrow(patients)
-				)
-			)
-
-			tmp <- with(
-				unique_patient_types,
-				mapply(
-					function(arg1, arg2, arg3, arg4) {
-						compute_estimates(
-							t_icu_discharge = arg1,
-							start_hrqol_patient = arg2,
-							t_death = arg3,
-							is_mortality_benefitter = arg4,
-							acceleration_hrqol = acceleration_hrqol
-						)
-					},
-					t_icu_discharge,
-					start_hrqol_patient,
-					t_death,
-					is_mortality_benefitter,
-					SIMPLIFY = FALSE
-				)
-			)
-
-			log_timediff(start_time_arm_in_batch, "Un-counting and assigning trial id's")
-			res <- data.table::as.data.table(do.call(rbind, tmp))
-			res[, n_patients_with_type := unique_patient_types$n]
-			res <- res[rep(1:.N, n_patients_with_type)] # "un-count"
-			res[, `:=`(
-				trial_id = sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm)),
-				n_patients_with_type = NULL
-			)]
+			res[, trial_id := sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm))]
 
 			batch_res[[arm]] <- res
 
