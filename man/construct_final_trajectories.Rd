@@ -7,7 +7,7 @@
 construct_final_trajectories(traj, t_icu_discharge, sampling_frequency)
 }
 \arguments{
-\item{traj}{tibble, x and y columns correspond to t and HRQoL, resp.}
+\item{traj}{matrix, x = time and y = HRQoL}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 

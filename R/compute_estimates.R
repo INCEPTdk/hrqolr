@@ -8,20 +8,24 @@
 #'   under the HRQoL trajectory for the primary and the two secondary analyses.
 #'
 compute_estimates <- function(
+		# Specific to this patient
 		t_icu_discharge = NULL,
-		sampling_frequency = 14L,
+		t_death = NA,
+		start_hrqol_patient = start_hrqol_arm,
+		is_mortality_benefitter = FALSE,
+
+		# Scenario settings
 		acceleration_hrqol = 0.0,
 		start_hrqol_arm = 0.1,
-		start_hrqol_patient = start_hrqol_arm,
 		final_hrqol_arm = 0.75,
-
-		t_death = Inf,
-		is_mortality_benefitter = FALSE,
 		mortality_trajectory_shape = "exp_decay",
 		mortality_dampening = 0.0,
 
+		# Constant across patients
+		sampling_frequency = 14L,
 		n_digits = 2
 ) {
+
 	patient_trajs <- construct_patient_trajectory(
 		t_icu_discharge = t_icu_discharge,
 		sampling_frequency = sampling_frequency,

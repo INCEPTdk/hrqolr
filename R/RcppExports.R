@@ -16,16 +16,6 @@ bootstrap_mean_diffs <- function(vals, grps, B = 2000L, fixed_seed = 4131L) {
     .Call(`_hrqolr_bootstrap_mean_diffs`, vals, grps, B, fixed_seed)
 }
 
-#' Area under the curve
-#'
-#' @param x,y numeric vectors of coordinates
-#' @return Area under the curve as a scalar.
-#'
-#' @export
-fast_auc <- function(x, y) {
-    .Call(`_hrqolr_fast_auc`, x, y)
-}
-
 #'
 NULL
 

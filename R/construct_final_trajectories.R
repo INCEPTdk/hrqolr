@@ -4,7 +4,7 @@
 #' Assumes the first coordinate in the `traj` object is day of ICU discharge.
 #'
 #' @inheritParams construct_arm_level_trajectory
-#' @param traj tibble, x and y columns correspond to t and HRQoL, resp.
+#' @param traj matrix, x = time and y = HRQoL
 #'
 #' @return A three-element list with trajectories for each of the three assumptions as to when
 #'   sampling can start.

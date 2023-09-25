@@ -18,6 +18,8 @@ patient was still alive at end of follow-up)}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
+\item{start_hrqol}{scalar, HRQoL at ICU discharge}
+
 \item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
 (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
 

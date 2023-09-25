@@ -11,28 +11,16 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // bootstrap_mean_diffs
-Rcpp::NumericVector bootstrap_mean_diffs(Rcpp::NumericVector vals, Rcpp::IntegerVector grps, int B, int fixed_seed);
+Rcpp::NumericVector bootstrap_mean_diffs(const Rcpp::NumericVector& vals, const Rcpp::IntegerVector& grps, int B, int fixed_seed);
 RcppExport SEXP _hrqolr_bootstrap_mean_diffs(SEXP valsSEXP, SEXP grpsSEXP, SEXP BSEXP, SEXP fixed_seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type vals(valsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type grps(grpsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type vals(valsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type grps(grpsSEXP);
     Rcpp::traits::input_parameter< int >::type B(BSEXP);
     Rcpp::traits::input_parameter< int >::type fixed_seed(fixed_seedSEXP);
     rcpp_result_gen = Rcpp::wrap(bootstrap_mean_diffs(vals, grps, B, fixed_seed));
-    return rcpp_result_gen;
-END_RCPP
-}
-// fast_auc
-Rcpp::NumericVector fast_auc(Rcpp::NumericVector x, Rcpp::NumericVector y);
-RcppExport SEXP _hrqolr_fast_auc(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(fast_auc(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -52,7 +40,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hrqolr_bootstrap_mean_diffs", (DL_FUNC) &_hrqolr_bootstrap_mean_diffs, 4},
-    {"_hrqolr_fast_auc", (DL_FUNC) &_hrqolr_fast_auc, 2},
     {"_hrqolr_linear_approx", (DL_FUNC) &_hrqolr_linear_approx, 3},
     {NULL, NULL, 0}
 };

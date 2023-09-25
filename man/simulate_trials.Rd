@@ -19,7 +19,8 @@ simulate_trials(
   prop_mortality_benefitters_actv = 0.1,
   n_digits = 2,
   seed = NULL,
-  n_patients_ground_truth = 100000L
+  n_patients_ground_truth = 100000L,
+  n_example_trajectories = 100
 )
 }
 \arguments{
