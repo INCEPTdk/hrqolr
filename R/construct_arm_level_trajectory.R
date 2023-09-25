@@ -14,10 +14,10 @@
 #'
 construct_arm_level_trajectory <- function(
 		t_icu_discharge,
-		sampling_frequency = 14L,
 		acceleration_hrqol = 0.0,
 		start_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75
+		final_hrqol_arm = 0.75,
+		sampling_frequency = 14L
 ) {
 
 	# Base trajectory
@@ -29,11 +29,15 @@ construct_arm_level_trajectory <- function(
 	)
 	hrqol <- c(0.1, 0.3, 0.68, 0.75)
 	traj <- create_smooth_trajectory(t, hrqol) # post-ICU discharge trajectory
+	for (i in seq(2, length(traj$y))) {
+		traj$y[i] <- max(traj$y[i-1], traj$y[i]) # enforce monotonicity
+	}
 
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
-	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - start_hrqol_arm))) + start_hrqol
-	traj$y <- y_tmp * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp))
+	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - min(traj$y)))) + min(traj$y)
+	y_tmp <- y_tmp * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp))
+	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
 	rbind(c(x = 0L, y = 0L), as.matrix(traj))
 }
