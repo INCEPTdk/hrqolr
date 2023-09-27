@@ -22,18 +22,20 @@ construct_mortality_trajectory <- function(
 		resolution = 100
 ) {
 
-	t_grid <- seq(t_icu_discharge, t_death, length = resolution)
-
 	if (mortality_trajectory_shape == "linear") {
+		t_grid <- c(t_icu_discharge, t_death)
 		hrqol <- c(start_hrqol, 0.0)
 	} else if (mortality_trajectory_shape == "constant") {
+		t_grid <- c(t_icu_discharge, t_death)
 		hrqol <- c(start_hrqol, start_hrqol)
 	} else {
+		browser()
+		t_grid <- seq(t_icu_discharge, t_death, length = resolution)
 		t_half <- find_decay_halflife(t_death - t_icu_discharge)
+			# TODO: consider setting t_half at (t_death - t_icu_discharge)/5
 		t_diff <- t_grid - t_icu_discharge
 		hrqol <- start_hrqol * 2.0^(-t_diff / t_half)
 		hrqol[length(hrqol)] <- 0.0 # enforce HRQoL at day of death
-		hrqol
 
 		if (mortality_trajectory_shape == "reflected_exp_decay") {
 			# Essentially rotates the trajectory 180 degrees
