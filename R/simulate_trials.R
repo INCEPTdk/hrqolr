@@ -265,81 +265,84 @@ simulate_trials <- function(
 	data.table::setnames(comparisons, "mean_diff", "mean_ground_truth")
 	data.table::setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
 
-	# Generate example trajectories for each arm (at arm and patient level)
-	example_trajectories <- list(
-		arm_level = list(),
-		patient_level = list()
-	)
-	t_icu_discharge <- sample_t_icu_discharge(n_example_trajectories / 2)
-		# the same for all arms to easy comparison ("counter-factual"-like)
-
-	for (arm in c("actv", "ctrl")) {
-		acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
-		relative_improvement_hrqol <- 1L + relative_improvement_hrqol_actv * (arm == "actv")
-		start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_hrqol, n_digits)
-		final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_hrqol, n_digits)
-
-		example_trajectories$arm_level[[arm]] <- data.table::as.data.table(
-			construct_arm_level_trajectory(
-				t_icu_discharge = ceiling(mean(t_icu_discharge)),
-				acceleration_hrqol = acceleration_hrqol,
-				start_hrqol_arm = start_hrqol_arm,
-				final_hrqol_arm = final_hrqol_arm,
-				sampling_frequency = sampling_frequency
-			)
-		)
-
-		t_death <- mortality_funs[[arm]]$r(n_example_trajectories / 2)
-		is_mortality_benefitter <- (arm == "actv") &
-			(stats::runif(n_example_trajectories / 2) < prop_mortality_benefitters_actv)
-		inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_hrqol / 1.96
-		start_hrqol_patients <- round(
-			stats::rnorm(n_example_trajectories / 2, start_hrqol_arm, inter_patient_noise_sd),
-			digits = n_digits
-		)
-
-		example_trajectories$patient_level[[arm]] <- data.table::rbindlist(
-			mapply(
-				function(arg1, arg2, arg3, arg4) {
-					data.table::as.data.table(construct_patient_trajectory(
-						t_icu_discharge = arg1,
-						start_hrqol_patient = arg2,
-						t_death = arg3,
-						is_mortality_benefitter = arg4,
-						acceleration_hrqol = acceleration_hrqol,
-						mortality_trajectory_shape = mortality_trajectory_shape,
-						mortality_dampening = mortality_dampening
-					)$primary)
-				},
-				t_icu_discharge,
-				start_hrqol_patients,
-				t_death,
-				is_mortality_benefitter,
-				SIMPLIFY = FALSE
-			),
-			idcol = "id"
-		)
-	}
-
-	example_trajectories <- lapply(example_trajectories, data.table::rbindlist, idcol = "arm")
-	example_trajectories$patient_level[, id := cumsum(patient != c(-Inf, patient[-.N]))]
-
 	# Prepare arguments for inclusion in function output
 	args <- formals() # start with default values
 	called_args <- as.list(match.call())[-1]
 	args[names(called_args)] <- called_args
 	args$seed <- seed
 
-	log_timediff(start_time, "Wrapping out, returning output")
+	log_timediff(start_time, "Wrapping up, returning output")
 
-	structure(
+	out <- structure(
 		list(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
 			args = args,
-			elapsed_time = Sys.time() - start_time,
-			example_trajectories = example_trajectories
+			elapsed_time = Sys.time() - start_time
 		),
 		class = c("hrqolr_results", "list")
 	)
+
+	if (n_example_trajectories > 0) {
+		example_trajectories <- list(
+			arm_level = list(),
+			patient_level = list()
+		)
+		t_icu_discharge <- sample_t_icu_discharge(n_example_trajectories / 2)
+		# the same for all arms to easy comparison ("counter-factual"-like)
+
+		for (arm in c("actv", "ctrl")) {
+			acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
+			relative_improvement_hrqol <- 1L + relative_improvement_hrqol_actv * (arm == "actv")
+			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_hrqol, n_digits)
+			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_hrqol, n_digits)
+
+			example_trajectories$arm_level[[arm]] <- data.table::as.data.table(
+				construct_arm_level_trajectory(
+					t_icu_discharge = ceiling(mean(t_icu_discharge)),
+					acceleration_hrqol = acceleration_hrqol,
+					start_hrqol_arm = start_hrqol_arm,
+					final_hrqol_arm = final_hrqol_arm,
+					sampling_frequency = sampling_frequency
+				)
+			)
+
+			t_death <- mortality_funs[[arm]]$r(n_example_trajectories / 2)
+			is_mortality_benefitter <- (arm == "actv") &
+				(stats::runif(n_example_trajectories / 2) < prop_mortality_benefitters_actv)
+			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_hrqol / 1.96
+			start_hrqol_patients <- round(
+				stats::rnorm(n_example_trajectories / 2, start_hrqol_arm, inter_patient_noise_sd),
+				digits = n_digits
+			)
+
+			example_trajectories$patient_level[[arm]] <- data.table::rbindlist(
+				mapply(
+					function(arg1, arg2, arg3, arg4) {
+						traj <- construct_patient_trajectory(
+							t_icu_discharge = arg1,
+							start_hrqol_patient = arg2,
+							t_death = arg3,
+							is_mortality_benefitter = arg4,
+							acceleration_hrqol = acceleration_hrqol,
+							mortality_trajectory_shape = mortality_trajectory_shape,
+							mortality_dampening = mortality_dampening
+						)$primary
+						data.table::as.data.table(traj)
+					},
+					t_icu_discharge,
+					start_hrqol_patients,
+					t_death,
+					is_mortality_benefitter,
+					SIMPLIFY = FALSE
+				),
+				idcol = "id"
+			)
+		}
+
+		out$example_trajectories <- lapply(example_trajectories, data.table::rbindlist, idcol = "arm")
+		out$example_trajectories$patient_level[, id := cumsum(patient != c(-Inf, patient[-.N]))]
+	}
+
+	return(out)
 }
