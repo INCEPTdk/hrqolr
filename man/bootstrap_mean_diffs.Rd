@@ -9,7 +9,7 @@ bootstrap_mean_diffs(vals, grps, B = 2000L, fixed_seed = 4131L)
 \arguments{
 \item{vals}{numeric vector of values from observations}
 
-\item{grps}{int vector with group assignments of the values in the `vals` parameter.
+\item{grps}{int vector with group assignments of the values in the \code{vals} parameter.
 Assumes: 0 = actv, 1 = ctrl.}
 
 \item{B}{int, the number of bootstrap samples (default = 2000)}

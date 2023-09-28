@@ -20,8 +20,8 @@ patient was still alive at end of follow-up)}
 
 \item{start_hrqol}{scalar, HRQoL at ICU discharge}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
-(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
+\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
 
 \item{resolution}{int, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death}

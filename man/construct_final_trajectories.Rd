@@ -15,9 +15,9 @@ construct_final_trajectories(traj, t_icu_discharge, sampling_frequency)
 }
 \value{
 A three-element list with trajectories for each of the three assumptions as to when
-  sampling can start.
+sampling can start.
 }
 \description{
 Cached. Takes a "raw" trajectory object and samples values according to sampling strategy.
-Assumes the first coordinate in the `traj` object is day of ICU discharge.
+Assumes the first coordinate in the \code{traj} object is day of ICU discharge.
 }

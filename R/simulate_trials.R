@@ -8,13 +8,13 @@
 #' @param start_hrqol_ctrl,final_hrqol_ctrl numeric scalars, the HRQoL at ICU discharge and end of
 #'   follow-up in the control arm, respectively
 #' @param relative_improvement_hrqol_actv scalar numeric, e.g. `0.10` means that the HRQoL at end of
-#'   follow-up in the active arm will be increased by 10\% compared to the control arm
+#'   follow-up in the active arm will be increased by `10%` compared to the control arm
 #' @param sampling_frequency int, for span between samplings from patients
 #' @param acceleration_hrqol_actv scalar, relative acceleration of HRQoL improvement in the active
 #'   arm
 #' @param mortality_ctrl numeric scalar, the mortality in the control group at end of follow-up
 #' @param relative_mortality_reduction_actv numeric scalar, e.g. `0.10` means that the mortality in
-#'   the active arm is 90\% of that in the control arm
+#'   the active arm is `90%` of that in the control arm
 #' @param mortality_dampening scalar, dampening effect of HRQoL at ICU discharge in patients who die
 #'   before end of follow-up
 #' @param mortality_trajectory_shape string, should be any of the following four: `"exp_decay"`
@@ -26,6 +26,8 @@
 #' @param n_digits int, the number of digits of HRQoL values
 #' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
 #'   truth
+#' @param n_example_trajectories int, the number of example trajectories to include in the returned
+#'   object
 #'
 #' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
 #'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the

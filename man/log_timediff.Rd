@@ -7,7 +7,7 @@
 log_timediff(start_time, mess = NULL, now = Sys.time())
 }
 \arguments{
-\item{start_time, now}{output from `Sys.time()`}
+\item{start_time, now}{output from \code{Sys.time()}}
 
 \item{mess}{str, message to print}
 }

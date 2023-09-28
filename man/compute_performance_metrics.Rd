@@ -16,12 +16,12 @@ compute_performance_metrics(
 \arguments{
 \item{theta_hat}{vector, estimates}
 
-\item{theta}{vector, ground truth values (length 1 or as long as `theta_hat`)}
+\item{theta}{vector, ground truth values (length 1 or as long as \code{theta_hat})}
 
 \item{p_value, ci_lo, ci_hi}{vectors holding the p values as well as lower and upper boundaries of
 the confidence intervals corresponding to the alpha (next parameter)}
 
-\item{alpha}{scalar in [0, 1], equals 1.0 - significance level}
+\item{alpha}{scalar in \verb{[0, 1]}, equals 1.0 - significance level}
 }
 \value{
 A named numeric vector with the performance measures.

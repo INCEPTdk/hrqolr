@@ -4,7 +4,7 @@
 #' The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
 #' to achieve a desired mortality at end of follow-up
 #'
-#' @param cum_mortality scalar in [0, 1], the cumulative mortality at end of follow-up (= time of
+#' @param cum_mortality scalar in `[0, 1]`, the cumulative mortality at end of follow-up (= time of
 #'   censoring)
 #' @param censoring_value the value assigned when a patient is censored, default is `NA`
 #'

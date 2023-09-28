@@ -20,7 +20,7 @@ NULL
 	if (getRversion() >= "2.15.1") {
 		utils::globalVariables(c(
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
-			"p_value"
+			"p_value", "id", "trial_id", "bootstrap_mean_diffs"
 		))
 	}
 

@@ -3,8 +3,6 @@
 #include <Rcpp.h>
 #include <vector>
 
-// [[Rcpp::plugins(cpp11)]]
-
 //' Bootstrap mean differences
 //'
 //' @param vals numeric vector of values from observations

@@ -21,17 +21,17 @@ estimation_helper(
 \arguments{
 \item{n_patients}{int, the number of patients for whom to estimate outcomes}
 
-\item{arm}{string, either `"actv"` or `"ctrl"`}
+\item{arm}{string, either \code{"actv"} or \code{"ctrl"}}
 
-\item{prop_mortality_benefitters_actv}{scalar numeric in `[0, 1]`, the proportion of patients in
+\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
 the active arm who are so-called mortality benefitters.}
 
 \item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
-(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
+\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
 
 \item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
 before end of follow-up}
@@ -44,7 +44,7 @@ before end of follow-up}
 }
 \value{
 Data.table with outcome results for all patients. NB! There are no trial_id indicator as
-  this is not required in all uses of this helper function.
+this is not required in all uses of this helper function.
 }
 \description{
 Helper function to estimate outcomes in individual patients

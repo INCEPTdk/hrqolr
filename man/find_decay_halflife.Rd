@@ -25,6 +25,6 @@ find_decay_halflife(
 The best half-life
 }
 \description{
-The notion of this function is to find the largest half-life that yields a almost-zero decay factor (as per `tol` argument) at `grid_end`.
+The notion of this function is to find the largest half-life that yields a almost-zero decay factor (as per \code{tol} argument) at \code{grid_end}.
 }
 \keyword{internal}

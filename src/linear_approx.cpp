@@ -1,8 +1,6 @@
 #include <Rcpp.h>
 #include <vector>
 
-// [[Rcpp::plugins(cpp11)]]
-
 // ' Interpolate a single value
 // '
 // ' Essentially, a stripped-down version of approx.c from the stats package. Not meant to be called

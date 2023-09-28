@@ -12,7 +12,7 @@ replace_na(x, replacement)
 \item{replacement}{replacement value}
 }
 \value{
-x vector in which NA's have been replaced with `replacement`.
+x vector in which NA's have been replaced with \code{replacement}.
 }
 \description{
 Helper function for simple handling of missing values in vectors. No type checking done.

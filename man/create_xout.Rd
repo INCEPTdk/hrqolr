@@ -10,6 +10,6 @@ create_xout(start, end, by)
 \item{by}{number: increment of the sequence.}
 }
 \description{
-Cached. Used in `construct_final_trajectories()`.
+Cached. Used in \code{construct_final_trajectories()}.
 }
 \keyword{internal}

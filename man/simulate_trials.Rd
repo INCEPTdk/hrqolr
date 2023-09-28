@@ -32,8 +32,8 @@ by the elements.}
 \item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
 follow-up in the control arm, respectively}
 
-\item{relative_improvement_hrqol_actv}{scalar numeric, e.g. `0.10` means that the HRQoL at end of
-follow-up in the active arm will be increased by 10\% compared to the control arm}
+\item{relative_improvement_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at end of
+follow-up in the active arm will be increased by \verb{10\%} compared to the control arm}
 
 \item{sampling_frequency}{int, for span between samplings from patients}
 
@@ -42,16 +42,16 @@ arm}
 
 \item{mortality_ctrl}{numeric scalar, the mortality in the control group at end of follow-up}
 
-\item{relative_mortality_reduction_actv}{numeric scalar, e.g. `0.10` means that the mortality in
-the active arm is 90\% of that in the control arm}
+\item{relative_mortality_reduction_actv}{numeric scalar, e.g. \code{0.10} means that the mortality in
+the active arm is \verb{90\%} of that in the control arm}
 
 \item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
 before end of follow-up}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
-(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
+\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
 
-\item{prop_mortality_benefitters_actv}{scalar numeric in `[0, 1]`, the proportion of patients in
+\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
 the active arm who are so-called mortality benefitters.}
 
 \item{n_digits}{int, the number of digits of HRQoL values}
@@ -61,11 +61,14 @@ deterministic value based on the arguments given (ensuring reproducibility by de
 
 \item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
 truth}
+
+\item{n_example_trajectories}{int, the number of example trajectories to include in the returned
+object}
 }
 \value{
-An object of class `hrqolr_results`, which is a specialised list with four elements:
-  summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
-  elapsed time.
+An object of class \code{hrqolr_results}, which is a specialised list with four elements:
+summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
+elapsed time.
 }
 \description{
 This is the key user-facing function for simulating trials.

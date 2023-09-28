@@ -12,7 +12,7 @@ welch_t_test(vals, grps, na_replacement = NULL, alpha = 0.05)
 \item{alpha}{numeric, 1.0 - confidence_level}
 
 \item{grp}{character vector, allowed values are "ctrl" and "actv" and used to
-slice `x` into two vectors with values to be compared.}
+slice \code{x} into two vectors with values to be compared.}
 }
 \value{
 A four-element vector with point estimate, p value and confidence internal

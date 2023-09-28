@@ -1,15 +1,18 @@
 Package: hrqolr
-Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
+Date: 2023-09-28
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+Type: Package
+BugReports: https://github.com/epiben/hrqolr/issues
 License: GPL (>= 3)
 Language: en-GB
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 2.10)
@@ -17,9 +20,16 @@ Imports:
 		cachem (>= 1.0.8),
 		data.table (>= 1.14.2),
 		digest (>= 0.6.33), 
+		Hmisc (>= 5.1.1),
 		memoise (>= 2.0.1),
 		Rcpp (>= 1.0.11)
+Suggests:
+		covr,
+		knitr,
+		rmarkdown,
+    testthat (>= 3.0.0)
 LinkingTo: Rcpp
-SystemRequirements: C++11
 NeedsCompilation: yes
 URL: https://epiben.github.io/hrqolr/
+Config/testthat/edition: 3
+VignetteBuilder: knitr

@@ -199,7 +199,7 @@ bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 
 #' @param theta vector, ground truth values (length 1 or as long as `theta_hat`)
 #' @param p_value,ci_lo,ci_hi vectors holding the p values as well as lower and upper boundaries of
 #'   the confidence intervals corresponding to the alpha (next parameter)
-#' @param alpha scalar in [0, 1], equals 1.0 - significance level
+#' @param alpha scalar in `[0, 1]`, equals 1.0 - significance level
 #'
 #' @keywords internal
 #' @return A named numeric vector with the performance measures.

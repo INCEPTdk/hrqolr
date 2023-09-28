@@ -32,8 +32,8 @@ patient was still alive at end of follow-up)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: `"exp_decay"`
-(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`}
+\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
 
 \item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
 before end of follow-up}
@@ -44,7 +44,7 @@ before end of follow-up}
 }
 \value{
 A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area
-  under the HRQoL trajectory for the primary and the two secondary analyses.
+under the HRQoL trajectory for the primary and the two secondary analyses.
 }
 \description{
 Compute outcome estimates for a given patient

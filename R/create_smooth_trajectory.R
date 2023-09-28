@@ -1,3 +1,21 @@
+#' Create smooth trajectory
+#'
+#' Default settings create a centripetal Catmull-Rom curve with the coordinates given by `x` and
+#' `y`.
+#'
+#' @param x,y numeric vectors with points to be connected with smooth curve
+#' @param alpha scalar in `[0, 1]`, controls the tightness of the curve. `alpha = 0.5` (the default)
+#'   yields a centripetal Catmull-Rom curve
+#' @param epsilon small scalar, used to create phantom points. The default value should suffice for
+#'   most use cases (see also link below).
+#'
+#' @details This function is based on the nice run-down of smooth curves at
+#' https://apoorvaj.io/cubic-bezier-through-four-points.
+#'
+#' @importFrom Hmisc bezier
+#' @return A data.table with the (x, y) coordinates of the smooth trajectory.
+#' @export
+#'
 create_smooth_trajectory <- function(x, y, alpha = 0.5, epsilon = 1e-4) {
 	# alpha = 0.5 yields centripetal Catmull-Rom curve
 

@@ -8,14 +8,14 @@ mortality distribution}
 generate_mortality_funs(cum_mortality = NULL, censoring_value = NA)
 }
 \arguments{
-\item{cum_mortality}{scalar in [0, 1], the cumulative mortality at end of follow-up (= time of
+\item{cum_mortality}{scalar in \verb{[0, 1]}, the cumulative mortality at end of follow-up (= time of
 censoring)}
 
-\item{censoring_value}{the value assigned when a patient is censored, default is `NA`}
+\item{censoring_value}{the value assigned when a patient is censored, default is \code{NA}}
 }
 \value{
-A list with the four functions, named `d`, `p`, `q` and `r` to follow R conventions (see,
-  e.g., `?rnorm`)
+A list with the four functions, named \code{d}, \code{p}, \code{q} and \code{r} to follow R conventions (see,
+e.g., \code{?rnorm})
 }
 \description{
 The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
