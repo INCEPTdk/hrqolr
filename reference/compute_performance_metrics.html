@@ -24,7 +24,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/epiben/hrqolr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -32,7 +38,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Computes select Monte Carlo performance measures</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/epiben/hrqolr/blob/HEAD/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
       <div class="d-none name"><code>compute_performance_metrics.Rd</code></div>
     </div>
 
@@ -59,7 +65,7 @@
 
 
 <dt>theta</dt>
-<dd><p>vector, ground truth values (length 1 or as long as `theta_hat`)</p></dd>
+<dd><p>vector, ground truth values (length 1 or as long as <code>theta_hat</code>)</p></dd>
 
 
 <dt>p_value, ci_lo, ci_hi</dt>
@@ -68,7 +74,7 @@ the confidence intervals corresponding to the alpha (next parameter)</p></dd>
 
 
 <dt>alpha</dt>
-<dd><p>scalar in [0, 1], equals 1.0 - significance level</p></dd>
+<dd><p>scalar in <code>[0, 1]</code>, equals 1.0 - significance level</p></dd>
 
 </dl></div>
     <div class="section level2">

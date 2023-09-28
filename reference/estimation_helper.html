@@ -24,7 +24,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/epiben/hrqolr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -32,7 +38,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Helper function to estimate outcomes in individual patients</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/epiben/hrqolr/blob/HEAD/R/estimation_helper.R" class="external-link"><code>R/estimation_helper.R</code></a></small>
       <div class="d-none name"><code>estimation_helper.Rd</code></div>
     </div>
 
@@ -64,11 +70,11 @@
 
 
 <dt>arm</dt>
-<dd><p>string, either `"actv"` or `"ctrl"`</p></dd>
+<dd><p>string, either <code>"actv"</code> or <code>"ctrl"</code></p></dd>
 
 
 <dt>prop_mortality_benefitters_actv</dt>
-<dd><p>scalar numeric in `[0, 1]`, the proportion of patients in
+<dd><p>scalar numeric in <code>[0, 1]</code>, the proportion of patients in
 the active arm who are so-called mortality benefitters.</p></dd>
 
 
@@ -81,8 +87,8 @@ the active arm who are so-called mortality benefitters.</p></dd>
 
 
 <dt>mortality_trajectory_shape</dt>
-<dd><p>string, should be any of the following four: `"exp_decay"`
-(default), `"linear"`, `"constant"`, `"reflected_exp_decay"`</p></dd>
+<dd><p>string, should be any of the following four: <code>"exp_decay"</code>
+(default), <code>"linear"</code>, <code>"constant"</code>, <code>"reflected_exp_decay"</code></p></dd>
 
 
 <dt>mortality_dampening</dt>
@@ -107,7 +113,7 @@ before end of follow-up</p></dd>
     
 
 <p>Data.table with outcome results for all patients. NB! There are no trial_id indicator as
-  this is not required in all uses of this helper function.</p>
+this is not required in all uses of this helper function.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

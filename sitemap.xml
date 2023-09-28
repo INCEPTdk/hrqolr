@@ -49,6 +49,9 @@
     <loc>https://epiben.github.io/hrqolr/reference/construct_patient_trajectory.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/create_smooth_trajectory.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/create_xout.html</loc>
   </url>
   <url>
@@ -74,6 +77,9 @@
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/na_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/plot_results.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/replace_na.html</loc>
