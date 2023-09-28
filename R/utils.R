@@ -77,7 +77,7 @@ create_xout <- function(start, end, by) {
 #'
 log_timediff <- function(start_time, mess = NULL, now = Sys.time()) {
 	dt <- now - start_time
-	message(now, ": ", mess, " (", round(dt, 2), " ", attr(dt, "units"), ")")
+	message(round(now), ": ", mess, " (", round(dt, 2), " ", attr(dt, "units"), ")")
 }
 
 
