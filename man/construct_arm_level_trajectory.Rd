@@ -15,13 +15,14 @@ construct_arm_level_trajectory(
 \arguments{
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
+\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
+trajectory}
+
 \item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
 \item{sampling_frequency}{int, for span between samplings from patients}
-
-\item{acceleration_hrqol_actv}{scalar, acceleration of HRQoL improvement in active-arm patients}
 }
 \value{
 A matrix with two columns: x is time and y the corresponding HRQoL values.

@@ -26,6 +26,9 @@ patient was still alive at end of follow-up)}
 
 \item{start_hrqol_patient}{scalar, the HRQoL value at ICU discharge of this patient}
 
+\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
+trajectory}
+
 \item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}

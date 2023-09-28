@@ -117,7 +117,7 @@ replace_na <- function(x, replacement) {
 #' level.
 #'
 #' @param vals numeric vector
-#' @param grp character vector, allowed values are "ctrl" and "actv" and used to
+#' @param grps character vector, allowed values are "ctrl" and "actv" and used to
 #'   slice `x` into two vectors with values to be compared.
 #' @param alpha numeric, 1.0 - confidence_level
 #'

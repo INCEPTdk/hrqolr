@@ -5,7 +5,8 @@
 #'
 #' @inheritParams simulate_trials
 #' @param t_icu_discharge scalar, time of ICU discharge
-#' @param acceleration_hrqol_actv scalar, acceleration of HRQoL improvement in active-arm patients
+#' @param acceleration_hrqol scalar, acceleration of HRQoL improvement compared to baseline
+#'   trajectory
 #' @param start_hrqol_arm scalar, HRQoL at ICU discharge (at arm level)
 #' @param final_hrqol_arm scalar HRQoL at end of follow-up (at arm level)
 #'

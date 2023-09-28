@@ -28,6 +28,9 @@ patient was still alive at end of follow-up)}
 
 \item{is_mortality_benefitter}{logical, is patient a mortality benefitters? Defaults to FALSE.}
 
+\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
+trajectory}
+
 \item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
