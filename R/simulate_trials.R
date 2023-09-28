@@ -155,7 +155,7 @@ simulate_trials <- function(
 			log_timediff(start_time_arm_in_batch, sprintf("Finished %s arm in batch", arm))
 		}
 
-		batch_res <- data.table::rbindlist(batch_res, idcol = "arm")
+		batch_res <- rbindlist(batch_res, idcol = "arm")
 
 		# Compute trial-level results
 		cols <- paste0(
@@ -174,8 +174,8 @@ simulate_trials <- function(
 		]
 
 		# Put into human-friendly format (essentially pivot data table)
-		results$summary_stats[[batch_idx]] <- data.table::dcast(
-			data.table::melt(
+		results$summary_stats[[batch_idx]] <- dcast(
+			melt(
 				summary_stats,
 				id.vars = c("trial_id", "arm"),
 				variable.name = "outcome"
@@ -195,8 +195,8 @@ simulate_trials <- function(
 		]
 
 		# Put into human-friendly format (essentially pivot data table)
-		results$mean_diffs[[batch_idx]] <- data.table::dcast(
-			data.table::melt(
+		results$mean_diffs[[batch_idx]] <- dcast(
+			melt(
 				mean_diffs,
 				id.vars = c("trial_id", "statistic"),
 				variable.name = "outcome"
@@ -219,12 +219,12 @@ simulate_trials <- function(
 
 	log_timediff(start_time, "Combining data into final return struct")
 
-	results <- lapply(results, data.table::rbindlist)
+	results <- lapply(results, rbindlist)
 
 	# Combine ground truth value into a single data.table
-	ground_truth <- data.table::rbindlist(ground_truth, idcol = "arm")
-	ground_truth <- data.table::dcast(
-		data.table::melt(ground_truth, id.vars = "arm", variable.name = "outcome"),
+	ground_truth <- rbindlist(ground_truth, idcol = "arm")
+	ground_truth <- dcast(
+		melt(ground_truth, id.vars = "arm", variable.name = "outcome"),
 		outcome ~ arm, value.var = "value"
 	)
 	ground_truth[, `:=`(mean_diff = actv - ctrl, actv = NULL, ctrl = NULL)]
@@ -235,8 +235,8 @@ simulate_trials <- function(
 		.(statistic = names(summarise_var(1)), actv = summarise_var(actv), ctrl = summarise_var(ctrl)),
 		by = "outcome"
 	]
-	summary_stats <- data.table::dcast(
-		data.table::melt(summary_stats, id.vars = c("outcome", "statistic"), variable.name = "arm"),
+	summary_stats <- dcast(
+		melt(summary_stats, id.vars = c("outcome", "statistic"), variable.name = "arm"),
 		outcome + arm ~ statistic, value.var = "value"
 	)
 
@@ -258,12 +258,12 @@ simulate_trials <- function(
 	]
 
 	comparisons <- merge(
-		data.table::dcast(comparisons, outcome ~ statistic, value.var = "value"),
+		dcast(comparisons, outcome ~ statistic, value.var = "value"),
 		ground_truth[, c("outcome", "mean_diff")],
 		by = "outcome"
 	)
-	data.table::setnames(comparisons, "mean_diff", "mean_ground_truth")
-	data.table::setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
+	setnames(comparisons, "mean_diff", "mean_ground_truth")
+	setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
 
 	# Prepare arguments for inclusion in function output
 	args <- formals() # start with default values
@@ -297,7 +297,7 @@ simulate_trials <- function(
 			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_hrqol, n_digits)
 			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_hrqol, n_digits)
 
-			example_trajectories$arm_level[[arm]] <- data.table::as.data.table(
+			example_trajectories$arm_level[[arm]] <- as.data.table(
 				construct_arm_level_trajectory(
 					t_icu_discharge = ceiling(mean(t_icu_discharge)),
 					acceleration_hrqol = acceleration_hrqol,
@@ -316,7 +316,7 @@ simulate_trials <- function(
 				digits = n_digits
 			)
 
-			example_trajectories$patient_level[[arm]] <- data.table::rbindlist(
+			example_trajectories$patient_level[[arm]] <- rbindlist(
 				mapply(
 					function(arg1, arg2, arg3, arg4) {
 						traj <- construct_patient_trajectory(
@@ -328,7 +328,7 @@ simulate_trials <- function(
 							mortality_trajectory_shape = mortality_trajectory_shape,
 							mortality_dampening = mortality_dampening
 						)$primary
-						data.table::as.data.table(traj)
+						as.data.table(traj)
 					},
 					t_icu_discharge,
 					start_hrqol_patients,
@@ -340,8 +340,8 @@ simulate_trials <- function(
 			)
 		}
 
-		out$example_trajectories <- lapply(example_trajectories, data.table::rbindlist, idcol = "arm")
-		out$example_trajectories$patient_level[, id := cumsum(patient != c(-Inf, patient[-.N]))]
+		out$example_trajectories <- lapply(example_trajectories, rbindlist, idcol = "arm")
+		out$example_trajectories$patient_level[, id := cumsum(id != shift(id, n = 1, fill = 0, type = "lag"))]
 	}
 
 	return(out)
