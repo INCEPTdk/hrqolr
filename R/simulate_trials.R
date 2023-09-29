@@ -7,8 +7,8 @@
 #'   by the elements.
 #' @param start_hrqol_ctrl,final_hrqol_ctrl numeric scalars, the HRQoL at ICU discharge and end of
 #'   follow-up in the control arm, respectively
-#' @param relative_improvement_hrqol_actv scalar numeric, e.g. `0.10` means that the HRQoL at end of
-#'   follow-up in the active arm will be increased by `10%` compared to the control arm
+#' @param relative_improvement_start_hrqol_actv,relative_improvement_final_hrqol_actv scalar numeric, e.g. `0.10` means that the HRQoL at start and end of
+#'   follow-up, resp. in the active arm will be increased by `10%` compared to the control arm
 #' @param sampling_frequency int, for span between samplings from patients
 #' @param acceleration_hrqol_actv scalar, relative acceleration of HRQoL improvement in the active
 #'   arm
@@ -45,7 +45,8 @@ simulate_trials <- function(
 
 		start_hrqol_ctrl = 0.1,
 		final_hrqol_ctrl = 0.75,
-		relative_improvement_hrqol_actv = 0.1,
+		relative_improvement_start_hrqol_actv = 0,
+		relative_improvement_final_hrqol_actv = 0.1,
 		sampling_frequency = 14L,
 		acceleration_hrqol_actv = 0.1,
 
@@ -59,7 +60,7 @@ simulate_trials <- function(
 		n_digits = 2,
 		seed = NULL,
 		n_patients_ground_truth = 100000L,
-		n_example_trajectories_per_arm = 100,
+		n_example_trajectories_per_arm = 0,
 		...
 ) {
 
@@ -102,10 +103,14 @@ simulate_trials <- function(
 			start_time_arm_in_batch <- Sys.time()
 
 			acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
-			relative_improvement_hrqol <- 1L + relative_improvement_hrqol_actv * (arm == "actv")
-			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_hrqol, n_digits)
-			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_hrqol, n_digits)
-			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_hrqol / 1.96
+
+			relative_improvement_start_hrqol <- 1L + relative_improvement_start_hrqol_actv * (arm == "actv")
+			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_start_hrqol, n_digits)
+
+			relative_improvement_final_hrqol <- 1L + relative_improvement_final_hrqol_actv * (arm == "actv")
+			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_final_hrqol, n_digits)
+
+			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_start_hrqol / 1.96
 
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) log_timediff(start_time, paste("Estimating ground truth of arm", arm))
@@ -116,13 +121,17 @@ simulate_trials <- function(
 				gt_res <- estimation_helper(
 					n_patients = n_patients_ground_truth,
 					arm = arm,
-					prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
 					start_hrqol_arm = start_hrqol_arm,
+					final_hrqol_arm = final_hrqol_arm,
 					inter_patient_noise_sd = inter_patient_noise_sd,
 					acceleration_hrqol = acceleration_hrqol,
+
+					prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
 					mortality_trajectory_shape = mortality_trajectory_shape,
 					mortality_dampening = mortality_dampening,
 					mortality_rng = mortality_funs[[arm]]$r,
+
+					sampling_frequency = sampling_frequency,
 					n_digits = n_digits,
 					min_valid_hrqol = MIN_EQ5D5L_DK
 				)
@@ -143,17 +152,22 @@ simulate_trials <- function(
 			res <- estimation_helper(
 				n_patients = n_patients,
 				arm = arm,
-				prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
 				start_hrqol_arm = start_hrqol_arm,
+				final_hrqol_arm = final_hrqol_arm,
 				inter_patient_noise_sd = inter_patient_noise_sd,
 				acceleration_hrqol = acceleration_hrqol,
+
+				prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
 				mortality_trajectory_shape = mortality_trajectory_shape,
 				mortality_dampening = mortality_dampening,
 				mortality_rng = mortality_funs[[arm]]$r,
+
+				sampling_frequency = sampling_frequency,
 				n_digits = n_digits,
 				min_valid_hrqol = MIN_EQ5D5L_DK
 			)
 
+			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm))]
 
 			batch_res[[arm]] <- res
@@ -216,12 +230,8 @@ simulate_trials <- function(
 		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
-	if (isTRUE(verbose)) log_timediff(start_time, "Resetting large caches")
-	memoise::forget(compute_estimates)
-	memoise::forget(construct_arm_level_trajectory)
-	memoise::forget(construct_final_trajectories)
-	memoise::forget(construct_patient_trajectory)
-	memoise::forget(generate_mortality_funs)
+	# A bit of housekeeping to free up memory
+	clear_hrqolr_cache()
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
 
@@ -289,12 +299,13 @@ simulate_trials <- function(
 		class = c("hrqolr_results", "list")
 	)
 
+	# Expand arm names to yield more neutral language w.r.t. arm names
+	# will also make plotting and printing more human friendly
+	out$summary_stats[, arm := beautify_arm_var(arm)]
+
 	if (n_example_trajectories_per_arm > 0) {
-		out[["example_trajectories"]] <- do.call(
-			sample_example_trajectories,
-			c(list(n_example_trajectories_per_arm = n_example_trajectories_per_arm), args)
-		)
+		out[["example_trajectories"]] <- do.call(sample_example_trajectories, args)
 	}
 
-	return(out)
+	out
 }
