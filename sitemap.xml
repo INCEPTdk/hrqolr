@@ -16,13 +16,22 @@
     <loc>https://epiben.github.io/hrqolr/reference/OR.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/assert_pkgs.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/auc.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/beautify_arm_var.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/bootstrap_estimates.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/bootstrap_mean_diffs.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/cache_hrqolr.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/compute_eof.html</loc>
@@ -79,7 +88,10 @@
     <loc>https://epiben.github.io/hrqolr/reference/na_matrix.html</loc>
   </url>
   <url>
-    <loc>https://epiben.github.io/hrqolr/reference/plot_results.html</loc>
+    <loc>https://epiben.github.io/hrqolr/reference/plot.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/print.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/replace_na.html</loc>
@@ -88,13 +100,22 @@
     <loc>https://epiben.github.io/hrqolr/reference/rescale.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/sample_example_trajectories.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/sample_t_icu_discharge.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/simulate_trials.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/stop0_warning0.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/summarise_var.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/vapply_helpers.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/welch_t_test.html</loc>
