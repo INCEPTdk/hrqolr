@@ -94,6 +94,21 @@ compute_eof <- function(t_icu_discharge, approx_end = 180, sampling_frequency = 
 }
 
 
+#' Give arm variable proper form and names
+#'
+#' @param arm character vector, will be converted to factor and renamed
+#'
+#' @return A factor with the right labels in the right order for pretty printing and plotting
+#' @keywords internal
+#'
+beautify_arm_var <- function(arm) {
+	factor(
+		ifelse(arm == "actv", "intervention", "control"),
+		levels = c("intervention", "control")
+	)
+}
+
+
 #' Default value for NA's
 #'
 #' Helper function for simple handling of missing values in vectors. No type checking done.
@@ -289,6 +304,88 @@ auc <- function(x, y) {
 		dx * y[-n], # rectangles
 		dx * dy * 0.5 # triangles
 	)
+}
+
+
+#' stop() and warning() with call. = FALSE
+#'
+#' Used internally. Calls [stop0()] or [warning()] but enforces `call. = FALSE`,
+#' to suppress the call from the error/warning.
+#'
+#' @inheritParams base::stop
+#'
+#' @return NULL
+#'
+#' @keywords internal
+#'
+#' @name stop0_warning0
+#'
+stop0 <- function(...) stop(..., call. = FALSE)
+
+#' @rdname stop0_warning0
+#' @keywords internal
+warning0 <- function(...) warning(..., call. = FALSE)
+
+
+#' vapply helpers
+#'
+#' Used internally. Helpers for simplifying code invoking vapply().
+#'
+#' @inheritParams base::vapply
+#'
+#' @keywords internal
+#'
+#' @name vapply_helpers
+#'
+vapply_num <- function(X, FUN, ...) vapply(X, FUN, FUN.VALUE = numeric(1), ...)
+
+#' @rdname vapply_helpers
+#' @keywords internal
+vapply_int <- function(X, FUN, ...) vapply(X, FUN, FUN.VALUE = integer(1), ...)
+
+#' @rdname vapply_helpers
+#' @keywords internal
+vapply_str <- function(X, FUN, ...) vapply(X, FUN, FUN.VALUE = character(1), ...)
+
+#' @rdname vapply_helpers
+#' @keywords internal
+vapply_lgl <- function(X, FUN, ...) vapply(X, FUN, FUN.VALUE = logical(1), ...)
+
+
+#' Check availability of required packages
+#'
+#' Used internally, helper function to check if SUGGESTED packages are
+#' available. Will halt execution if any of the queried packages are not
+#' available and provide installation instructions.
+#'
+#' @param pkgs, character vector with name(s) of package(s) to check.
+#'
+#' @return `TRUE` if all packages available, otherwise execution is halted with
+#'   an error.
+#'
+#' @keywords internal
+#'
+assert_pkgs <- function(pkgs = NULL) {
+	checks <- vapply_lgl(pkgs, function(p) isFALSE(requireNamespace(p, quietly = TRUE)))
+	unavailable_pkgs <- names(checks[checks])
+
+	if (any(checks)) {
+		stop0(
+			"Could not load the following required package(s)",
+			paste(unavailable_pkgs, collapse = ", "),
+			". \nConsider installing with the following command: ",
+			sprintf(
+				"install.packages(%s)",
+				paste0(
+					if (sum(checks) > 1) "c(" else "",
+					paste0("\"", unavailable_pkgs, "\"", collapse = ", "),
+					if (sum(checks) > 1) ")" else ""
+				)
+			)
+		)
+	}
+
+	return(TRUE)
 }
 
 
