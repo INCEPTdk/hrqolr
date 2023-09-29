@@ -9,7 +9,8 @@ simulate_trials(
   n_patients_per_arm = 100L,
   start_hrqol_ctrl = 0.1,
   final_hrqol_ctrl = 0.75,
-  relative_improvement_hrqol_actv = 0.1,
+  relative_improvement_start_hrqol_actv = 0,
+  relative_improvement_final_hrqol_actv = 0.1,
   sampling_frequency = 14L,
   acceleration_hrqol_actv = 0.1,
   mortality_ctrl = 0.4,
@@ -21,7 +22,7 @@ simulate_trials(
   n_digits = 2,
   seed = NULL,
   n_patients_ground_truth = 100000L,
-  n_example_trajectories_per_arm = 100,
+  n_example_trajectories_per_arm = 0,
   ...
 )
 }
@@ -34,8 +35,8 @@ by the elements.}
 \item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
 follow-up in the control arm, respectively}
 
-\item{relative_improvement_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at end of
-follow-up in the active arm will be increased by \verb{10\%} compared to the control arm}
+\item{relative_improvement_start_hrqol_actv, relative_improvement_final_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at start and end of
+follow-up, resp. in the active arm will be increased by \verb{10\%} compared to the control arm}
 
 \item{sampling_frequency}{int, for span between samplings from patients}
 

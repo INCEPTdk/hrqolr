@@ -5,10 +5,11 @@
 \title{Sample example trajectories}
 \usage{
 sample_example_trajectories(
-  n_trajectories_per_arm = 100,
+  n_example_trajectories_per_arm = 100,
   start_hrqol_ctrl = 0.1,
   final_hrqol_ctrl = 0.75,
-  relative_improvement_hrqol_actv = 0.1,
+  relative_improvement_start_hrqol_actv = 0,
+  relative_improvement_final_hrqol_actv = 0,
   sampling_frequency = 14L,
   acceleration_hrqol_actv = 0.1,
   mortality_ctrl = 0.4,
@@ -22,11 +23,14 @@ sample_example_trajectories(
 )
 }
 \arguments{
+\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the returned
+object}
+
 \item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
 follow-up in the control arm, respectively}
 
-\item{relative_improvement_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at end of
-follow-up in the active arm will be increased by \verb{10\%} compared to the control arm}
+\item{relative_improvement_start_hrqol_actv, relative_improvement_final_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at start and end of
+follow-up, resp. in the active arm will be increased by \verb{10\%} compared to the control arm}
 
 \item{sampling_frequency}{int, for span between samplings from patients}
 
@@ -56,7 +60,7 @@ deterministic value based on the arguments given (ensuring reproducibility by de
 }
 \value{
 An object of class \code{hrqolr_examples} with trajectories in data.tables. The function will
-always return arm-level trajectories. If \code{n_trajectories_per_arm > 0}, it will also return
+always return arm-level trajectories. If \code{n_example_trajectories_per_arm > 0}, it will also return
 data.table with patient trajectories, with a \code{id} column denoting patients. with
 }
 \description{
