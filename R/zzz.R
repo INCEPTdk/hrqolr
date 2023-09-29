@@ -6,6 +6,49 @@
 #'
 NULL
 
+
+# Save package version
+.hrqolr_version <- as.character(packageVersion("hrqolr"))
+
+# Helper to identify hrqolr functions that the user can choose to cache
+.user_cacheable_functions <- c(
+	"compute_estimates",
+	"construct_final_trajectories",
+	"construct_patient_trajectory"
+)
+
+# Set up cache environment
+#
+# This way, the user need to opt in to use caching and can specify the cache settings. That more
+# tricky if cache is set up while loading the package.
+#
+.cache_env <- new.env(parent = emptyenv())
+
+
+#' Print package startup message
+#'
+#' @param libname not used.
+#' @param pkgname not used.
+#'
+#' @return NULL
+#'
+#' @importFrom utils packageVersion
+#'
+#' @keywords internal
+#' @noRd
+#'
+.onAttach <- function(libname, pkgname) {
+	packageStartupMessage(
+		"Loading 'hrqolr' package v", .hrqolr_version, ".\n",
+		"For help, run 'help(\"hrqolr\")' or \n",
+		"check out https://inceptdk.github.io/hrqolr/.\n",
+		"Consider running 'cache_hrqolr()' for faster simulations. \n",
+		"If you have enough RAM, consider increasing the cache size; \n",
+		"run '?cache_hrqolr' for details."
+	)
+}
+
+
 #' Stuff to do when package is loaded
 #'
 #' @param libname not used.
@@ -20,34 +63,24 @@ NULL
 	if (getRversion() >= "2.15.1") {
 		utils::globalVariables(c(
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
-			"p_value", "id", "trial_id", "bootstrap_mean_diffs"
+			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo"
 		))
 	}
 
 	# Setting up cache (as per "Details" in ?memoise::memoise)
 	shared_cache <- cachem::cache_mem(
-		max_size = 7 * 1024^3, # GBs
-		# max_age = 60,
-		# logfile = "internal/memoise.log",
+		max_size = 256 * 1024^2, # MBs
 		evict = "lru"
 	)
 	custom_memoise <- function(fun) {
 		memoise::memoise(fun, cache = shared_cache)
 	}
 
-	# These are commented out as memoising them seems to hurt performance quite a lot
-	# auc <<- custom_memoise(auc)
-	# compute_hosp_discharge <<- custom_memoise(compute_hosp_discharge)
-	# linear_approx <<- custom_memoise(linear_approx)
-	# na_matrix <<- custom_memoise(na_matrix)
-
+	# These functions will always be cached
 	compute_eof <<- custom_memoise(compute_eof)
-	compute_estimates <<- custom_memoise(compute_estimates)
 	construct_arm_level_trajectory <<- custom_memoise(construct_arm_level_trajectory)
-	construct_final_trajectories <<- custom_memoise(construct_final_trajectories)
-	construct_patient_trajectory <<- custom_memoise(construct_patient_trajectory)
 	create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
 	create_xout <<- custom_memoise(create_xout)
-	find_decay_halflife <<- custom_memoise(find_decay_halflife)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
+	find_decay_halflife <<- custom_memoise(find_decay_halflife)
 }
