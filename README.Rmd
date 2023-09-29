@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,25 +15,25 @@ knitr::opts_chunk$set(
 )
 ```
 
-# adaptr <img src="man/figures/adaptr.png" align="right" width="120" />
+# hrqolr <img src="man/figures/hrqolr.png" align="right" width="120" />
 
 <!-- badges: start -->
-<!-- [![R-CMD-check](https://github.com/INCEPTdk/adaptr/workflows/R-CMD-check/badge.svg)](https://github.com/INCEPTdk/adaptr/actions/)
-[![status](https://joss.theoj.org/papers/10.21105/joss.04284/status.svg)](https://joss.theoj.org/papers/10.21105/joss.04284)
-[![codecov](https://codecov.io/gh/INCEPTdk/adaptr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/adaptr/)
+[![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
+<!-- [![codecov](https://codecov.io/gh/INCEPTdk/adaptr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/adaptr/)
 ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
-The `hrqolr` package simulates conventional two-arm clinical trials in which trajectories of health-related quality of life (HRQoL) are sampled from the simulated patients. 
+Package for simulating two-arm randomised clinical trials with temporal trajectories of
+health-related quality of life (HRQoL) as the outcome and quantifies effect sizes as single-sampled
+HRQoL values at end of follow-up and as the area under the trajectories. 
 
-The package has been developed as part of the
-[INCEPT (Intensive Care Platform Trial) project](https://incept.dk/), which
-is primarily supported by a grant from
-[Sygeforsikringen "danmark"](https://www.sygeforsikring.dk/).
+Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>),
+which is primarily supported by a grant from Sygeforsikringen "danmark"
+(<https://www.sygeforsikring.dk/>).
 
 ## Resources
 
-* [Website](https://epiben.github.io/hrqolr/index.html) - stand-alone website with full
+* [Website](https://inceptdk.github.io/hrqolr/index.html) - stand-alone website with full
 package documentation
 * [Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study](https://doi.org/10.1111/aas.14324) -
 article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use `hrqolr`
@@ -44,10 +46,9 @@ The easiest way is to install from CRAN directly:
 install.packages("hrqolr")
 ```
 
-Alternatively, you can install the **development version** from GitHub - this
+You can also install the **development version** from directly from GitHub. Doing this
 requires the *remotes*-package installed. The development version may contain
-additional features not yet available in the CRAN version (including preliminary
-functions), but may not be stable or fully documented:
+additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.
 
 ```{r eval = FALSE}
 # install.packages("remotes") 
@@ -56,106 +57,74 @@ remotes::install_github("INCEPTdk/hrqolr@dev")
 
 ## Example
 
-The basic functionality of `adaptr` is illustrated below.
-
-First, load the library and setup a trial specification using the general
-`setup_trial()` function, or one of the special case functions,
-`setup_trial_binom()` (used in the example) or `setup_trial_norm()`.
+`hrqolr` was built to simulate many scenarios.
 
 ```{r}
 library(hrqolr)
+cache_hrqolr()
 
-# Setup a trial using a binary, binomially distributed, undesirable outcome
-binom_trial <- setup_trial_binom(
-  arms = c("Arm A", "Arm B", "Arm C"),
-  true_ys = c(0.25, 0.20, 0.30),
-  min_probs = rep(0.15, 3), # Minimum allocation of 15% in all arms
-  data_looks = seq(from = 300, to = 2000, by = 100),
-  # Stop for equivalence at > 90% probability of differences < 5 %-points
-  equivalence_prob = 0.9,
-  equivalence_diff = 0.05,
-  soften_power = 0.5 # Soften allocation ratios
+scenario <- list(
+	n_trials = 100L,
+	n_patients_per_arm = 100L,
+	
+	start_hrqol_ctrl = 0.1,
+	final_hrqol_ctrl = 0.75,
+	relative_improvement_final_hrqol_actv = 0.0,
+	sampling_frequency = 14L,
+	acceleration_hrqol_actv = 0.1,
+	
+	mortality_ctrl = 0.4,
+	relative_mortality_reduction_actv = 0.0,
+	mortality_dampening = 0.0,
+	mortality_trajectory_shape = "exp_decay",
+	prop_mortality_benefitters_actv = 0.0,
+	
+	n_digits = 3,
+	n_patients_ground_truth = 1000L,
+	n_example_trajectories_per_arm = 100L
 )
 
-# Print trial specification
-print(binom_trial, prob_digits = 3)
+example_trajs <- do.call(sample_example_trajectories, scenario)
+example_trajs
 ```
 
-The resulting trial specification may be calibrated to obtain a specific value
-for a certain performance metric (e.g., the Bayesian type 1 error rate for
-trial specifications with no between-arm differences) by using the
-`calibrate_trial()` function.
+### Visualise trajectories
+```{r}
+plot(example_trajs)
+```
 
-Simulate a single trial using a reproducible random seed:
+You might also want to break apart the trajectories in the arms. Hiding the legend, then, makes sense as the facet strips will already provide the same information. Here, we also set the arm-level trajectory in black to set it apart from the individual patient trajectories:
 
 ```{r}
-trial_res <- run_trial(binom_trial, seed = 12345)
-print(trial_res, digits = 3)
+library(ggplot2) 
+
+plot(example_trajs, arm_aes = list(colour = "black")) +
+	facet_wrap(~ arm) +
+	theme(legend.position = "none")
 ```
 
-Simulate multiple trials using a reproducible random seed:
+Of course, we might also be interested in summarising the trajectories. Here, for example, with inter-quartile range. Note that the ribbons become a bit wonky at end of follow-up because there are increasingly few observations, and some of them may be low because, e.g., *mortality benefitters* are still alive.
 
 ```{r}
-# Simulate multiple trials - only 10 simulations for speed in the example
-trial_res_mult <- run_trials(binom_trial, n_rep = 10, base_seed = 67890)
-
-# Extract results in a tidy data.frame (1 simulation per row)
-# See function documentation for details, including on arm selection in trials
-# not ending with a superior arm
-extr_res <- extract_results(trial_res_mult)
-head(extr_res)
-
-# Summarise trial results
-# See function documentation for details, including on arm selection in trials
-# not ending with a superior arm
-res_sum <- summary(trial_res_mult)
-print(res_sum, digits = 1)
+plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-Performance metrics may also be calculated and returned in a tidy
-`data.frame` (with bootstrapped uncertainty measures, if requested) by
-the `check_performance()` function, and the empirical cumulative distribution
-functions of numerical performance metrics may be plotted by the
-`plot_metrics_ecdf()` function. The `plot_convergence()` function may be used to
-visually assess stability of performance metrics according to the number of
-simulations. Finally, the `check_remaining_arms()` function may be used to
-summarise all combinations of remaining arms across multiple simulations.
-
-Plot trial statuses or history of trial metrics over time:
-
-```{r plot, fig.align="center", fig.width=6, fig.height=3}
-# Simulate multiple trials - 25 simulations only for speed
-# sparse = FALSE is required for plot_history (but not plot_status)
-trial_res_mult <- run_trials(binom_trial, n_rep = 25, base_seed = 67890, sparse = FALSE)
-
-# Plot overall trial statuses according to the total number
-# of patients randomised
-plot_status(trial_res_mult, x_value = "total n")
-
-# Plot allocation probabilities at each adaptive look (requires sparse = FALSE)
-plot_history(trial_res_mult)
+The same scenario specification can, then, be used to simulate a desired number of trials:
+```{r}
+sims <- do.call(simulate_trials, scenario)
+sims
 ```
-
-Plotting statuses for individual trial arms and other summary metrics is
-possible, too.
-
-Running simulations and extracting and processing results may be done in
-parallel by either using the `setup_cluster()` function to set up a cluster of
-parallel workers that may be used throughout the session, or with new clusters
-each time parallel computation is done by setting the `"mc.cores"` global option
-via `options(mc.cores = <number>)` or by using the `cores` argument of many
-functions in the package.
 
 ## Issues and enhancements
 
-We use the [GitHub issue tracker](https://github.com/INCEPTdk/adaptr/issues) for
+We use the [GitHub issue tracker](https://github.com/epiben/hrqolr/issues) for
 all bug/issue reports and proposals for enhancements. 
 
 ## Contributing
 
 We welcome contributions directly to the code to improve performance as well
 as new functionality. For the latter, please first explain and motivate it in an
-[issue](https://github.com/INCEPTdk/adaptr/issues).
+[issue](https://github.com/epiben/hrqolr/issues).
 
 Changes to the code base should follow these steps:
 
@@ -173,5 +142,5 @@ of `adaptr`
 If using the package, please consider citing it:
 
 ```{r}
-citation(package = "adaptr")
+citation(package = "hrqolr")
 ```

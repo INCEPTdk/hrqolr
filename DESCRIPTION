@@ -1,21 +1,35 @@
 Package: hrqolr
-Title: What the Package Does (Title Case)
-Version: 0.1.0
+Title: Simulator of health-related quality of life trajectories
+Version: 0.0.9000
 Date: 2023-09-28
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: 
+    c(person("Benjamin Skov", "Kaas-Hansen",
+             email = "epiben@hey.com",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0003-1023-0371")),
+      person("Anders", "Granholm",
+             email = "andersgran@gmail.com",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0001-5799-7655")),
+      person("Aksel Karl Georg", "Jensen",
+             email = "akje@sund.ku.dk",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-1459-0465")))
+Description: Package for simulating two-arm randomised clinical trials with temporal 
+    trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
+    sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
+    Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>), 
+    which is primarily supported by a grant from Sygeforsikringen "danmark" 
+    (<https://www.sygeforsikring.dk/>).
 Type: Package
-BugReports: https://github.com/epiben/hrqolr/issues
+BugReports: https://github.com/INCEPTdk/hrqolr/issues
+URL: https://inceptdk.github.io/hrqolr/, https://github.com/INCEPTdk/hrqolr/, https://incept.dk/
 License: GPL (>= 3)
 Language: en-GB
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Depends: 
-    R (>= 2.10)
 Imports:
 		cachem (>= 1.0.8),
 		data.table (>= 1.14.2),
@@ -25,11 +39,11 @@ Imports:
 		Rcpp (>= 1.0.11)
 Suggests:
 		covr,
+		ggplot2,
 		knitr,
 		rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: Rcpp
 NeedsCompilation: yes
-URL: https://epiben.github.io/hrqolr/
 Config/testthat/edition: 3
 VignetteBuilder: knitr
