@@ -6,9 +6,11 @@
 #' @inheritParams cachem::cache_mem
 #'
 #' @rdname cache_hrqolr
+#'
 #' @return NULL, these functions are called for their side effects: caching (or clearing caches) of
 #'   select `hrqolr` functions.
 #' @export
+#' @importFrom utils assignInMyNamespace
 #'
 cache_hrqolr <- function(
 		max_size = 1 * 1024^3,
