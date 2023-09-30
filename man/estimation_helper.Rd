@@ -7,13 +7,15 @@
 estimation_helper(
   n_patients,
   arm,
-  prop_mortality_benefitters_actv,
   start_hrqol_arm,
+  final_hrqol_arm,
   inter_patient_noise_sd,
   acceleration_hrqol,
+  prop_mortality_benefitters_actv,
   mortality_trajectory_shape,
   mortality_dampening,
   mortality_rng,
+  sampling_frequency = NULL,
   n_digits = 2,
   min_valid_hrqol = -0.757
 )
@@ -23,12 +25,14 @@ estimation_helper(
 
 \item{arm}{string, either \code{"actv"} or \code{"ctrl"}}
 
-\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
-the active arm who are so-called mortality benefitters.}
-
 \item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
+\item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
+
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement}
+
+\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
+the active arm who are so-called mortality benefitters.}
 
 \item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
 (default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
@@ -37,6 +41,8 @@ the active arm who are so-called mortality benefitters.}
 before end of follow-up}
 
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
+
+\item{sampling_frequency}{int, for span between samplings from patients}
 
 \item{n_digits}{int, the number of digits of HRQoL values}
 

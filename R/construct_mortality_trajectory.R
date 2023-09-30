@@ -10,6 +10,8 @@
 #' @param start_hrqol scalar, HRQoL at ICU discharge
 #' @param resolution int, the number of grid points on the HRQoL trajectory between ICU discharge
 #'   and time of death
+##' @param n_halflives_to_zero scalar, the number of half-lives after which one considers HRQoL to
+##'  equal `0`.
 #'
 #' @return Two-column matrix: x is time, y is the HRQoL.
 #' @keywords internal
@@ -19,7 +21,8 @@ construct_mortality_trajectory <- function(
 		t_icu_discharge,
 		start_hrqol = 0.0,
 		mortality_trajectory_shape = "exp_decay",
-		resolution = 100
+		resolution = 100,
+		n_halflives_to_zero = 10
 ) {
 
 	if (mortality_trajectory_shape == "linear") {
@@ -29,10 +32,8 @@ construct_mortality_trajectory <- function(
 		t_grid <- c(t_icu_discharge, t_death)
 		hrqol <- c(start_hrqol, start_hrqol)
 	} else {
-		browser()
 		t_grid <- seq(t_icu_discharge, t_death, length = resolution)
-		t_half <- find_decay_halflife(t_death - t_icu_discharge)
-			# TODO: consider setting t_half at (t_death - t_icu_discharge)/5
+		t_half <- (t_death - t_icu_discharge) / n_halflives_to_zero
 		t_diff <- t_grid - t_icu_discharge
 		hrqol <- start_hrqol * 2.0^(-t_diff / t_half)
 		hrqol[length(hrqol)] <- 0.0 # enforce HRQoL at day of death

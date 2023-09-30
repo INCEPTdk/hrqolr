@@ -13,13 +13,13 @@
 #' https://apoorvaj.io/cubic-bezier-through-four-points.
 #'
 #' @importFrom Hmisc bezier
+#' @importFrom stats dist
+#'
 #' @return A data.table with the (x, y) coordinates of the smooth trajectory.
 #' @export
 #'
 create_smooth_trajectory <- function(x, y, alpha = 0.5, epsilon = 1e-4) {
 	# alpha = 0.5 yields centripetal Catmull-Rom curve
-
-	# adapted from https://apoorvaj.io/cubic-bezier-through-four-points
 
 	stopifnot(length(x) == length(y))
 

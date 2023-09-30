@@ -9,7 +9,7 @@ find_decay_halflife(
   min_halflife = 0,
   max_halflife = 180,
   res = 0.1,
-  tol = 0.001
+  tol = 0.05
 )
 }
 \arguments{
@@ -19,12 +19,14 @@ find_decay_halflife(
 
 \item{res}{scalar numeric, grid size in half-life values to be checked}
 
-\item{tol}{scalar, low number reflecting the tolerance for find}
+\item{tol}{scalar, the proportion of the original HRQoL that corresponds to zero (the default
+value corresponds to considering \verb{<5\%} of the starting HRQoL to be the same as \code{0})}
 }
 \value{
 The best half-life
 }
 \description{
-The notion of this function is to find the largest half-life that yields a almost-zero decay factor (as per \code{tol} argument) at \code{grid_end}.
+The notion of this function is to find the largest half-life that yields a almost-zero decay
+factor (as per \code{tol} argument) at \code{grid_end}.
 }
 \keyword{internal}

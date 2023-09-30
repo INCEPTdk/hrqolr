@@ -15,13 +15,17 @@
 estimation_helper <- function(
 		n_patients,
 		arm,
-		prop_mortality_benefitters_actv,
 		start_hrqol_arm,
+		final_hrqol_arm,
 		inter_patient_noise_sd,
 		acceleration_hrqol,
+
+		prop_mortality_benefitters_actv,
 		mortality_trajectory_shape,
 		mortality_dampening,
 		mortality_rng,
+
+		sampling_frequency = NULL,
 		n_digits = 2,
 		min_valid_hrqol = -0.757
 ) {
@@ -50,12 +54,18 @@ estimation_helper <- function(
 			function(arg1, arg2, arg3, arg4) {
 				compute_estimates(
 					t_icu_discharge = arg1,
-					start_hrqol_patient = arg2,
 					t_death = arg3,
+					start_hrqol_patient = arg2,
 					is_mortality_benefitter = arg4,
+
 					acceleration_hrqol = acceleration_hrqol,
+					start_hrqol_arm = start_hrqol_arm,
+					final_hrqol_arm = final_hrqol_arm,
 					mortality_trajectory_shape = mortality_trajectory_shape,
-					mortality_dampening = mortality_dampening
+					mortality_dampening = mortality_dampening,
+
+					sampling_frequency = sampling_frequency,
+					n_digits = n_digits
 				)
 			},
 			t_icu_discharge,

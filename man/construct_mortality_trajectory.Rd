@@ -9,7 +9,8 @@ construct_mortality_trajectory(
   t_icu_discharge,
   start_hrqol = 0,
   mortality_trajectory_shape = "exp_decay",
-  resolution = 100
+  resolution = 100,
+  n_halflives_to_zero = 10
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ patient was still alive at end of follow-up)}
 
 \item{resolution}{int, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death}
+
+\item{n_halflives_to_zero}{scalar, the number of half-lives after which one considers HRQoL to
+equal \code{0}.}
 }
 \value{
 Two-column matrix: x is time, y is the HRQoL.

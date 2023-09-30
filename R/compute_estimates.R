@@ -25,20 +25,19 @@ compute_estimates <- function(
 		sampling_frequency = 14L,
 		n_digits = 2
 ) {
-
 	patient_trajs <- construct_patient_trajectory(
 		t_icu_discharge = t_icu_discharge,
-		sampling_frequency = sampling_frequency,
+		t_death = t_death,
+		start_hrqol_patient = start_hrqol_patient,
+
 		acceleration_hrqol = acceleration_hrqol,
 		start_hrqol_arm = start_hrqol_arm,
-		start_hrqol_patient = start_hrqol_patient,
 		final_hrqol_arm = final_hrqol_arm,
-
-		t_death = t_death,
 		is_mortality_benefitter = is_mortality_benefitter,
 		mortality_trajectory_shape = mortality_trajectory_shape,
 		mortality_dampening = mortality_dampening,
 
+		sampling_frequency = sampling_frequency,
 		n_digits = n_digits
 	)
 

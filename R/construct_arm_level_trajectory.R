@@ -36,9 +36,10 @@ construct_arm_level_trajectory <- function(
 
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
-	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - min(traj$y)))) + min(traj$y)
-	y_tmp <- y_tmp * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp))
+	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - start_hrqol_arm))) + start_hrqol_arm
+	y_tmp[-1] <- y_tmp[-1] * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp) - 1)
+		# HRQoL ICU discharge is unaffected by acceleration, so leave alone => [-1]
 	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
-	rbind(c(x = 0L, y = 0L), as.matrix(traj))
+	rbind(c(x = 0L, y = 0L), as.matrix(traj)) # concatenate index values (t = 0, hrqol = 0)
 }

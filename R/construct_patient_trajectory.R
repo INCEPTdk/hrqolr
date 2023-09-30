@@ -39,12 +39,12 @@ construct_patient_trajectory <- function(
 		)
 
 		# Enforce between-patient noise throughout trajectory
-		y_new <- 1 - (1 - start_hrqol_patient) / (1 - start_hrqol_arm) * (1 - traj[, "y"])
+		y_new <- pmin(1, traj[-1, "y"] + (start_hrqol_patient - start_hrqol_arm * (1 + acceleration_hrqol)))
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)
 
-		traj[, "y"] <- y_new
+		traj[-1, "y"] <- y_new
 	} else if (isTRUE(t_death <= t_icu_discharge)) {
 		traj <- na_matrix(t_icu_discharge)
 	} else {
@@ -59,7 +59,6 @@ construct_patient_trajectory <- function(
 	}
 
 	traj[, "y"] <- round(traj[, "y"], n_digits)
-	# TODO: try to not round here and see if there's a performance hit
 
 	# Enforce sampling strategies and return
 	construct_final_trajectories(traj, t_icu_discharge, sampling_frequency)
