@@ -7,6 +7,7 @@
 sample_example_trajectories(
   arms,
   n_example_trajectories_per_arm,
+  index_hrqol,
   first_hrqol,
   final_hrqol,
   sampling_frequency,
@@ -27,6 +28,8 @@ below.}
 
 \item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
 returned object}
+
+\item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
 
 \item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
 

@@ -12,6 +12,7 @@
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
+#' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
 #' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
 #' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
 #' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
@@ -58,6 +59,7 @@ simulate_trials <- function(
 		n_example_trajectories_per_arm = 50L,
 
 		arms = c("A", "B"),
+		index_hrqol = c(A = 0.0, B = 0.0),
 		first_hrqol = c(A = 0.1, B = 0.1),
 		final_hrqol = c(A = 0.75, B = 0.75),
 		acceleration_hrqol = c(A = 0.0, B = 0.0),
@@ -121,6 +123,8 @@ simulate_trials <- function(
 				gt_res <- estimation_helper(
 					n_patients = n_patients_ground_truth,
 					arm = arm,
+
+					index_hrqol_arm = index_hrqol[arm],
 					first_hrqol_arm = first_hrqol[arm],
 					final_hrqol_arm = final_hrqol[arm],
 					inter_patient_noise_sd = inter_patient_noise_sd,
@@ -159,6 +163,8 @@ simulate_trials <- function(
 			res <- estimation_helper(
 				n_patients = n_patients,
 				arm = arm,
+
+				index_hrqol_arm = index_hrqol[arm],
 				first_hrqol_arm = first_hrqol[arm],
 				final_hrqol_arm = final_hrqol[arm],
 				inter_patient_noise_sd = inter_patient_noise_sd,
@@ -199,13 +205,6 @@ simulate_trials <- function(
 		results$summary_stats[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
 
 		# Trial-level effect estimates
-		# tmp <- sapply(
-		# 	outcome_cols,
-		# 	function(col) {
-		# 		batch_res[, test_fun(get(col), grps = arm, arms = arms, na_replacement = 0), by = "trial_id"]
-		# 	},
-		# 	simplify = FALSE
-		# )
 		tmp <- mapply(
 			function(col, label, na_replacement) {
 				tmp <- batch_res[

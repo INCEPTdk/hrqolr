@@ -5,15 +5,16 @@
 \title{Compute outcome estimates for a given patient}
 \usage{
 compute_estimates(
-  t_icu_discharge = NULL,
-  t_death = NA,
-  first_hrqol_patient = first_hrqol_arm,
-  is_mortality_benefitter = FALSE,
-  acceleration_hrqol = 0,
-  first_hrqol_arm = 0.1,
-  final_hrqol_arm = 0.75,
-  mortality_trajectory_shape = "exp_decay",
-  mortality_dampening = 0,
+  t_icu_discharge,
+  t_death,
+  first_hrqol_patient,
+  is_mortality_benefitter,
+  acceleration_hrqol,
+  index_hrqol_arm,
+  first_hrqol_arm,
+  final_hrqol_arm,
+  mortality_trajectory_shape,
+  mortality_dampening,
   sampling_frequency = 14L,
   n_digits = 2
 )

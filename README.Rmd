@@ -78,6 +78,7 @@ scenario <- list(
 	n_example_trajectories_per_arm = 100L,
 	
 	arms = c("A", "B"),
+	index_hrqol = c(A = 0.0, B = 0.0),
 	first_hrqol = c(A = 0.1, B = 0.1),
 	final_hrqol = c(A = 0.8, B = 0.7),
 	acceleration_hrqol = c(A = 0.1, B = 0.0),

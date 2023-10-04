@@ -11,17 +11,18 @@
 #'
 construct_patient_trajectory <- function(
 		# Specific to this patient
-		t_icu_discharge = NULL,
-		t_death = NA,
-		first_hrqol_patient = first_hrqol_arm,
+		t_icu_discharge,
+		t_death,
+		first_hrqol_patient,
 
 		# Scenario settings
-		acceleration_hrqol = 0.0,
-		first_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75,
-		is_mortality_benefitter = FALSE,
-		mortality_trajectory_shape = "exp_decay",
-		mortality_dampening = 0.0,
+		acceleration_hrqol,
+		index_hrqol_arm,
+		first_hrqol_arm,
+		final_hrqol_arm,
+		is_mortality_benefitter,
+		mortality_trajectory_shape,
+		mortality_dampening,
 
 		# Constant across patients
 		sampling_frequency = 14L,
@@ -34,6 +35,7 @@ construct_patient_trajectory <- function(
 			t_icu_discharge = t_icu_discharge,
 			sampling_frequency = sampling_frequency,
 			acceleration_hrqol = acceleration_hrqol,
+			index_hrqol_arm = index_hrqol_arm,
 			first_hrqol_arm = first_hrqol_arm,
 			final_hrqol_arm = final_hrqol_arm
 		)
@@ -46,11 +48,12 @@ construct_patient_trajectory <- function(
 
 		traj[-1, "y"] <- y_new
 	} else if (isTRUE(t_death <= t_icu_discharge)) {
-		traj <- na_matrix(t_icu_discharge)
+		traj <- na_matrix(index_hrqol_arm, t_icu_discharge)
 	} else {
 		traj <- construct_mortality_trajectory(
 			t_death = t_death,
 			t_icu_discharge = t_icu_discharge,
+			index_hrqol = index_hrqol_arm,
 			first_hrqol = first_hrqol_patient * (1 - mortality_dampening * (first_hrqol_patient > 0)),
 				# no dampening in patients who start with HRQoL <= 0
 			mortality_trajectory_shape = mortality_trajectory_shape,

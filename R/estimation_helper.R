@@ -14,6 +14,8 @@
 estimation_helper <- function(
 		n_patients,
 		arm,
+
+		index_hrqol_arm,
 		first_hrqol_arm,
 		final_hrqol_arm,
 		inter_patient_noise_sd,
@@ -63,6 +65,7 @@ estimation_helper <- function(
 					is_mortality_benefitter = arg4,
 
 					acceleration_hrqol = acceleration_hrqol,
+					index_hrqol_arm = index_hrqol_arm,
 					first_hrqol_arm = first_hrqol_arm,
 					final_hrqol_arm = final_hrqol_arm,
 					mortality_trajectory_shape = mortality_trajectory_shape,

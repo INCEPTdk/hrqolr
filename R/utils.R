@@ -59,12 +59,13 @@ compute_hosp_discharge <- function(t_icu_discharge) {
 #'
 #' Useful for patients for whom no data are every observed.
 #'
+#' @param index_hrqol scalar, HRQoL at time of enrolment (= index)
 #' @param t scalar
 #' @keywords internal
 #'
-na_matrix <- function(t) {
+na_matrix <- function(index_hrqol, t) {
 	matrix(
-		c(0.0, 0.0, t, NA_real_),
+		c(0.0, index_hrqol, t, NA_real_),
 		ncol = 2,
 		byrow = TRUE,
 		dimnames = list(NULL, c("x", "y"))
