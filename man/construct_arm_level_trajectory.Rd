@@ -7,7 +7,7 @@
 construct_arm_level_trajectory(
   t_icu_discharge,
   acceleration_hrqol = 0,
-  start_hrqol_arm = 0.1,
+  first_hrqol_arm = 0.1,
   final_hrqol_arm = 0.75,
   sampling_frequency = 14L
 )
@@ -18,11 +18,11 @@ construct_arm_level_trajectory(
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
 trajectory}
 
-\item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
+\item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{sampling_frequency}{int, for span between samplings from patients}
+\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 }
 \value{
 A matrix with two columns: x is time and y the corresponding HRQoL values.

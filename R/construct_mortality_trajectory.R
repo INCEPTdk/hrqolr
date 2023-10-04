@@ -7,7 +7,7 @@
 #' @inheritParams simulate_trials
 #' @param t_death numeric scalar, time of death. NA represent administrative censoring (i.e., the
 #'   patient was still alive at end of follow-up)
-#' @param start_hrqol scalar, HRQoL at ICU discharge
+#' @param first_hrqol scalar, HRQoL at ICU discharge
 #' @param resolution int, the number of grid points on the HRQoL trajectory between ICU discharge
 #'   and time of death
 ##' @param n_halflives_to_zero scalar, the number of half-lives after which one considers HRQoL to
@@ -19,7 +19,7 @@
 construct_mortality_trajectory <- function(
 		t_death,
 		t_icu_discharge,
-		start_hrqol = 0.0,
+		first_hrqol = 0.0,
 		mortality_trajectory_shape = "exp_decay",
 		resolution = 100,
 		n_halflives_to_zero = 10
@@ -27,20 +27,20 @@ construct_mortality_trajectory <- function(
 
 	if (mortality_trajectory_shape == "linear") {
 		t_grid <- c(t_icu_discharge, t_death)
-		hrqol <- c(start_hrqol, 0.0)
+		hrqol <- c(first_hrqol, 0.0)
 	} else if (mortality_trajectory_shape == "constant") {
 		t_grid <- c(t_icu_discharge, t_death)
-		hrqol <- c(start_hrqol, start_hrqol)
+		hrqol <- c(first_hrqol, first_hrqol)
 	} else {
 		t_grid <- seq(t_icu_discharge, t_death, length = resolution)
 		t_half <- (t_death - t_icu_discharge) / n_halflives_to_zero
 		t_diff <- t_grid - t_icu_discharge
-		hrqol <- start_hrqol * 2.0^(-t_diff / t_half)
+		hrqol <- first_hrqol * 2.0^(-t_diff / t_half)
 		hrqol[length(hrqol)] <- 0.0 # enforce HRQoL at day of death
 
 		if (mortality_trajectory_shape == "reflected_exp_decay") {
 			# Essentially rotates the trajectory 180 degrees
-			hrqol <- start_hrqol - hrqol
+			hrqol <- first_hrqol - hrqol
 			t_grid <- rev(t_grid)
 		}
 	}

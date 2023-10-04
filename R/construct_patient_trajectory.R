@@ -3,7 +3,7 @@
 #' @inheritParams construct_arm_level_trajectory
 #' @inheritParams construct_mortality_trajectory
 #' @inheritParams simulate_trials
-#' @param start_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
+#' @param first_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
 #' @param is_mortality_benefitter logical, is patient a mortality benefitters? Defaults to FALSE.
 #'
 #' @keywords internal
@@ -13,11 +13,11 @@ construct_patient_trajectory <- function(
 		# Specific to this patient
 		t_icu_discharge = NULL,
 		t_death = NA,
-		start_hrqol_patient = start_hrqol_arm,
+		first_hrqol_patient = first_hrqol_arm,
 
 		# Scenario settings
 		acceleration_hrqol = 0.0,
-		start_hrqol_arm = 0.1,
+		first_hrqol_arm = 0.1,
 		final_hrqol_arm = 0.75,
 		is_mortality_benefitter = FALSE,
 		mortality_trajectory_shape = "exp_decay",
@@ -34,12 +34,12 @@ construct_patient_trajectory <- function(
 			t_icu_discharge = t_icu_discharge,
 			sampling_frequency = sampling_frequency,
 			acceleration_hrqol = acceleration_hrqol,
-			start_hrqol_arm = start_hrqol_arm,
+			first_hrqol_arm = first_hrqol_arm,
 			final_hrqol_arm = final_hrqol_arm
 		)
 
 		# Enforce between-patient noise throughout trajectory
-		y_new <- pmin(1, traj[-1, "y"] + (start_hrqol_patient - start_hrqol_arm * (1 + acceleration_hrqol)))
+		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * (1 + acceleration_hrqol)))
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)
@@ -51,7 +51,7 @@ construct_patient_trajectory <- function(
 		traj <- construct_mortality_trajectory(
 			t_death = t_death,
 			t_icu_discharge = t_icu_discharge,
-			start_hrqol = start_hrqol_patient * (1 - mortality_dampening * (start_hrqol_patient > 0)),
+			first_hrqol = first_hrqol_patient * (1 - mortality_dampening * (first_hrqol_patient > 0)),
 				# no dampening in patients who start with HRQoL <= 0
 			mortality_trajectory_shape = mortality_trajectory_shape,
 			resolution = 100

@@ -8,6 +8,21 @@ rescale <- function(x) {
 }
 
 
+#' Mean value without the housekeeping
+#'
+#' R's built-it `mean` function has a lot of overhead which is redundant for the internal workings
+#' of `hrqolr`.
+#'
+#' @param x numeric vector
+#'
+#' @keywords internal
+#' @return Scalar with the mean, after handling NA's as per the `na_replacement` parameter
+#'
+fast_mean <- function(x) {
+	sum(x) / length(x)
+}
+
+
 #' Compute deterministic day of hospital discharge based on day of ICU discharge
 #'
 #' @param t_icu_discharge int, day of ICU discharge
@@ -94,21 +109,6 @@ compute_eof <- function(t_icu_discharge, approx_end = 180, sampling_frequency = 
 }
 
 
-#' Give arm variable proper form and names
-#'
-#' @param arm character vector, will be converted to factor and renamed
-#'
-#' @return A factor with the right labels in the right order for pretty printing and plotting
-#' @keywords internal
-#'
-beautify_arm_var <- function(arm) {
-	factor(
-		ifelse(arm == "actv", "intervention", "control"),
-		levels = c("intervention", "control")
-	)
-}
-
-
 #' Default value for NA's
 #'
 #' Helper function for simple handling of missing values in vectors. No type checking done.
@@ -124,51 +124,6 @@ replace_na <- function(x, replacement) {
 	return(x)
 }
 
-
-#' Welch's t test
-#'
-#' Custom and stripped-down version of R's built-in t.test that yields the
-#' estimate with the confidence interval corresponding to the specified alpha
-#' level.
-#'
-#' @param vals numeric vector
-#' @param grps character vector, allowed values are "ctrl" and "actv" and used to
-#'   slice `x` into two vectors with values to be compared.
-#' @param alpha numeric, 1.0 - confidence_level
-#'
-#' @keywords internal
-#' @return A four-element vector with point estimate, p value and confidence internal
-#'
-welch_t_test <- function (vals, grps, na_replacement = NULL, alpha = 0.05) {
-	if (!is.null(na_replacement)) {
-		vals <- replace_na(vals, na_replacement)
-	} else {
-		na_idx <- is.na(vals)
-		vals <- vals[!na_idx]
-		grps <- grps[!na_idx]
-	}
-
-	# Extract values for the two groups
-	x <- vals[grps == "actv"]
-	y <- vals[grps == "ctrl"]
-
-	nx <- length(x)
-	mx <- mean(x)
-	stderrx <- sqrt(stats::var(x) / nx)
-
-	ny <- length(y)
-	my <- mean(y)
-	stderry <- sqrt(stats::var(y) / ny)
-
-	stderr <- sqrt(stderrx^2 + stderry^2)
-
-	df <- stderr^4 / (stderrx^4 / (nx - 1) + stderry^4 / (ny - 1))
-	tstat <- (mx - my) / stderr
-	p_value <- 2 * stats::pt(-abs(tstat), df)
-	conf_int <- stderr * (tstat + c(-1, 1) * stats::qt(1 - alpha * 0.5, df))
-
-	setNames(c(mx - my, p_value, conf_int), c("est", "p_value", "ci_lo", "ci_hi"))
-}
 
 #' Bootstrap confidence intervals and p values
 #'
@@ -190,7 +145,7 @@ bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 
 	boot_samples <- bootstrap_mean_diffs(vals, grps == "ctrl", B = n_samples)
 		# must convert grps to integer vector
 
-	# This is one R-only version (some 12-18 times slower):
+	# This is one R-only version (some 12-18 times slower, and .Internal() makes R CMD check fail...):
 	# bootstrap_fun <- function(i, idx) {
 	# 	boot_idx <- sample(idx, replace = TRUE)
 	# 	actv_idx <- grps[boot_idx] == "actv"
@@ -205,48 +160,6 @@ bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 
 	conf_int <- stats::quantile(boot_samples, c(alpha/2, 1 - alpha/2))
 
 	setNames(c(est, conf_int, p_value), c("point_est", "ci_lo", "ci_hi", "p_values"))
-}
-
-
-#' Computes select Monte Carlo performance measures
-#'
-#' @param theta_hat vector, estimates
-#' @param theta vector, ground truth values (length 1 or as long as `theta_hat`)
-#' @param p_value,ci_lo,ci_hi vectors holding the p values as well as lower and upper boundaries of
-#'   the confidence intervals corresponding to the alpha (next parameter)
-#' @param alpha scalar in `[0, 1]`, equals 1.0 - significance level
-#'
-#' @keywords internal
-#' @return A named numeric vector with the performance measures.
-#'
-compute_performance_metrics <- function(theta_hat, theta, p_value, ci_lo, ci_hi, alpha = 0.05) {
-	# From table 6 in https://doi.org/10.1002/sim.8086
-	# and https://www.ellessenne.xyz/2022/11/monte-carlo-errors-for-relative-bias/ (relative bias + its SE)
-
-	n <- length(theta_hat)
-	n_prefix <- 1 / (n * (n - 1))
-	bias <- mean(theta_hat - theta)
-	relative_bias <- mean((theta_hat - theta) / theta)
-	mse <- mean((theta_hat - theta)^2)
-	coverage <- mean(ci_lo <= theta & theta <= ci_hi)
-	rejection_prop <- mean(p_value <= alpha)
-	be_coverage <- mean(ci_lo <= mean(theta_hat) & mean(theta_hat) <= ci_hi)
-
-	c(
-		bias = bias,
-		bias_se = sqrt(n_prefix * sum((theta_hat - mean(theta_hat))^2)),
-			# TODO: isn't it theta instead of mean(theta_hat)?
-		relative_bias = relative_bias,
-		relative_bias_se = sqrt(n_prefix * sum(((theta_hat - theta) / theta - relative_bias)^2)),
-		mse = mse,
-		mse_se = sqrt(n_prefix * sum(((theta_hat - theta)^2 - mse)^2)),
-		coverage = coverage,
-		coverage_se = sqrt(coverage * (1 - coverage) / n),
-		bias_corrected_coverage = be_coverage,
-		bias_corrected_coverage_se = sqrt(be_coverage * (1 - be_coverage) / n),
-		rejection_proportion = rejection_prop,
-		rejection_proportion_se = sqrt(rejection_prop * (1 - rejection_prop) / n)
-	)
 }
 
 
@@ -277,10 +190,10 @@ sample_t_icu_discharge <- function(n) {
 summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 	if (isTRUE(na_rm)) x <- x[!is.na(x)]
 
-	setNames(
+	as.list(setNames(
 		c(stats::quantile(x, probs = probs), mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
 		c(paste0("p", 100 * probs), "mean", "sd", "se")
-	)
+	))
 }
 
 
