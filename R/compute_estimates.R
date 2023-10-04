@@ -11,12 +11,12 @@ compute_estimates <- function(
 		# Specific to this patient
 		t_icu_discharge = NULL,
 		t_death = NA,
-		start_hrqol_patient = start_hrqol_arm,
+		first_hrqol_patient = first_hrqol_arm,
 		is_mortality_benefitter = FALSE,
 
 		# Scenario settings
 		acceleration_hrqol = 0.0,
-		start_hrqol_arm = 0.1,
+		first_hrqol_arm = 0.1,
 		final_hrqol_arm = 0.75,
 		mortality_trajectory_shape = "exp_decay",
 		mortality_dampening = 0.0,
@@ -28,10 +28,10 @@ compute_estimates <- function(
 	patient_trajs <- construct_patient_trajectory(
 		t_icu_discharge = t_icu_discharge,
 		t_death = t_death,
-		start_hrqol_patient = start_hrqol_patient,
+		first_hrqol_patient = first_hrqol_patient,
 
 		acceleration_hrqol = acceleration_hrqol,
-		start_hrqol_arm = start_hrqol_arm,
+		first_hrqol_arm = first_hrqol_arm,
 		final_hrqol_arm = final_hrqol_arm,
 		is_mortality_benefitter = is_mortality_benefitter,
 		mortality_trajectory_shape = mortality_trajectory_shape,
