@@ -3,10 +3,9 @@
 #' @inheritParams simulate_trials
 #' @inheritParams construct_arm_level_trajectory
 #' @param n_patients int, the number of patients for whom to estimate outcomes
-#' @param arm string, either `"actv"` or `"ctrl"`
+#' @param arm character scalar
 #' @param acceleration_hrqol scalar, acceleration of HRQoL improvement
 #' @param mortality_rng function, a function that produces times of death (only one parameter which should be the number of values to sample)
-#' @param min_valid_hrqol scalar, the minimum valid HRQoL value
 #'
 #' @keywords internal
 #' @return Data.table with outcome results for all patients. NB! There are no trial_id indicator as
@@ -15,33 +14,40 @@
 estimation_helper <- function(
 		n_patients,
 		arm,
-		start_hrqol_arm,
+
+		index_hrqol_arm,
+		first_hrqol_arm,
 		final_hrqol_arm,
 		inter_patient_noise_sd,
 		acceleration_hrqol,
 
-		prop_mortality_benefitters_actv,
+		prop_mortality_benefitters,
 		mortality_trajectory_shape,
 		mortality_dampening,
 		mortality_rng,
 
 		sampling_frequency = NULL,
 		n_digits = 2,
-		min_valid_hrqol = -0.757
+		valid_hrqol_range = c(-0.757, 1.0)
 ) {
 
 	t_icu_discharge <- sample_t_icu_discharge(n_patients)
 	t_death <- mortality_rng(n_patients)
-	is_mortality_benefitter <- (arm == "actv") &
-		(stats::runif(n_patients) < prop_mortality_benefitters_actv)
-	start_hrqol_patients <- round(
-		stats::rnorm(n_patients, start_hrqol_arm, inter_patient_noise_sd),
+
+	is_mortality_benefitter <- if (prop_mortality_benefitters > 0) {
+		stats::runif(n_patients) < prop_mortality_benefitters
+	} else {
+		rep(FALSE, n_patients)
+	}
+
+	first_hrqol_patients <- round(
+		stats::rnorm(n_patients, first_hrqol_arm, inter_patient_noise_sd),
 		digits = n_digits
 	)
 
 	patients <- data.table::data.table(
 		t_icu_discharge,
-		start_hrqol_patient = pmin(pmax(start_hrqol_patients, min_valid_hrqol), 1L),
+		first_hrqol_patient = pmin(pmax(first_hrqol_patients, valid_hrqol_range[1]), valid_hrqol_range[2]),
 		t_death,
 		is_mortality_benefitter
 	)
@@ -55,11 +61,12 @@ estimation_helper <- function(
 				compute_estimates(
 					t_icu_discharge = arg1,
 					t_death = arg3,
-					start_hrqol_patient = arg2,
+					first_hrqol_patient = arg2,
 					is_mortality_benefitter = arg4,
 
 					acceleration_hrqol = acceleration_hrqol,
-					start_hrqol_arm = start_hrqol_arm,
+					index_hrqol_arm = index_hrqol_arm,
+					first_hrqol_arm = first_hrqol_arm,
 					final_hrqol_arm = final_hrqol_arm,
 					mortality_trajectory_shape = mortality_trajectory_shape,
 					mortality_dampening = mortality_dampening,
@@ -69,7 +76,7 @@ estimation_helper <- function(
 				)
 			},
 			t_icu_discharge,
-			start_hrqol_patient,
+			first_hrqol_patient,
 			t_death,
 			is_mortality_benefitter,
 			SIMPLIFY = FALSE

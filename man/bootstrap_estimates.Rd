@@ -15,8 +15,11 @@ bootstrap_estimates(
 \arguments{
 \item{vals}{numeric vector}
 
-\item{grps}{character vector, allowed values are "ctrl" and "actv" and used to
-slice \code{x} into two vectors with values to be compared.}
+\item{grps}{character vector, allowed values are "ctrl" and "actv" and used to slice \code{x} into two
+vectors with values to be compared.}
+
+\item{na_replacement}{scalar (or \code{NULL}), if \code{NULL} missing values will be removed. Otherwise,
+missing values will be replaced by the value of \code{na_replacement}}
 
 \item{n_samples}{scalar, number of bootstrap samples}
 

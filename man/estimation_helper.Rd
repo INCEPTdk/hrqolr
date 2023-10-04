@@ -7,46 +7,49 @@
 estimation_helper(
   n_patients,
   arm,
-  start_hrqol_arm,
+  index_hrqol_arm,
+  first_hrqol_arm,
   final_hrqol_arm,
   inter_patient_noise_sd,
   acceleration_hrqol,
-  prop_mortality_benefitters_actv,
+  prop_mortality_benefitters,
   mortality_trajectory_shape,
   mortality_dampening,
   mortality_rng,
   sampling_frequency = NULL,
   n_digits = 2,
-  min_valid_hrqol = -0.757
+  valid_hrqol_range = c(-0.757, 1)
 )
 }
 \arguments{
 \item{n_patients}{int, the number of patients for whom to estimate outcomes}
 
-\item{arm}{string, either \code{"actv"} or \code{"ctrl"}}
+\item{arm}{character scalar}
 
-\item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
+\item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement}
 
-\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
-the active arm who are so-called mortality benefitters.}
+\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
+each arm who are so-called mortality benefitters.}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
+\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
 
-\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
-before end of follow-up}
+\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
+patients who die before end of follow-up}
 
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
 
-\item{sampling_frequency}{int, for span between samplings from patients}
+\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 
-\item{n_digits}{int, the number of digits of HRQoL values}
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
 
-\item{min_valid_hrqol}{scalar, the minimum valid HRQoL value}
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 }
 \value{
 Data.table with outcome results for all patients. NB! There are no trial_id indicator as

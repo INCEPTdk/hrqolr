@@ -5,70 +5,83 @@
 \title{Simulate trials}
 \usage{
 simulate_trials(
-  n_trials = 100000L,
+  n_trials = 100L,
   n_patients_per_arm = 100L,
-  start_hrqol_ctrl = 0.1,
-  final_hrqol_ctrl = 0.75,
-  relative_improvement_start_hrqol_actv = 0,
-  relative_improvement_final_hrqol_actv = 0.1,
   sampling_frequency = 14L,
-  acceleration_hrqol_actv = 0.1,
-  mortality_ctrl = 0.4,
-  relative_mortality_reduction_actv = 0.05,
-  mortality_dampening = 0.7,
-  mortality_trajectory_shape = "exp_decay",
-  prop_mortality_benefitters_actv = 0.1,
+  n_patients_ground_truth = 1000L,
+  n_example_trajectories_per_arm = 50L,
+  arms = c("A", "B"),
+  index_hrqol = c(A = 0, B = 0),
+  first_hrqol = c(A = 0.1, B = 0.1),
+  final_hrqol = c(A = 0.75, B = 0.75),
+  acceleration_hrqol = c(A = 0, B = 0),
+  mortality = c(A = 0.4, B = 0.4),
+  mortality_dampening = c(A = 0, B = 0.7),
+  mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
+  prop_mortality_benefitters = c(A = 0, B = 0),
+  test_fun = welch_t_test,
   verbose = TRUE,
   n_digits = 2,
   seed = NULL,
-  n_patients_ground_truth = 100000L,
-  n_example_trajectories_per_arm = 0,
+  valid_hrqol_range = c(-0.757, 1),
+  alpha = 0.05,
   ...
 )
 }
 \arguments{
-\item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given
-by the elements.}
+\item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given}
 
 \item{n_patients_per_arm}{int scalar}
 
-\item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
-follow-up in the control arm, respectively}
-
-\item{relative_improvement_start_hrqol_actv, relative_improvement_final_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at start and end of
-follow-up, resp. in the active arm will be increased by \verb{10\%} compared to the control arm}
-
-\item{sampling_frequency}{int, for span between samplings from patients}
-
-\item{acceleration_hrqol_actv}{scalar, relative acceleration of HRQoL improvement in the active
-arm}
-
-\item{mortality_ctrl}{numeric scalar, the mortality in the control group at end of follow-up}
-
-\item{relative_mortality_reduction_actv}{numeric scalar, e.g. \code{0.10} means that the mortality in
-the active arm is \verb{90\%} of that in the control arm}
-
-\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
-before end of follow-up}
-
-\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
-
-\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
-the active arm who are so-called mortality benefitters.}
-
-\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
-
-\item{n_digits}{int, the number of digits of HRQoL values}
-
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).}
+\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 
 \item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
 truth}
 
-\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the returned
-object}
+\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
+returned object}
+
+\item{arms}{character vector with the names of the arms. Must match the names of named vectors
+below.}
+
+\item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
+
+\item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
+
+\item{final_hrqol}{named numeric vector, the HRQoL at end of follow-up in each arm}
+
+\item{acceleration_hrqol}{named numeric vector, relative acceleration of HRQoL improvement in
+each arm}
+
+\item{mortality}{named numeric vector in \verb{[0, 1]}, the mortality in at end of follow-up, in each
+arm}
+
+\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
+patients who die before end of follow-up}
+
+\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
+
+\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
+each arm who are so-called mortality benefitters.}
+
+\item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
+\code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
+below.}
+
+\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
+
+\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+
+\item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
+arms.}
 
 \item{..., }{not used}
 }
@@ -79,4 +92,9 @@ elapsed time.
 }
 \description{
 This is the key user-facing function for simulating trials.
+}
+\details{
+\itemize{
+\item \code{test_fun}: [pending]
+}
 }

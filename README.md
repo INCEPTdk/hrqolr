@@ -31,10 +31,12 @@ Sygeforsikringen “danmark” (<https://www.sygeforsikring.dk/>).
 
 ## Installation
 
-The easiest way is to install from CRAN directly:
+`hrqolr` isn’t on CRAN yet but can be installed from GitHub if you have
+the `remotes` package installed:
 
 ``` r
-install.packages("hrqolr")
+# install.packages("remotes") 
+remotes::install_github("INCEPTdk/hrqolr")
 ```
 
 You can also install the **development version** from directly from
@@ -43,74 +45,81 @@ development version may contain additional features not yet available in
 the stable CRAN version, but may be unstable or lack documentation.
 
 ``` r
-# install.packages("remotes") 
 remotes::install_github("INCEPTdk/hrqolr@dev")
 ```
 
 ## Example
 
-`hrqolr` was built to simulate many scenarios.
+First, load the package:
 
 ``` r
 library(hrqolr)
-#> Loading 'hrqolr' package v0.1.0.
-#> For help, run 'help("hrqolr")' or 
-#> check out https://inceptdk.github.io/hrqolr/.
-#> Consider running 'cache_hrqolr()' for faster simulations. 
-#> If you have enough RAM, consider increasing the cache size; 
+#> Loading 'hrqolr' package v0.0.9000.
+#> For help, run 'help("hrqolr")' or check out https://inceptdk.github.io/hrqolr/.
+#> Consider running 'cache_hrqolr()' for faster simulations. If you have enough RAM, increasing the cache size might speed up things even more; 
 #> run '?cache_hrqolr' for details.
-cache_hrqolr()
+```
 
+–then, we activate the cache. This is optional but highly recommended.
+
+``` r
+cache_hrqolr()
+```
+
+`hrqolr` was built to simulate many scenarios, but here we define a
+single scenario and use `do.call` to give the list elements as named
+arguments to the function:
+
+``` r
 scenario <- list(
     n_trials = 100L,
     n_patients_per_arm = 100L,
-    
-    start_hrqol_ctrl = 0.1,
-    final_hrqol_ctrl = 0.75,
-    relative_improvement_final_hrqol_actv = 0.0,
     sampling_frequency = 14L,
-    acceleration_hrqol_actv = 0.1,
-    
-    mortality_ctrl = 0.4,
-    relative_mortality_reduction_actv = 0.0,
-    mortality_dampening = 0.0,
-    mortality_trajectory_shape = "exp_decay",
-    prop_mortality_benefitters_actv = 0.0,
-    
-    n_digits = 3,
     n_patients_ground_truth = 1000L,
-    n_example_trajectories_per_arm = 100L
+    n_example_trajectories_per_arm = 100L,
+    
+    arms = c("A", "B"),
+    index_hrqol = c(A = 0.0, B = 0.0),
+    first_hrqol = c(A = 0.1, B = 0.1),
+    final_hrqol = c(A = 0.8, B = 0.7),
+    acceleration_hrqol = c(A = 0.1, B = 0.0),
+    
+    mortality = c(A = 0.4, B = 0.4),
+    mortality_dampening = c(A = 0.0, B = 0.0),
+    mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
+    prop_mortality_benefitters = c(A = 0.0, B = 0.0),
+    n_digits = 3
 )
 
 example_trajs <- do.call(sample_example_trajectories, scenario)
 example_trajs
 #> $arm_level
-#>               arm          x         y
-#>   1: intervention   0.000000 0.0000000
-#>   2: intervention   9.000000 0.1000000
-#>   3: intervention   9.007835 0.1100861
-#>   4: intervention   9.022878 0.1102224
-#>   5: intervention   9.045034 0.1104414
-#>  ---                                  
-#> 594:      control 190.582005 0.7500000
-#> 595:      control 190.748687 0.7500000
-#> 596:      control 190.874375 0.7500000
-#> 597:      control 190.958377 0.7500000
-#> 598:      control 191.000000 0.7500000
+#>      arm          x         y
+#>   1:   A   0.000000 0.0000000
+#>   2:   A   5.000000 0.1100000
+#>   3:   A   5.006211 0.1100609
+#>   4:   A   5.017999 0.1102155
+#>   5:   A   5.035294 0.1104622
+#>  ---                         
+#> 594:   B 186.604774 0.7000000
+#> 595:   B 186.762172 0.7000000
+#> 596:   B 186.880937 0.7000000
+#> 597:   B 186.960426 0.7000000
+#> 598:   B 187.000000 0.7000000
 #> 
 #> $patient_level
-#>                arm  id   x     y
-#>    1: intervention   1   0 0.000
-#>    2: intervention   1   3 0.156
-#>    3: intervention   1   4 0.000
-#>    4: intervention   2   0 0.000
-#>    5: intervention   2  10    NA
-#>   ---                           
-#> 2038:      control 199 189 0.756
-#> 2039:      control 200   0 0.000
-#> 2040:      control 200   2 0.059
-#> 2041:      control 200  16 0.000
-#> 2042:      control 200  20 0.000
+#>       arm  id   x         y
+#>    1:   A   1   0 0.0000000
+#>    2:   A   1   9 0.1210000
+#>    3:   A   1  10 0.0000000
+#>    4:   A   2   0 0.0000000
+#>    5:   A   2  50 0.0820000
+#>   ---                      
+#> 2252:   B 200 133 0.7223143
+#> 2253:   B 200 147 0.7280000
+#> 2254:   B 200 161 0.7310000
+#> 2255:   B 200 175 0.7310000
+#> 2256:   B 200 189 0.7310000
 #> 
 #> attr(,"class")
 #> [1] "hrqolr_trajectories" "list"
@@ -122,7 +131,7 @@ example_trajs
 plot(example_trajs)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 You might also want to break apart the trajectories in the arms. Hiding
 the legend, then, makes sense as the facet strips will already provide
@@ -137,10 +146,10 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
     theme(legend.position = "none")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 Of course, we might also be interested in summarising the trajectories.
-Here, for example, with inter-quartile range. Note that the ribbons
+Here, for example, with inter-quartile ranges. Note that the ribbons
 become a bit wonky at end of follow-up because there are increasingly
 few observations, and some of them may be low because, e.g., *mortality
 benefitters* are still alive.
@@ -149,142 +158,111 @@ benefitters* are still alive.
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 The same scenario specification can, then, be used to simulate a desired
 number of trials:
 
 ``` r
 sims <- do.call(simulate_trials, scenario)
-#> 2023-09-29 22:32:13: STARTING BATCH 1 (0 secs)
-#> 2023-09-29 22:32:13: Estimating ground truth of arm actv (0.01 secs)
-#> 2023-09-29 22:32:26: Finished actv arm in batch (12.12 secs)
-#> 2023-09-29 22:32:26: Estimating ground truth of arm ctrl (12.12 secs)
-#> 2023-09-29 22:32:37: Finished ctrl arm in batch (11.45 secs)
-#> 2023-09-29 22:32:37: Finished batch (11.78 secs)
-#> 2023-09-29 22:32:38: Combining data into final return struct (24.07 secs)
-#> 2023-09-29 22:32:38: Wrapping up, returning output (24.1 secs)
+#> 2023-10-04 14:38:31: Estimating ground truth of arm A (0 secs)
+#> 2023-10-04 14:38:43: Finished arm 'A' in batch (12.09 secs)
+#> 2023-10-04 14:38:43: Estimating ground truth of arm B (12.09 secs)
+#> 2023-10-04 14:38:56: Finished arm 'B' in batch (13.08 secs)
+#> 2023-10-04 14:38:56: Finished batch (13.32 secs)
+#> 2023-10-04 14:38:56: Combining data into final return struct (25.53 secs)
+#> 2023-10-04 14:38:56: Wrapping up, returning output (25.56 secs)
 sims
 #> $summary_stats
-#>                                  outcome          arm        mean         p25
-#>  1:    surv__primary__hrqol_at_eof__mean intervention   0.5363629   0.5180439
-#>  2:    surv__primary__hrqol_at_eof__mean      control   0.5436186   0.5250157
-#>  3:       surv__primary__hrqol_auc__mean intervention  78.6739450  75.7291399
-#>  4:       surv__primary__hrqol_auc__mean      control  78.1052664  75.1811988
-#>  5: surv__secondary1__hrqol_at_eof__mean intervention   0.6361485   0.6137020
-#>  6: surv__secondary1__hrqol_at_eof__mean      control   0.6447538   0.6219722
-#>  7:    surv__secondary1__hrqol_auc__mean intervention  93.1917532  90.1781333
-#>  8:    surv__secondary1__hrqol_auc__mean      control  92.3883222  89.3774531
-#>  9: surv__secondary2__hrqol_at_eof__mean intervention   0.7347596   0.7309086
-#> 10: surv__secondary2__hrqol_at_eof__mean      control   0.7446996   0.7407697
-#> 11:    surv__secondary2__hrqol_auc__mean intervention 100.8029468 100.0206638
-#> 12:    surv__secondary2__hrqol_auc__mean      control 100.3282820  99.5402182
-#> 13:     all__primary__hrqol_at_eof__mean intervention   0.4349474   0.4038075
-#> 14:     all__primary__hrqol_at_eof__mean      control   0.4408314   0.4093075
-#> 15:        all__primary__hrqol_auc__mean intervention  63.8011554  59.4058002
-#> 16:        all__primary__hrqol_auc__mean      control  63.3397780  58.9523711
-#> 17:  all__secondary1__hrqol_at_eof__mean intervention   0.4350250   0.4038075
-#> 18:  all__secondary1__hrqol_at_eof__mean      control   0.4409100   0.4093075
-#> 19:     all__secondary1__hrqol_auc__mean intervention  63.7307650  59.3082761
-#> 20:     all__secondary1__hrqol_auc__mean      control  63.1810940  58.7902536
-#> 21:  all__secondary2__hrqol_at_eof__mean intervention   0.4350250   0.4038075
-#> 22:  all__secondary2__hrqol_at_eof__mean      control   0.4409100   0.4093075
-#> 23:     all__secondary2__hrqol_auc__mean intervention  59.6803108  55.1923682
-#> 24:     all__secondary2__hrqol_auc__mean      control  59.3992286  54.9363650
-#>                                  outcome          arm        mean         p25
-#>             p50         p75          sd           se
-#>  1:   0.5378694   0.5649285 0.038368805 0.0038368805
-#>  2:   0.5451308   0.5725293 0.038875801 0.0038875801
-#>  3:  78.7370355  82.5499391 5.640287968 0.5640287968
-#>  4:  78.1600141  81.9473627 5.598226080 0.5598226080
-#>  5:   0.6381614   0.6555895 0.030252419 0.0030252419
-#>  6:   0.6467935   0.6643916 0.030636807 0.0030636807
-#>  7:  93.0348663  95.8695896 4.536845003 0.4536845003
-#>  8:  92.2908923  95.0342591 4.499531724 0.4499531724
-#>  9:   0.7350565   0.7398001 0.008325213 0.0008325213
-#> 10:   0.7450565   0.7498001 0.008391762 0.0008391762
-#> 11: 100.9365647 101.6080603 1.260308655 0.1260308655
-#> 12: 100.4613556 101.1290890 1.255960397 0.1255960397
-#> 13:   0.4350900   0.4636600 0.036942242 0.0036942242
-#> 14:   0.4409900   0.4698900 0.037436543 0.0037436543
-#> 15:  63.8060768  68.0960443 5.461966473 0.5461966473
-#> 16:  63.3256063  67.5938003 5.419147247 0.5419147247
-#> 17:   0.4350900   0.4636600 0.036813658 0.0036813658
-#> 18:   0.4409900   0.4698900 0.037306248 0.0037306248
-#> 19:  63.6956264  68.0591989 5.460269005 0.5460269005
-#> 20:  63.1506977  67.4808441 5.411327893 0.5411327893
-#> 21:   0.4350900   0.4636600 0.036813658 0.0036813658
-#> 22:   0.4409900   0.4698900 0.037306248 0.0037306248
-#> 23:  59.6927726  63.7065086 5.044316436 0.5044316436
-#> 24:  59.4120469  63.4006617 5.020074136 0.5020074136
-#>             p50         p75          sd           se
+#>                      outcome arm  analysis         p25         p50         p75
+#>  1:    primary__hrqol_at_eof   A       all   0.4545150   0.4755350   0.4976625
+#>  2:    primary__hrqol_at_eof   B       all   0.3945425   0.4183150   0.4411500
+#>  3:       primary__hrqol_auc   A       all  66.3712879  69.6579439  72.7747194
+#>  4:       primary__hrqol_auc   B       all  56.7253300  60.5214887  63.3352651
+#>  5: secondary1__hrqol_at_eof   A       all   0.4545150   0.4755350   0.4976625
+#>  6: secondary1__hrqol_at_eof   B       all   0.3952650   0.4183150   0.4411500
+#>  7:    secondary1__hrqol_auc   A       all  66.3337672  69.5726049  72.7028925
+#>  8:    secondary1__hrqol_auc   B       all  56.6950110  60.3027054  63.2218979
+#>  9: secondary2__hrqol_at_eof   A       all   0.4545150   0.4755350   0.4976625
+#> 10: secondary2__hrqol_at_eof   B       all   0.3952650   0.4183150   0.4411500
+#> 11:    secondary2__hrqol_auc   A       all  62.3874079  65.2913302  68.1377208
+#> 12:    secondary2__hrqol_auc   B       all  53.1958311  56.4383943  59.4447974
+#> 13:    primary__hrqol_at_eof   A survivors   0.5600473   0.5840513   0.6082282
+#> 14:    primary__hrqol_at_eof   B survivors   0.4885596   0.5106373   0.5340828
+#> 15:       primary__hrqol_auc   A survivors  82.1101393  85.3571708  89.2243108
+#> 16:       primary__hrqol_auc   B survivors  70.3347862  73.7634297  77.0674439
+#> 17: secondary1__hrqol_at_eof   A survivors   0.6596208   0.6860463   0.7071192
+#> 18: secondary1__hrqol_at_eof   B survivors   0.5881867   0.6071097   0.6259293
+#> 19:    secondary1__hrqol_auc   A survivors  96.5894743 100.5117371 102.8966477
+#> 20:    secondary1__hrqol_auc   B survivors  84.5784544  87.1273619  90.2613489
+#> 21: secondary2__hrqol_at_eof   A survivors   0.7758056   0.7846061   0.7922107
+#> 22: secondary2__hrqol_at_eof   B survivors   0.6889943   0.6959494   0.7015797
+#> 23:    secondary2__hrqol_auc   A survivors 106.5290293 107.5943341 108.5483765
+#> 24:    secondary2__hrqol_auc   B survivors  92.8010617  93.7169985  94.5147982
+#>                      outcome arm  analysis         p25         p50         p75
+#>            mean          sd           se
+#>  1:   0.4757633 0.033922731 0.0033922731
+#>  2:   0.4156550 0.035100797 0.0035100797
+#>  3:  69.6804500 4.949652678 0.4949652678
+#>  4:  59.9142122 4.997006133 0.4997006133
+#>  5:   0.4760869 0.033855927 0.0033855927
+#>  6:   0.4159338 0.035238449 0.0035238449
+#>  7:  69.6316306 4.947023786 0.4947023786
+#>  8:  59.7486650 5.029279108 0.5029279108
+#>  9:   0.4760869 0.033855927 0.0033855927
+#> 10:   0.4159338 0.035238449 0.0035238449
+#> 11:  65.2738004 4.633036904 0.4633036904
+#> 12:  56.0319007 4.733978947 0.4733978947
+#> 13:   0.5844709 0.034916038 0.0034916038
+#> 14:   0.5118941 0.035819467 0.0035819467
+#> 15:  85.6050894 5.150381886 0.5150381886
+#> 16:  73.7888922 5.108277033 0.5108277033
+#> 17:   0.6828919 0.032447747 0.0032447747
+#> 18:   0.6072027 0.028211609 0.0028211609
+#> 19:  99.8836155 4.850081013 0.4850081013
+#> 20:  87.2285342 4.063915778 0.4063915778
+#> 21:   0.7834906 0.011557565 0.0011557565
+#> 22:   0.6948380 0.009294728 0.0009294728
+#> 23: 107.4226576 1.657530848 0.1657530848
+#> 24:  93.6059112 1.302426009 0.1302426009
+#>            mean          sd           se
 #> 
 #> $comparisons
-#>                            outcome         mean mean_ground_truth           sd
-#>  1:    surv__primary__hrqol_at_eof -0.007255676      -0.032463362 5.102650e-04
-#>  2:       surv__primary__hrqol_auc  0.568678594      -3.427828929 5.062304e-02
-#>  3: surv__secondary1__hrqol_at_eof -0.008605298      -0.014425307 3.897969e-04
-#>  4:    surv__secondary1__hrqol_auc  0.803430982      -0.475974463 4.511705e-02
-#>  5: surv__secondary2__hrqol_at_eof -0.009940054      -0.007674645 9.296047e-05
-#>  6:    surv__secondary2__hrqol_auc  0.474664850       0.150302836 1.750253e-02
-#>  7:     all__primary__hrqol_at_eof -0.005884000      -0.031188000 4.965985e-04
-#>  8:        all__primary__hrqol_auc  0.461377320      -3.484177734 4.842485e-02
-#>  9:  all__secondary1__hrqol_at_eof -0.005885000      -0.030474000 4.948982e-04
-#> 10:     all__secondary1__hrqol_auc  0.549671032      -3.307522503 5.180743e-02
-#> 11:  all__secondary2__hrqol_at_eof -0.005885000      -0.030474000 4.948982e-04
-#> 12:     all__secondary2__hrqol_auc  0.281082149      -3.430510836 2.619489e-02
-#>               se         bias bias_corrected_coverage
-#>  1: 5.102650e-05  0.025207687                       1
-#>  2: 5.062304e-03  3.996507524                       1
-#>  3: 3.897969e-05  0.005820009                       1
-#>  4: 4.511705e-03  1.279405446                       1
-#>  5: 9.296047e-06 -0.002265409                       1
-#>  6: 1.750253e-03  0.324362015                       1
-#>  7: 4.965985e-05  0.025304000                       1
-#>  8: 4.842485e-03  3.945555054                       1
-#>  9: 4.948982e-05  0.024589000                       1
-#> 10: 5.180743e-03  3.857193535                       1
-#> 11: 4.948982e-05  0.024589000                       1
-#> 12: 2.619489e-03  3.711592986                       1
-#>     bias_corrected_coverage_se      bias_se coverage coverage_se          mse
-#>  1:                          0 5.102650e-05        1           0 6.356852e-04
-#>  2:                          0 5.062304e-03        1           0 1.597461e+01
-#>  3:                          0 3.897969e-05        1           0 3.402292e-05
-#>  4:                          0 4.511705e-03        1           0 1.638893e+00
-#>  5:                          0 9.296047e-06        1           0 5.140631e-06
-#>  6:                          0 1.750253e-03        1           0 1.055140e-01
-#>  7:                          0 4.965985e-05        1           0 6.405366e-04
-#>  8:                          0 4.842485e-03        1           0 1.556973e+01
-#>  9:                          0 4.948982e-05        1           0 6.048614e-04
-#> 10:                          0 5.180743e-03        1           0 1.488060e+01
-#> 11:                          0 4.948982e-05        1           0 6.048614e-04
-#> 12:                          0 2.619489e-03        1           0 1.377660e+01
-#>           mse_se n_sim          p25          p50          p75
-#>  1: 2.581155e-06   100 -0.007597533 -0.007272727 -0.006971836
-#>  2: 4.033858e-02   100  0.541569003  0.569016907  0.605626993
-#>  3: 4.528374e-07   100 -0.008873239 -0.008642506 -0.008326923
-#>  4: 1.153228e-02   100  0.776209726  0.803571104  0.831226660
-#>  5: 4.105549e-08   100 -0.010000000 -0.010000000 -0.009841270
-#>  6: 1.121230e-03   100  0.464162632  0.476716450  0.486870779
-#>  7: 2.519071e-06   100 -0.006300000 -0.005900000 -0.005500000
-#>  8: 3.815105e-02   100  0.430383558  0.466298588  0.501366554
-#>  9: 2.439440e-06   100 -0.006300000 -0.005900000 -0.005500000
-#> 10: 3.988587e-02   100  0.521086035  0.551357547  0.592534980
-#> 11: 2.439440e-06   100 -0.006300000 -0.005900000 -0.005500000
-#> 12: 1.942701e-02   100  0.264706686  0.282819463  0.300313246
-#>     rejection_proportion rejection_proportion_se relative_bias relative_bias_se
-#>  1:                    0                       0    -0.7764965     0.0015718181
-#>  2:                    0                       0    -1.1659005     0.0014768253
-#>  3:                    0                       0    -0.4034582     0.0027021740
-#>  4:                    0                       0    -2.6879708     0.0094788803
-#>  5:                    0                       0     0.2951809     0.0012112673
-#>  6:                    0                       0     2.1580565     0.0116448438
-#>  7:                    0                       0    -0.8113377     0.0015922744
-#>  8:                    0                       0    -1.1324207     0.0013898502
-#>  9:                    0                       0    -0.8068846     0.0016240015
-#> 10:                    0                       0    -1.1661881     0.0015663515
-#> 11:                    0                       0    -0.8068846     0.0016240015
-#> 12:                    0                       0    -1.0819359     0.0007635858
+#>                     outcome        mean mean_ground_truth         sd
+#> 1:    primary__hrqol_at_eof  -0.0601083         -0.077066 0.05247630
+#> 2:       primary__hrqol_auc -11.8161973        -14.389573 7.62188493
+#> 3: secondary1__hrqol_at_eof  -0.0601531         -0.077066 0.05238591
+#> 4:    secondary1__hrqol_auc -12.6550813        -15.024230 6.10626065
+#> 5: secondary2__hrqol_at_eof  -0.0601531         -0.077066 0.05238591
+#> 6:    secondary2__hrqol_auc -13.8167464        -13.076459 1.91552865
+#>             se  analysis comparator target       bias     bias_se relative_bias
+#> 1: 0.005247630       all          A      B  0.0169577 0.005247630   -0.22004126
+#> 2: 0.762188493 survivors          A      B  2.5733754 0.762188493   -0.17883613
+#> 3: 0.005238591       all          A      B  0.0169129 0.005238591   -0.21945994
+#> 4: 0.610626065 survivors          A      B  2.3691489 0.610626065   -0.15768854
+#> 5: 0.005238591       all          A      B  0.0169129 0.005238591   -0.21945994
+#> 6: 0.191552865 survivors          A      B -0.7402870 0.191552865    0.05661219
+#>    relative_bias_se          mse       mse_se coverage coverage_se
+#> 1:       0.06809267  0.003013788 0.0004480764     0.94  0.02374868
+#> 2:       0.05296811 64.134459638 9.0517072872     0.93  0.02551470
+#> 3:       0.06797539  0.003002887 0.0004521019     0.94  0.02374868
+#> 4:       0.04064275 42.526421575 5.8198356812     0.96  0.01959592
+#> 5:       0.06797539  0.003002887 0.0004521019     0.94  0.02374868
+#> 6:       0.01464868  4.180582305 0.6382570299     0.96  0.01959592
+#>    bias_corrected_coverage bias_corrected_coverage_se rejection_proportion
+#> 1:                    0.94                 0.02374868                 0.22
+#> 2:                    0.93                 0.02551470                 0.34
+#> 3:                    0.93                 0.02551470                 0.22
+#> 4:                    0.97                 0.01705872                 0.50
+#> 5:                    0.93                 0.02551470                 0.22
+#> 6:                    0.97                 0.01705872                 0.99
+#>    rejection_proportion_se n_sim         p25       p50        p75
+#> 1:             0.041424630   100  -0.0936775  -0.05713  -0.023330
+#> 2:             0.047370877   100 -17.2428597 -11.42719  -6.922696
+#> 3:             0.041424630   100  -0.0936775  -0.05713  -0.024570
+#> 4:             0.050000000   100 -16.2669058 -13.18206  -8.144643
+#> 5:             0.041424630   100  -0.0936775  -0.05713  -0.024570
+#> 6:             0.009949874   100 -15.0271941 -13.84674 -12.683173
 #> 
 #> $args
 #> $args$n_trials
@@ -293,38 +271,52 @@ sims
 #> $args$n_patients_per_arm
 #> [1] 100
 #> 
-#> $args$start_hrqol_ctrl
-#> [1] 0.1
-#> 
-#> $args$final_hrqol_ctrl
-#> [1] 0.75
-#> 
-#> $args$relative_improvement_start_hrqol_actv
-#> [1] 0
-#> 
-#> $args$relative_improvement_final_hrqol_actv
-#> [1] 0
-#> 
 #> $args$sampling_frequency
 #> [1] 14
 #> 
-#> $args$acceleration_hrqol_actv
-#> [1] 0.1
+#> $args$n_patients_ground_truth
+#> [1] 1000
 #> 
-#> $args$mortality_ctrl
-#> [1] 0.4
+#> $args$n_example_trajectories_per_arm
+#> [1] 100
 #> 
-#> $args$relative_mortality_reduction_actv
-#> [1] 0
+#> $args$arms
+#> [1] "A" "B"
+#> 
+#> $args$index_hrqol
+#> A B 
+#> 0 0 
+#> 
+#> $args$first_hrqol
+#>   A   B 
+#> 0.1 0.1 
+#> 
+#> $args$final_hrqol
+#>   A   B 
+#> 0.8 0.7 
+#> 
+#> $args$acceleration_hrqol
+#>   A   B 
+#> 0.1 0.0 
+#> 
+#> $args$mortality
+#>   A   B 
+#> 0.4 0.4 
 #> 
 #> $args$mortality_dampening
-#> [1] 0
+#> A B 
+#> 0 0 
 #> 
 #> $args$mortality_trajectory_shape
-#> [1] "exp_decay"
+#>           A           B 
+#> "exp_decay" "exp_decay" 
 #> 
-#> $args$prop_mortality_benefitters_actv
-#> [1] 0
+#> $args$prop_mortality_benefitters
+#> A B 
+#> 0 0 
+#> 
+#> $args$test_fun
+#> welch_t_test
 #> 
 #> $args$verbose
 #> [1] TRUE
@@ -333,52 +325,49 @@ sims
 #> [1] 3
 #> 
 #> $args$seed
-#> [1] 1028563912
+#> [1] -1508126091
 #> 
-#> $args$n_patients_ground_truth
-#> [1] 1000
+#> $args$valid_hrqol_range
+#> c(-0.757, 1)
 #> 
-#> $args$n_example_trajectories_per_arm
-#> [1] 100
+#> $args$alpha
+#> [1] 0.05
 #> 
-#> $args$...
-#> 
-#> 
-#> 
-#> $elapsed_time
-#> Time difference of 24.10509 secs
 #> 
 #> $example_trajectories
 #> $arm_level
-#>               arm         x         y
-#>   1: intervention   0.00000 0.0000000
-#>   2: intervention  12.00000 0.1000000
-#>   3: intervention  12.00827 0.1100856
-#>   4: intervention  12.02421 0.1102203
-#>   5: intervention  12.04771 0.1104366
-#>  ---                                 
-#> 594:      control 179.62914 0.7500000
-#> 595:      control 179.77697 0.7500000
-#> 596:      control 179.88847 0.7500000
-#> 597:      control 179.96301 0.7500000
-#> 598:      control 180.00000 0.7500000
+#>      arm          x         y
+#>   1:   A   0.000000 0.0000000
+#>   2:   A   5.000000 0.1100000
+#>   3:   A   5.006211 0.1100609
+#>   4:   A   5.017999 0.1102155
+#>   5:   A   5.035294 0.1104622
+#>  ---                         
+#> 594:   B 186.604774 0.7000000
+#> 595:   B 186.762172 0.7000000
+#> 596:   B 186.880937 0.7000000
+#> 597:   B 186.960426 0.7000000
+#> 598:   B 187.000000 0.7000000
 #> 
 #> $patient_level
-#>                arm  id   x         y
-#>    1: intervention   1   0 0.0000000
-#>    2: intervention   1   2 0.0740000
-#>    3: intervention   1  16 0.3145785
-#>    4: intervention   1  30 0.4242271
-#>    5: intervention   1  44 0.5026606
-#>   ---                               
-#> 1915:      control 200 134 0.7298478
-#> 1916:      control 200 148 0.7360000
-#> 1917:      control 200 162 0.7380000
-#> 1918:      control 200 176 0.7380000
-#> 1919:      control 200 190 0.7380000
+#>       arm  id   x         y
+#>    1:   A   1   0 0.0000000
+#>    2:   A   1  10 0.1230000
+#>    3:   A   1  24 0.2803429
+#>    4:   A   1  38 0.4094467
+#>    5:   A   1  52 0.5276908
+#>   ---                      
+#> 2049:   B 200 127 0.6598121
+#> 2050:   B 200 141 0.6680000
+#> 2051:   B 200 155 0.6730000
+#> 2052:   B 200 169 0.6750000
+#> 2053:   B 200 183 0.6750000
 #> 
 #> attr(,"class")
 #> [1] "hrqolr_trajectories" "list"               
+#> 
+#> $elapsed_time
+#> Time difference of 25.82849 secs
 #> 
 #> attr(,"class")
 #> [1] "hrqolr_results" "list"
@@ -414,26 +403,22 @@ Changes to the code base should follow these steps:
 
 ## Citation
 
-If using the package, please consider citing it:
+If using `hrqolr`, please consider citing it:
 
 ``` r
 citation(package = "hrqolr")
 #> To cite package 'hrqolr' in publications use:
 #> 
-#>   it Ww (2023). _hrqolr: What the Package Does (Title Case)_. R package
-#>   version 0.1.0, <https://epiben.github.io/hrqolr/>.
+#>   Kaas-Hansen BS, Jensen AKG, Granholm A (2023). hrqolr: an R package
+#>   for simulating health-related quality of life trajectories.
+#>   https://inceptdk.github.io/hrqolr/
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {hrqolr: What the Package Does (Title Case)},
-#>     author = {Who wrote it},
+#>     title = {{hrqolr}: an R package for simulating health-related quality of life trajectories},
+#>     author = {Benjamin Skov Kaas-Hansen and Aksel Karl Georg Jensen and Anders Granholm},
 #>     year = {2023},
-#>     note = {R package version 0.1.0},
-#>     url = {https://epiben.github.io/hrqolr/},
+#>     url = {https://inceptdk.github.io/hrqolr/},
 #>   }
-#> 
-#> ATTENTION: This citation information has been auto-generated from the
-#> package DESCRIPTION file and may need manual editing, see
-#> 'help("citation")'.
 ```

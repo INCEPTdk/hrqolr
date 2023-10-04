@@ -40,10 +40,11 @@ article in Acta Anaesthesiologica Scandinavica outlining the first scientific st
 
 ## Installation
 
-The easiest way is to install from CRAN directly:
+`hrqolr` isn't on CRAN yet but can be installed from GitHub if you have the `remotes` package installed:
 
 ```{r eval = FALSE}
-install.packages("hrqolr")
+# install.packages("remotes") 
+remotes::install_github("INCEPTdk/hrqolr")
 ```
 
 You can also install the **development version** from directly from GitHub. Doing this
@@ -51,37 +52,42 @@ requires the *remotes*-package installed. The development version may contain
 additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.
 
 ```{r eval = FALSE}
-# install.packages("remotes") 
 remotes::install_github("INCEPTdk/hrqolr@dev")
 ```
 
 ## Example
-
-`hrqolr` was built to simulate many scenarios.
-
+First, load the package:
 ```{r}
 library(hrqolr)
-cache_hrqolr()
+```
 
+--then, we activate the cache. This is optional but highly recommended.
+
+```{r eval=FALSE}
+cache_hrqolr()
+```
+
+`hrqolr` was built to simulate many scenarios, but here we define a single scenario and use `do.call` to give the list elements as named arguments to the function:
+
+```{r}
 scenario <- list(
 	n_trials = 100L,
 	n_patients_per_arm = 100L,
-	
-	start_hrqol_ctrl = 0.1,
-	final_hrqol_ctrl = 0.75,
-	relative_improvement_final_hrqol_actv = 0.0,
 	sampling_frequency = 14L,
-	acceleration_hrqol_actv = 0.1,
-	
-	mortality_ctrl = 0.4,
-	relative_mortality_reduction_actv = 0.0,
-	mortality_dampening = 0.0,
-	mortality_trajectory_shape = "exp_decay",
-	prop_mortality_benefitters_actv = 0.0,
-	
-	n_digits = 3,
 	n_patients_ground_truth = 1000L,
-	n_example_trajectories_per_arm = 100L
+	n_example_trajectories_per_arm = 100L,
+	
+	arms = c("A", "B"),
+	index_hrqol = c(A = 0.0, B = 0.0),
+	first_hrqol = c(A = 0.1, B = 0.1),
+	final_hrqol = c(A = 0.8, B = 0.7),
+	acceleration_hrqol = c(A = 0.1, B = 0.0),
+	
+	mortality = c(A = 0.4, B = 0.4),
+	mortality_dampening = c(A = 0.0, B = 0.0),
+	mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
+	prop_mortality_benefitters = c(A = 0.0, B = 0.0),
+	n_digits = 3
 )
 
 example_trajs <- do.call(sample_example_trajectories, scenario)
@@ -103,7 +109,7 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
 	theme(legend.position = "none")
 ```
 
-Of course, we might also be interested in summarising the trajectories. Here, for example, with inter-quartile range. Note that the ribbons become a bit wonky at end of follow-up because there are increasingly few observations, and some of them may be low because, e.g., *mortality benefitters* are still alive.
+Of course, we might also be interested in summarising the trajectories. Here, for example, with inter-quartile ranges. Note that the ribbons become a bit wonky at end of follow-up because there are increasingly few observations, and some of them may be low because, e.g., *mortality benefitters* are still alive.
 
 ```{r}
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
@@ -139,7 +145,7 @@ of `adaptr`
 
 ## Citation
 
-If using the package, please consider citing it:
+If using `hrqolr`, please consider citing it:
 
 ```{r}
 citation(package = "hrqolr")

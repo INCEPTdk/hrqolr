@@ -7,7 +7,7 @@
 #' @param t_icu_discharge scalar, time of ICU discharge
 #' @param acceleration_hrqol scalar, acceleration of HRQoL improvement compared to baseline
 #'   trajectory
-#' @param start_hrqol_arm scalar, HRQoL at ICU discharge (at arm level)
+#' @param first_hrqol_arm scalar, HRQoL at ICU discharge (at arm level)
 #' @param final_hrqol_arm scalar HRQoL at end of follow-up (at arm level)
 #'
 #' @keywords internal
@@ -15,9 +15,10 @@
 #'
 construct_arm_level_trajectory <- function(
 		t_icu_discharge,
-		acceleration_hrqol = 0.0,
-		start_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75,
+		acceleration_hrqol,
+		index_hrqol_arm,
+		first_hrqol_arm,
+		final_hrqol_arm,
 		sampling_frequency = 14L
 ) {
 
@@ -36,10 +37,11 @@ construct_arm_level_trajectory <- function(
 
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
-	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - start_hrqol_arm))) + start_hrqol_arm
-	y_tmp[-1] <- y_tmp[-1] * seq(1L + acceleration_hrqol, 1L, length = length(y_tmp) - 1)
-		# HRQoL ICU discharge is unaffected by acceleration, so leave alone => [-1]
+	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - first_hrqol_arm))) + first_hrqol_arm
+	y_tmp <- y_tmp * seq(1 + acceleration_hrqol, 1, length = length(y_tmp))
 	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
-	rbind(c(x = 0L, y = 0L), as.matrix(traj)) # concatenate index values (t = 0, hrqol = 0)
+	rbind(c(x = 0, y = index_hrqol_arm[[1]]), as.matrix(traj))
+		# concatenate index values (i.e. values at enrolment)
+		# I use double brackets to remove the name of the value (5 times faster than unname())
 }
