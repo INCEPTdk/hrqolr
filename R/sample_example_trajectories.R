@@ -41,8 +41,6 @@ sample_example_trajectories <- function(
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
 	set.seed(seed)
 
-	browser()
-
 	t_icu_discharge <- sample_t_icu_discharge(n_example_trajectories_per_arm)
 	# the same for all arms to easy comparison ("counter-factual"-like)
 
