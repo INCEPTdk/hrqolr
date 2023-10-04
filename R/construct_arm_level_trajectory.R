@@ -15,9 +15,9 @@
 #'
 construct_arm_level_trajectory <- function(
 		t_icu_discharge,
-		acceleration_hrqol = 0.0,
-		first_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75,
+		acceleration_hrqol,
+		first_hrqol_arm,
+		final_hrqol_arm,
 		sampling_frequency = 14L
 ) {
 

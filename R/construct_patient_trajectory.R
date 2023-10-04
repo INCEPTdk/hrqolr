@@ -11,17 +11,17 @@
 #'
 construct_patient_trajectory <- function(
 		# Specific to this patient
-		t_icu_discharge = NULL,
-		t_death = NA,
-		first_hrqol_patient = first_hrqol_arm,
+		t_icu_discharge,
+		t_death,
+		first_hrqol_patient,
 
 		# Scenario settings
-		acceleration_hrqol = 0.0,
-		first_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75,
-		is_mortality_benefitter = FALSE,
-		mortality_trajectory_shape = "exp_decay",
-		mortality_dampening = 0.0,
+		acceleration_hrqol,
+		first_hrqol_arm,
+		final_hrqol_arm,
+		is_mortality_benefitter,
+		mortality_trajectory_shape,
+		mortality_dampening,
 
 		# Constant across patients
 		sampling_frequency = 14L,

@@ -9,17 +9,17 @@
 #'
 compute_estimates <- function(
 		# Specific to this patient
-		t_icu_discharge = NULL,
-		t_death = NA,
-		first_hrqol_patient = first_hrqol_arm,
-		is_mortality_benefitter = FALSE,
+		t_icu_discharge,
+		t_death,
+		first_hrqol_patient,
+		is_mortality_benefitter,
 
 		# Scenario settings
-		acceleration_hrqol = 0.0,
-		first_hrqol_arm = 0.1,
-		final_hrqol_arm = 0.75,
-		mortality_trajectory_shape = "exp_decay",
-		mortality_dampening = 0.0,
+		index_hrqol_arm,
+		first_hrqol_arm,
+		final_hrqol_arm,
+		mortality_trajectory_shape,
+		mortality_dampening,
 
 		# Constant across patients
 		sampling_frequency = 14L,

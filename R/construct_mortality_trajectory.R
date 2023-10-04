@@ -19,8 +19,8 @@
 construct_mortality_trajectory <- function(
 		t_death,
 		t_icu_discharge,
-		first_hrqol = 0.0,
-		mortality_trajectory_shape = "exp_decay",
+		first_hrqol,
+		mortality_trajectory_shape,
 		resolution = 100,
 		n_halflives_to_zero = 10
 ) {
