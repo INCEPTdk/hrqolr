@@ -6,8 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
-<!-- [![codecov](https://codecov.io/gh/INCEPTdk/adaptr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/adaptr/)
-![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
+[![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr)
+<!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
 Package for simulating two-arm randomised clinical trials with temporal
@@ -165,13 +165,13 @@ number of trials:
 
 ``` r
 sims <- do.call(simulate_trials, scenario)
-#> 2023-10-04 14:38:31: Estimating ground truth of arm A (0 secs)
-#> 2023-10-04 14:38:43: Finished arm 'A' in batch (12.09 secs)
-#> 2023-10-04 14:38:43: Estimating ground truth of arm B (12.09 secs)
-#> 2023-10-04 14:38:56: Finished arm 'B' in batch (13.08 secs)
-#> 2023-10-04 14:38:56: Finished batch (13.32 secs)
-#> 2023-10-04 14:38:56: Combining data into final return struct (25.53 secs)
-#> 2023-10-04 14:38:56: Wrapping up, returning output (25.56 secs)
+#> 2023-10-04 15:16:35: Estimating ground truth of arm A (0 secs)
+#> 2023-10-04 15:16:48: Finished arm 'A' in batch (13.12 secs)
+#> 2023-10-04 15:16:48: Estimating ground truth of arm B (13.12 secs)
+#> 2023-10-04 15:17:01: Finished arm 'B' in batch (12.59 secs)
+#> 2023-10-04 15:17:01: Finished batch (12.89 secs)
+#> 2023-10-04 15:17:01: Combining data into final return struct (26.17 secs)
+#> 2023-10-04 15:17:01: Wrapping up, returning output (26.2 secs)
 sims
 #> $summary_stats
 #>                      outcome arm  analysis         p25         p50         p75
@@ -367,7 +367,7 @@ sims
 #> [1] "hrqolr_trajectories" "list"               
 #> 
 #> $elapsed_time
-#> Time difference of 25.82849 secs
+#> Time difference of 26.49287 secs
 #> 
 #> attr(,"class")
 #> [1] "hrqolr_results" "list"
