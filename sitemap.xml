@@ -22,9 +22,6 @@
     <loc>https://epiben.github.io/hrqolr/reference/auc.html</loc>
   </url>
   <url>
-    <loc>https://epiben.github.io/hrqolr/reference/beautify_arm_var.html</loc>
-  </url>
-  <url>
     <loc>https://epiben.github.io/hrqolr/reference/bootstrap_estimates.html</loc>
   </url>
   <url>
@@ -67,7 +64,13 @@
     <loc>https://epiben.github.io/hrqolr/reference/estimation_helper.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/fast_mean.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/find_decay_halflife.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/games_howell_test.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/generate_mortality_funs.html</loc>

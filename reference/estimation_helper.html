@@ -51,17 +51,18 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimation_helper</span><span class="op">(</span></span>
 <span>  <span class="va">n_patients</span>,</span>
 <span>  <span class="va">arm</span>,</span>
-<span>  <span class="va">start_hrqol_arm</span>,</span>
+<span>  <span class="va">index_hrqol_arm</span>,</span>
+<span>  <span class="va">first_hrqol_arm</span>,</span>
 <span>  <span class="va">final_hrqol_arm</span>,</span>
 <span>  <span class="va">inter_patient_noise_sd</span>,</span>
 <span>  <span class="va">acceleration_hrqol</span>,</span>
-<span>  <span class="va">prop_mortality_benefitters_actv</span>,</span>
+<span>  <span class="va">prop_mortality_benefitters</span>,</span>
 <span>  <span class="va">mortality_trajectory_shape</span>,</span>
 <span>  <span class="va">mortality_dampening</span>,</span>
 <span>  <span class="va">mortality_rng</span>,</span>
 <span>  sampling_frequency <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  min_valid_hrqol <span class="op">=</span> <span class="op">-</span><span class="fl">0.757</span></span>
+<span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,10 +73,10 @@
 
 
 <dt>arm</dt>
-<dd><p>string, either <code>"actv"</code> or <code>"ctrl"</code></p></dd>
+<dd><p>character scalar</p></dd>
 
 
-<dt>start_hrqol_arm</dt>
+<dt>first_hrqol_arm</dt>
 <dd><p>scalar, HRQoL at ICU discharge (at arm level)</p></dd>
 
 
@@ -87,19 +88,19 @@
 <dd><p>scalar, acceleration of HRQoL improvement</p></dd>
 
 
-<dt>prop_mortality_benefitters_actv</dt>
-<dd><p>scalar numeric in <code>[0, 1]</code>, the proportion of patients in
-the active arm who are so-called mortality benefitters.</p></dd>
+<dt>prop_mortality_benefitters</dt>
+<dd><p>named numeric vector <code>[0, 1]</code>, the proportion of patients in
+each arm who are so-called mortality benefitters.</p></dd>
 
 
 <dt>mortality_trajectory_shape</dt>
-<dd><p>string, should be any of the following four: <code>"exp_decay"</code>
-(default), <code>"linear"</code>, <code>"constant"</code>, <code>"reflected_exp_decay"</code></p></dd>
+<dd><p>named character vector, valid values are: <code>"exp_decay"</code>
+(default), <code>"linear"</code>, <code>"constant"</code>, <code>"reflected_exp_decay"</code>. Can differ across arms.</p></dd>
 
 
 <dt>mortality_dampening</dt>
-<dd><p>scalar, dampening effect of HRQoL at ICU discharge in patients who die
-before end of follow-up</p></dd>
+<dd><p>named numeric vector, dampening effect on HRQoL at ICU discharge in
+patients who die before end of follow-up</p></dd>
 
 
 <dt>mortality_rng</dt>
@@ -107,15 +108,17 @@ before end of follow-up</p></dd>
 
 
 <dt>sampling_frequency</dt>
-<dd><p>int, for span between samplings from patients</p></dd>
+<dd><p>int, for span between samplings from patients by the elements.</p></dd>
 
 
 <dt>n_digits</dt>
-<dd><p>int, the number of digits of HRQoL values</p></dd>
+<dd><p>int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.</p></dd>
 
 
-<dt>min_valid_hrqol</dt>
-<dd><p>scalar, the minimum valid HRQoL value</p></dd>
+<dt>valid_hrqol_range</dt>
+<dd><p>two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5D-5L index values.</p></dd>
 
 </dl></div>
     <div class="section level2">
