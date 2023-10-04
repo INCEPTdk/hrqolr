@@ -12,13 +12,14 @@
 construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequency) {
 	t_hosp_discharge <- compute_hosp_discharge(t_icu_discharge)
 	eof <- traj[nrow(traj), "x"] # end of follow-up
+	index_hrqol <- traj[1, "y"]
 
 	if (nrow(traj) <= 2 && is.na(traj[2, "y"])) {
 		# These patients die before ICU discharge
 		return(list(
-			primary = na_matrix(t_icu_discharge),
-			secondary1 = na_matrix(t_hosp_discharge),
-			secondary2 = na_matrix(90)
+			primary = na_matrix(index_hrqol, t_icu_discharge),
+			secondary1 = na_matrix(index_hrqol, t_hosp_discharge),
+			secondary2 = na_matrix(index_hrqol, 90)
 		))
 	}
 
@@ -36,7 +37,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 			dimnames = list(NULL, c("x", "y"))
 		)
 	} else {
-		na_matrix(t_icu_discharge)
+		na_matrix(index_hrqol, t_icu_discharge)
 	}
 
 	out$secondary1 <- if (eof >= t_hosp_discharge) {
@@ -48,7 +49,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 			dimnames = list(NULL, c("x", "y"))
 		)
 	} else {
-		na_matrix(t_hosp_discharge)
+		na_matrix(index_hrqol, t_hosp_discharge)
 	}
 
 	out$secondary2 <- if (eof >= 90) {
@@ -60,7 +61,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 			dimnames = list(NULL, c("x", "y"))
 		)
 	} else {
-		na_matrix(90)
+		na_matrix(index_hrqol, 90)
 	}
 
 	out

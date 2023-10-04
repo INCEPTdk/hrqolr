@@ -7,6 +7,7 @@
 #' @inheritParams simulate_trials
 #' @param t_death numeric scalar, time of death. NA represent administrative censoring (i.e., the
 #'   patient was still alive at end of follow-up)
+#' @param index_hrqol scalar, HRQoL at index (= time of enrolment)
 #' @param first_hrqol scalar, HRQoL at ICU discharge
 #' @param resolution int, the number of grid points on the HRQoL trajectory between ICU discharge
 #'   and time of death
@@ -19,6 +20,7 @@
 construct_mortality_trajectory <- function(
 		t_death,
 		t_icu_discharge,
+		index_hrqol,
 		first_hrqol,
 		mortality_trajectory_shape,
 		resolution = 100,
@@ -46,7 +48,7 @@ construct_mortality_trajectory <- function(
 	}
 
 	matrix(
-		c(0.0, t_grid, 0.0, hrqol),
+		c(0.0, t_grid, index_hrqol, hrqol),
 		ncol = 2,
 		byrow = FALSE,
 		dimnames = list(NULL, c("x", "y"))

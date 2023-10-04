@@ -15,6 +15,7 @@ compute_estimates <- function(
 		is_mortality_benefitter,
 
 		# Scenario settings
+		acceleration_hrqol,
 		index_hrqol_arm,
 		first_hrqol_arm,
 		final_hrqol_arm,
@@ -31,6 +32,7 @@ compute_estimates <- function(
 		first_hrqol_patient = first_hrqol_patient,
 
 		acceleration_hrqol = acceleration_hrqol,
+		index_hrqol_arm = index_hrqol_arm,
 		first_hrqol_arm = first_hrqol_arm,
 		final_hrqol_arm = final_hrqol_arm,
 		is_mortality_benefitter = is_mortality_benefitter,

@@ -15,6 +15,7 @@
 sample_example_trajectories <- function(
 		arms,
 		n_example_trajectories_per_arm,
+		index_hrqol,
 		first_hrqol,
 		final_hrqol,
 		sampling_frequency,
@@ -51,6 +52,7 @@ sample_example_trajectories <- function(
 			construct_arm_level_trajectory(
 				t_icu_discharge = ceiling(stats::median(t_icu_discharge)),
 				acceleration_hrqol = acceleration_hrqol[arm],
+				index_hrqol_arm = index_hrqol[arm],
 				first_hrqol_arm = first_hrqol[arm],
 				final_hrqol_arm = final_hrqol[arm],
 				sampling_frequency = sampling_frequency
@@ -80,6 +82,7 @@ sample_example_trajectories <- function(
 						first_hrqol_patient = arg2,
 						t_death = arg3,
 						is_mortality_benefitter = arg4,
+						index_hrqol_arm = index_hrqol[arm],
 						first_hrqol_arm = first_hrqol[arm],
 						final_hrqol_arm = final_hrqol[arm],
 						acceleration_hrqol = acceleration_hrqol[arm],
