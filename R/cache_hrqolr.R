@@ -44,3 +44,16 @@ clear_hrqolr_cache <- function() {
 	}
 	gc()
 }
+
+
+#' Remove caches
+#'
+#' @export
+#' @rdname cache_hrqolr
+#'
+remove_hrqolr_cache <- function() {
+	for (fun_name in .user_cacheable_functions) {
+		memoise::drop_cache(get(fun_name))
+	}
+	gc()
+}
