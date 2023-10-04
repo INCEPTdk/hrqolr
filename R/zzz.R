@@ -40,10 +40,9 @@ NULL
 .onAttach <- function(libname, pkgname) {
 	packageStartupMessage(
 		"Loading 'hrqolr' package v", .hrqolr_version, ".\n",
-		"For help, run 'help(\"hrqolr\")' or \n",
-		"check out https://inceptdk.github.io/hrqolr/.\n",
-		"Consider running 'cache_hrqolr()' for faster simulations. \n",
-		"If you have enough RAM, consider increasing the cache size; \n",
+		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr/.\n",
+		"Consider running 'cache_hrqolr()' for faster simulations. ",
+		"If you have enough RAM, increasing the cache size might speed up things even more; \n",
 		"run '?cache_hrqolr' for details."
 	)
 }
@@ -63,7 +62,8 @@ NULL
 	if (getRversion() >= "2.15.1") {
 		utils::globalVariables(c(
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
-			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo"
+			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis",
+			"outcome", "value"
 		))
 	}
 
@@ -83,4 +83,6 @@ NULL
 	create_xout <<- custom_memoise(create_xout)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 	find_decay_halflife <<- custom_memoise(find_decay_halflife)
+
+	cache_hrqolr(1 * 1024^3) # TODO: remove before deploying
 }

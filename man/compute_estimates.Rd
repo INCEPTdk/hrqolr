@@ -7,10 +7,10 @@
 compute_estimates(
   t_icu_discharge = NULL,
   t_death = NA,
-  start_hrqol_patient = start_hrqol_arm,
+  first_hrqol_patient = first_hrqol_arm,
   is_mortality_benefitter = FALSE,
   acceleration_hrqol = 0,
-  start_hrqol_arm = 0.1,
+  first_hrqol_arm = 0.1,
   final_hrqol_arm = 0.75,
   mortality_trajectory_shape = "exp_decay",
   mortality_dampening = 0,
@@ -24,26 +24,27 @@ compute_estimates(
 \item{t_death}{numeric scalar, time of death. NA represent administrative censoring (i.e., the
 patient was still alive at end of follow-up)}
 
-\item{start_hrqol_patient}{scalar, the HRQoL value at ICU discharge of this patient}
+\item{first_hrqol_patient}{scalar, the HRQoL value at ICU discharge of this patient}
 
 \item{is_mortality_benefitter}{logical, is patient a mortality benefitters? Defaults to FALSE.}
 
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
 trajectory}
 
-\item{start_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
+\item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
+\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
 
-\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
-before end of follow-up}
+\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
+patients who die before end of follow-up}
 
-\item{sampling_frequency}{int, for span between samplings from patients}
+\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 
-\item{n_digits}{int, the number of digits of HRQoL values}
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
 }
 \value{
 A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area

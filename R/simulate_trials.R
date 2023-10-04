@@ -2,34 +2,45 @@
 #'
 #' This is the key user-facing function for simulating trials.
 #'
-#' @param n_patients_per_arm int scalar
 #' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#'   by the elements.
-#' @param start_hrqol_ctrl,final_hrqol_ctrl numeric scalars, the HRQoL at ICU discharge and end of
-#'   follow-up in the control arm, respectively
-#' @param relative_improvement_start_hrqol_actv,relative_improvement_final_hrqol_actv scalar numeric, e.g. `0.10` means that the HRQoL at start and end of
-#'   follow-up, resp. in the active arm will be increased by `10%` compared to the control arm
-#' @param sampling_frequency int, for span between samplings from patients
-#' @param acceleration_hrqol_actv scalar, relative acceleration of HRQoL improvement in the active
+#' @param n_patients_per_arm int scalar
+#' @param sampling_frequency int, for span between samplings from patients by the elements.
+#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#'   truth
+#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
+#'   returned object
+#'
+#' @param arms character vector with the names of the arms. Must match the names of named vectors
+#'   below.
+#' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
+#' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
+#' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
+#'   each arm
+#' @param mortality named numeric vector in `[0, 1]`, the mortality in at end of follow-up, in each
 #'   arm
-#' @param mortality_ctrl numeric scalar, the mortality in the control group at end of follow-up
-#' @param relative_mortality_reduction_actv numeric scalar, e.g. `0.10` means that the mortality in
-#'   the active arm is `90%` of that in the control arm
-#' @param mortality_dampening scalar, dampening effect of HRQoL at ICU discharge in patients who die
-#'   before end of follow-up
-#' @param mortality_trajectory_shape string, should be any of the following four: `"exp_decay"`
-#'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`
-#' @param prop_mortality_benefitters_actv scalar numeric in `[0, 1]`, the proportion of patients in
-#'   the active arm who are so-called mortality benefitters.
+#' @param mortality_dampening named numeric vector, dampening effect on HRQoL at ICU discharge in
+#'   patients who die before end of follow-up
+#' @param mortality_trajectory_shape named character vector, valid values are: `"exp_decay"`
+#'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`. Can differ across arms.
+#' @param prop_mortality_benefitters named numeric vector `[0, 1]`, the proportion of patients in
+#'   each arm who are so-called mortality benefitters.
+#'
+#' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
+#'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
+#'   below.
 #' @param verbose logical, should the function give progress timestamped updates? Default: `TRUE`
 #' @param seed int, optional seed for reproducible pseudo-random number generation. Defaults to a
 #'   deterministic value based on the arguments given (ensuring reproducibility by default).
-#' @param n_digits int, the number of digits of HRQoL values
-#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
-#'   truth
-#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the returned
-#'   object
+#' @param n_digits int, the number of digits of HRQoL values. More digits will yield greater
+#'   precision but also cause longer run-times.
+#' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
+#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
+#' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
+#'   arms.
 #' @param ..., not used
+#'
+#' @details
+#' * `test_fun`: \[pending\]
 #'
 #' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
 #'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
@@ -40,27 +51,28 @@
 #' @importFrom stats setNames
 #'
 simulate_trials <- function(
-		n_trials = 100000L,
+		n_trials = 100L,
 		n_patients_per_arm = 100L,
-
-		start_hrqol_ctrl = 0.1,
-		final_hrqol_ctrl = 0.75,
-		relative_improvement_start_hrqol_actv = 0,
-		relative_improvement_final_hrqol_actv = 0.1,
 		sampling_frequency = 14L,
-		acceleration_hrqol_actv = 0.1,
+		n_patients_ground_truth = 1000L,
+		n_example_trajectories_per_arm = 50L,
 
-		mortality_ctrl = 0.4,
-		relative_mortality_reduction_actv = 0.05,
-		mortality_dampening = 0.7,
-		mortality_trajectory_shape = "exp_decay",
-		prop_mortality_benefitters_actv = 0.1,
+		arms = c("A", "B"),
+		first_hrqol = c(A = 0.1, B = 0.1),
+		final_hrqol = c(A = 0.75, B = 0.75),
+		acceleration_hrqol = c(A = 0.0, B = 0.0),
 
+		mortality = c(A = 0.4, B = 0.4),
+		mortality_dampening = c(A = 0.0, B = 0.7),
+		mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
+		prop_mortality_benefitters = c(A = 0.0, B = 0.0),
+
+		test_fun = welch_t_test,
 		verbose = TRUE,
 		n_digits = 2,
 		seed = NULL,
-		n_patients_ground_truth = 100000L,
-		n_example_trajectories_per_arm = 0,
+		valid_hrqol_range = c(-0.757, 1.0),
+		alpha = 0.05,
 		...
 ) {
 
@@ -70,15 +82,8 @@ simulate_trials <- function(
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
 	set.seed(seed)
 
-	# Constants
-	MIN_EQ5D5L_DK <- -0.757 # lowest possible EQ-5D-5L index value in Denmark
-	ALPHA <- 0.05 # = 1.0 - significance level
-
 	# Setup
-	mortality_funs <- list(
-		ctrl = generate_mortality_funs(mortality_ctrl),
-		actv = generate_mortality_funs(mortality_ctrl * (1 - relative_mortality_reduction_actv))
-	)
+	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	n_patients_per_batch <- n_patients_per_arm * n_trials
 	trial_ids_per_batch <- split(
@@ -94,77 +99,79 @@ simulate_trials <- function(
 	ground_truth <- list()
 
 	for (batch_idx in seq_along(n_patients_per_batch)) {
-		if (isTRUE(verbose)) log_timediff(start_time, paste("STARTING BATCH", batch_idx))
-		n_patients <- n_patients_per_batch[[batch_idx]]
+		if (isTRUE(verbose) & length(n_patients_per_batch) > 1) {
+			log_timediff(start_time, paste("STARTING BATCH", batch_idx))
+		}
 
+		n_patients <- n_patients_per_batch[[batch_idx]]
 		batch_res <- list()
 
-		for (arm in c("actv", "ctrl")) {
+		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
 
-			acceleration_hrqol <- acceleration_hrqol_actv * (arm == "actv")
-
-			relative_improvement_start_hrqol <- 1L + relative_improvement_start_hrqol_actv * (arm == "actv")
-			start_hrqol_arm <- round(start_hrqol_ctrl * relative_improvement_start_hrqol, n_digits)
-
-			relative_improvement_final_hrqol <- 1L + relative_improvement_final_hrqol_actv * (arm == "actv")
-			final_hrqol_arm <- round(final_hrqol_ctrl * relative_improvement_final_hrqol, n_digits)
-
-			inter_patient_noise_sd <- start_hrqol_ctrl * relative_improvement_start_hrqol / 1.96
+			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) log_timediff(start_time, paste("Estimating ground truth of arm", arm))
 
-				old_seed <- .Random.seed
+				# Use different seed for ground-truth sampling as this must be entirely independent
+				current_seed <- .Random.seed
 				set.seed(digest::digest2int(paste(c(match.call(), arm), collapse = ", ")))
 
 				gt_res <- estimation_helper(
 					n_patients = n_patients_ground_truth,
 					arm = arm,
-					start_hrqol_arm = start_hrqol_arm,
-					final_hrqol_arm = final_hrqol_arm,
+					first_hrqol_arm = first_hrqol[arm],
+					final_hrqol_arm = final_hrqol[arm],
 					inter_patient_noise_sd = inter_patient_noise_sd,
-					acceleration_hrqol = acceleration_hrqol,
+					acceleration_hrqol = acceleration_hrqol[arm],
 
-					prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
-					mortality_trajectory_shape = mortality_trajectory_shape,
-					mortality_dampening = mortality_dampening,
+					prop_mortality_benefitters = prop_mortality_benefitters[arm],
+					mortality_trajectory_shape = mortality_trajectory_shape[arm],
+					mortality_dampening = mortality_dampening[arm],
 					mortality_rng = mortality_funs[[arm]]$r,
 
 					sampling_frequency = sampling_frequency,
 					n_digits = n_digits,
-					min_valid_hrqol = MIN_EQ5D5L_DK
+					valid_hrqol_range = valid_hrqol_range
 				)
 
-				ground_truth[[arm]] <- gt_res[
-					,
-					c(
-						setNames(lapply(.SD, function(col) mean(col, na.rm = TRUE)), paste0("surv__", names(.SD))),
-						setNames(lapply(.SD, function(col) mean(replace_na(col, 0))), paste0("all__", names(.SD)))
-					),
-					.SDcols = names(gt_res)
-				]
+				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
 
-				rm(gt_res); gc()
-				set.seed(old_seed)
+				tmp <- sapply(
+					outcome_cols,
+					function(col) {
+						gt_res[, list(
+							all = fast_mean(replace_na(get(col), 0)),
+							survivors = fast_mean(get(col)[!is.na(get(col))])
+						)]
+					},
+					simplify = FALSE
+				)
+
+				ground_truth[[arm]] <- rbindlist(tmp, idcol = "outcome")
+
+				rm(gt_res)
+				gc()
+				.Random.seed <- current_seed
 			}
 
 			res <- estimation_helper(
 				n_patients = n_patients,
 				arm = arm,
-				start_hrqol_arm = start_hrqol_arm,
-				final_hrqol_arm = final_hrqol_arm,
+				first_hrqol_arm = first_hrqol[arm],
+				final_hrqol_arm = final_hrqol[arm],
 				inter_patient_noise_sd = inter_patient_noise_sd,
-				acceleration_hrqol = acceleration_hrqol,
+				acceleration_hrqol = acceleration_hrqol[arm],
 
-				prop_mortality_benefitters_actv = prop_mortality_benefitters_actv,
-				mortality_trajectory_shape = mortality_trajectory_shape,
-				mortality_dampening = mortality_dampening,
+				prop_mortality_benefitters = prop_mortality_benefitters[arm],
+				mortality_trajectory_shape = mortality_trajectory_shape[arm],
+				mortality_dampening = mortality_dampening[arm],
 				mortality_rng = mortality_funs[[arm]]$r,
 
 				sampling_frequency = sampling_frequency,
 				n_digits = n_digits,
-				min_valid_hrqol = MIN_EQ5D5L_DK
+				valid_hrqol_range = valid_hrqol_range
 			)
 
 			# Assign trial IDs
@@ -172,65 +179,58 @@ simulate_trials <- function(
 
 			batch_res[[arm]] <- res
 
-			if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, sprintf("Finished %s arm in batch", arm))
+			if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, sprintf("Finished arm '%s' in batch", arm))
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
 
-		# Compute trial-level results
-		cols <- paste0(
-			rep(c("primary", "secondary1", "secondary2"), each = 2),
-			c("__hrqol_at_eof", "__hrqol_auc")
-		)
-
 		# Arm-level summary statistics
-		summary_stats <- batch_res[
-			,
-			c(
-				setNames(lapply(.SD, function(col) mean(col, na.rm = TRUE)), paste0("surv__", cols, "__mean")),
-				setNames(lapply(.SD, function(col) mean(replace_na(col, 0))), paste0("all__", cols, "__mean"))
-			),
-			.SDcols = cols, by = c("trial_id", "arm")
-		]
-
-		# Put into human-friendly format (essentially pivot data table)
-		results$summary_stats[[batch_idx]] <- dcast(
-			melt(
-				summary_stats,
-				id.vars = c("trial_id", "arm"),
-				variable.name = "outcome"
-			),
-			trial_id + outcome ~ arm, value.var = "value"
+		tmp <- sapply(
+			outcome_cols,
+			function(col) {
+				batch_res[, .(
+					all = fast_mean(replace_na(get(col), 0)),
+					survivors = fast_mean(get(col)[!is.na(get(col))])
+				), by = c("trial_id", "arm")]
+			},
+			simplify = FALSE
 		)
+
+		results$summary_stats[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
 
 		# Trial-level effect estimates
-		mean_diffs <- batch_res[
-			,
-			c(
-				list(statistic = names(welch_t_test(1, 1))),
-				setNames(lapply(.SD, welch_t_test, grps = arm), paste0("surv__", cols)),
-				setNames(lapply(.SD, welch_t_test, grps = arm, na_replacement = 0), paste0("all__", cols))
-			),
-			.SDcols = cols, by = "trial_id"
-		]
-
-		# Put into human-friendly format (essentially pivot data table)
-		results$mean_diffs[[batch_idx]] <- dcast(
-			melt(
-				mean_diffs,
-				id.vars = c("trial_id", "statistic"),
-				variable.name = "outcome"
-			),
-			trial_id + outcome ~ statistic, value.var = "value"
+		# tmp <- sapply(
+		# 	outcome_cols,
+		# 	function(col) {
+		# 		batch_res[, test_fun(get(col), grps = arm, arms = arms, na_replacement = 0), by = "trial_id"]
+		# 	},
+		# 	simplify = FALSE
+		# )
+		tmp <- mapply(
+			function(col, label, na_replacement) {
+				tmp <- batch_res[
+					, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement),
+					by = "trial_id"
+				]
+				tmp[, analysis := label]
+				return(tmp)
+			},
+			col = outcome_cols,
+			label = c("all", "survivors"),
+			na_replacement = list(0, NULL),
+			SIMPLIFY = FALSE
 		)
 
-		rm(summary_stats, mean_diffs, batch_res)
+		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
+
+		# Housekeeping
+		rm(tmp, batch_res)
 		gc()
 
 		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
-	# A bit of housekeeping to free up memory
+	# Housekeeping to free up memory
 	clear_hrqolr_cache()
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
@@ -239,46 +239,48 @@ simulate_trials <- function(
 
 	# Combine ground truth value into a single data.table
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
-	ground_truth <- dcast(
-		melt(ground_truth, id.vars = "arm", variable.name = "outcome"),
-		outcome ~ arm, value.var = "value"
-	)
-	ground_truth[, `:=`(mean_diff = actv - ctrl, actv = NULL, ctrl = NULL)]
+	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
 
-	# Summarise across trials
-	summary_stats <- results$summary_stats[
-		,
-		.(statistic = names(summarise_var(1)), actv = summarise_var(actv), ctrl = summarise_var(ctrl)),
-		by = "outcome"
-	]
-	summary_stats <- dcast(
-		melt(summary_stats, id.vars = c("outcome", "statistic"), variable.name = "arm"),
-		outcome + arm ~ statistic, value.var = "value"
-	)
-
-	comparisons <- merge(results$mean_diffs, ground_truth, by = "outcome")[
-		,
-		.(
-			statistic = c(
-				names(summarise_var(1)),
-				"n_sim",
-				names(compute_performance_metrics(1, 1, 1, 1, 1))
-			),
-			value = c(
-				summarise_var(est),
-				.N,
-				compute_performance_metrics(est, mean_diff, p_value, ci_lo, ci_hi, alpha = ALPHA)
+	ground_truth <- data.table::rbindlist(lapply(
+		utils::combn(arms, m = 2, simplify = FALSE),
+		function(arms) {
+			tmp <- dcast(
+				melt(ground_truth[arms], id.vars = c("arm", "outcome"), variable.name = "analysis"),
+				outcome + analysis ~ arm
 			)
-		),
-		by = "outcome"
-	]
+			tmp[, .(
+				outcome,
+				analysis,
+				comparator = arms[1],
+				target = arms[2],
+				mean_diff = get(arms[2]) - get(arms[1])
+			)]
+		}
+	))
+
+	# Arm-level summary stats across trials
+	summary_stats <- melt(
+		results$summary_stats,
+		id.vars = c("outcome", "arm", "trial_id"),
+		variable.name = "analysis")
+	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
+
+	# Comparisons across trials
+	by_cols <- c("outcome", "analysis", "comparator", "target")
+	comparisons <- merge(results$mean_diffs, ground_truth, by = by_cols)
 
 	comparisons <- merge(
-		dcast(comparisons, outcome ~ statistic, value.var = "value"),
-		ground_truth[, c("outcome", "mean_diff")],
-		by = "outcome"
+		comparisons[
+			, compute_performance_metrics(est, mean_diff, p_value, ci_lo, ci_hi, alpha), by = by_cols
+		],
+		comparisons[
+			, c(list(n_sim = .N), summarise_var(est)), by = by_cols
+		]
 	)
+
+	comparisons <- merge(comparisons, ground_truth) # add column with ground truth mean diff
 	setnames(comparisons, "mean_diff", "mean_ground_truth")
+
 	setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
 
 	# Prepare arguments for inclusion in function output
@@ -286,6 +288,7 @@ simulate_trials <- function(
 	called_args <- as.list(match.call())[-1]
 	args[names(called_args)] <- called_args
 	args$seed <- seed
+	args[["..."]] <- NULL
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
 
@@ -293,19 +296,15 @@ simulate_trials <- function(
 		list(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
-			args = args,
-			elapsed_time = Sys.time() - start_time
+			args = args
 		),
 		class = c("hrqolr_results", "list")
 	)
-
-	# Expand arm names to yield more neutral language w.r.t. arm names
-	# will also make plotting and printing more human friendly
-	out$summary_stats[, arm := beautify_arm_var(arm)]
 
 	if (n_example_trajectories_per_arm > 0) {
 		out[["example_trajectories"]] <- do.call(sample_example_trajectories, args)
 	}
 
+	out$elapsed_time <- Sys.time() - start_time
 	out
 }
