@@ -7,6 +7,7 @@
 estimation_helper(
   n_patients,
   arm,
+  index_hrqol_arm,
   first_hrqol_arm,
   final_hrqol_arm,
   inter_patient_noise_sd,

@@ -5,15 +5,16 @@
 \title{Construct the full (primary) HRQoL trajectory for a patient}
 \usage{
 construct_patient_trajectory(
-  t_icu_discharge = NULL,
-  t_death = NA,
-  first_hrqol_patient = first_hrqol_arm,
-  acceleration_hrqol = 0,
-  first_hrqol_arm = 0.1,
-  final_hrqol_arm = 0.75,
-  is_mortality_benefitter = FALSE,
-  mortality_trajectory_shape = "exp_decay",
-  mortality_dampening = 0,
+  t_icu_discharge,
+  t_death,
+  first_hrqol_patient,
+  acceleration_hrqol,
+  index_hrqol_arm,
+  first_hrqol_arm,
+  final_hrqol_arm,
+  is_mortality_benefitter,
+  mortality_trajectory_shape,
+  mortality_dampening,
   sampling_frequency = 14L,
   n_digits = 2
 )

@@ -4,9 +4,11 @@
 \alias{na_matrix}
 \title{Create "empty" observation tibble}
 \usage{
-na_matrix(t)
+na_matrix(index_hrqol, t)
 }
 \arguments{
+\item{index_hrqol}{scalar, HRQoL at time of enrolment (= index)}
+
 \item{t}{scalar}
 }
 \description{

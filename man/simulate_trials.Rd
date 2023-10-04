@@ -11,6 +11,7 @@ simulate_trials(
   n_patients_ground_truth = 1000L,
   n_example_trajectories_per_arm = 50L,
   arms = c("A", "B"),
+  index_hrqol = c(A = 0, B = 0),
   first_hrqol = c(A = 0.1, B = 0.1),
   final_hrqol = c(A = 0.75, B = 0.75),
   acceleration_hrqol = c(A = 0, B = 0),
@@ -42,6 +43,8 @@ returned object}
 
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
+
+\item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
 
 \item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
 

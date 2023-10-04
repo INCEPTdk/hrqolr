@@ -7,8 +7,9 @@
 construct_mortality_trajectory(
   t_death,
   t_icu_discharge,
-  first_hrqol = 0,
-  mortality_trajectory_shape = "exp_decay",
+  index_hrqol,
+  first_hrqol,
+  mortality_trajectory_shape,
   resolution = 100,
   n_halflives_to_zero = 10
 )
@@ -18,6 +19,8 @@ construct_mortality_trajectory(
 patient was still alive at end of follow-up)}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
+
+\item{index_hrqol}{scalar, HRQoL at index (= time of enrolment)}
 
 \item{first_hrqol}{scalar, HRQoL at ICU discharge}
 
