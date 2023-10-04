@@ -5,56 +5,58 @@
 \title{Sample example trajectories}
 \usage{
 sample_example_trajectories(
-  n_example_trajectories_per_arm = 100,
-  start_hrqol_ctrl = 0.1,
-  final_hrqol_ctrl = 0.75,
-  relative_improvement_start_hrqol_actv = 0,
-  relative_improvement_final_hrqol_actv = 0,
-  sampling_frequency = 14L,
-  acceleration_hrqol_actv = 0.1,
-  mortality_ctrl = 0.4,
-  relative_mortality_reduction_actv = 0.05,
-  mortality_dampening = 0.7,
-  mortality_trajectory_shape = "exp_decay",
-  prop_mortality_benefitters_actv = 0.1,
+  arms,
+  n_example_trajectories_per_arm,
+  first_hrqol,
+  final_hrqol,
+  sampling_frequency,
+  acceleration_hrqol,
+  mortality,
+  prop_mortality_benefitters,
+  mortality_trajectory_shape,
+  mortality_dampening,
   n_digits = 2,
   seed = NULL,
+  valid_hrqol_range,
   ...
 )
 }
 \arguments{
-\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the returned
-object}
+\item{arms}{character vector with the names of the arms. Must match the names of named vectors
+below.}
 
-\item{start_hrqol_ctrl, final_hrqol_ctrl}{numeric scalars, the HRQoL at ICU discharge and end of
-follow-up in the control arm, respectively}
+\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
+returned object}
 
-\item{relative_improvement_start_hrqol_actv, relative_improvement_final_hrqol_actv}{scalar numeric, e.g. \code{0.10} means that the HRQoL at start and end of
-follow-up, resp. in the active arm will be increased by \verb{10\%} compared to the control arm}
+\item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
 
-\item{sampling_frequency}{int, for span between samplings from patients}
+\item{final_hrqol}{named numeric vector, the HRQoL at end of follow-up in each arm}
 
-\item{acceleration_hrqol_actv}{scalar, relative acceleration of HRQoL improvement in the active
+\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
+
+\item{acceleration_hrqol}{named numeric vector, relative acceleration of HRQoL improvement in
+each arm}
+
+\item{mortality}{named numeric vector in \verb{[0, 1]}, the mortality in at end of follow-up, in each
 arm}
 
-\item{mortality_ctrl}{numeric scalar, the mortality in the control group at end of follow-up}
+\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
+each arm who are so-called mortality benefitters.}
 
-\item{relative_mortality_reduction_actv}{numeric scalar, e.g. \code{0.10} means that the mortality in
-the active arm is \verb{90\%} of that in the control arm}
+\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
 
-\item{mortality_dampening}{scalar, dampening effect of HRQoL at ICU discharge in patients who die
-before end of follow-up}
+\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
+patients who die before end of follow-up}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
-
-\item{prop_mortality_benefitters_actv}{scalar numeric in \verb{[0, 1]}, the proportion of patients in
-the active arm who are so-called mortality benefitters.}
-
-\item{n_digits}{int, the number of digits of HRQoL values}
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
 
 \item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
 deterministic value based on the arguments given (ensuring reproducibility by default).}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 
 \item{...}{not used}
 }

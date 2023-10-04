@@ -7,7 +7,7 @@
 construct_mortality_trajectory(
   t_death,
   t_icu_discharge,
-  start_hrqol = 0,
+  first_hrqol = 0,
   mortality_trajectory_shape = "exp_decay",
   resolution = 100,
   n_halflives_to_zero = 10
@@ -19,10 +19,10 @@ patient was still alive at end of follow-up)}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
-\item{start_hrqol}{scalar, HRQoL at ICU discharge}
+\item{first_hrqol}{scalar, HRQoL at ICU discharge}
 
-\item{mortality_trajectory_shape}{string, should be any of the following four: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}}
+\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
+(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
 
 \item{resolution}{int, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death}
