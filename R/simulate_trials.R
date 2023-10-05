@@ -3,7 +3,6 @@
 #' This is the key user-facing function for simulating trials.
 #'
 #' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#' @param n_patients_per_arm int scalar
 #' @param sampling_frequency int, for span between samplings from patients by the elements.
 #' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
 #'   truth
@@ -12,6 +11,7 @@
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
+#' @param n_patients_per_arm named int vector, number of patient in each arm
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
 #' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
 #' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
@@ -51,14 +51,10 @@
 #' @import data.table
 #' @importFrom stats setNames
 #'
-simulate_trials <- function(
-		n_trials = 100L,
-		n_patients_per_arm = 100L,
-		sampling_frequency = 14L,
-		n_patients_ground_truth = 1000L,
-		n_example_trajectories_per_arm = 50L,
+		n_trials = 100,
 
 		arms = c("A", "B"),
+		n_patients_per_arm = c(A = 100, B = 100),
 		index_hrqol = c(A = 0.0, B = 0.0),
 		first_hrqol = c(A = 0.1, B = 0.1),
 		final_hrqol = c(A = 0.75, B = 0.75),
@@ -87,7 +83,7 @@ simulate_trials <- function(
 	# Setup
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	n_patients_per_batch <- n_patients_per_arm * n_trials
+	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients_per_arm)
 	trial_ids_per_batch <- split(
 		seq_len(sum(n_trials)),
 		rep(seq_along(n_trials), n_trials)
@@ -105,11 +101,12 @@ simulate_trials <- function(
 			log_timediff(start_time, paste("STARTING BATCH", batch_idx))
 		}
 
-		n_patients <- n_patients_per_batch[[batch_idx]]
 		batch_res <- list()
 
 		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
+
+			n_patients <- n_patients_per_batch[[batch_idx]][arm]
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
@@ -181,7 +178,7 @@ simulate_trials <- function(
 			)
 
 			# Assign trial IDs
-			res[, trial_id := sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm))]
+			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients_per_arm[arm]))]
 
 			batch_res[[arm]] <- res
 
