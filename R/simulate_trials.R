@@ -2,16 +2,54 @@
 #'
 #' This is the key user-facing function for simulating trials.
 #'
-#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#' @param sampling_frequency int, for span between samplings from patients by the elements.
-#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
-#'   truth
-#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
-#'   returned object
+#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
+#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
+#'   elapsed time.
+#'
+#' @name simulate_trials
+#'
+#' @export
+#' @import data.table
+#' @importFrom stats setNames
+#'
+simulate_trials <- function(...) {
+	UseMethod("simulate_trials")
+}
+
+
+#' Helper for when scenario given as first argument
+#'
+#' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
+#'
+#' @rdname simulate_trials
+#' @export
+#'
+simulate_trials.hrqolr_scenario <- function(
+		scenario,
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
+		n_example_trajectories_per_arm = 50,
+		test_fun = welch_t_test,
+		verbose = TRUE,
+		n_digits = 2,
+		seed = NULL,
+		valid_hrqol_range = c(-0.757, 1.0),
+		alpha = 0.05,
+		...
+) {
+	args <- formals() # start with defaults
+	called_args <- match.call()[-1]
+	args[names(called_args)] <- called_args
+	do.call(simulate_trials.default, args)
+}
+
+
+#' Work-horse
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
 #' @param n_patients_per_arm named int vector, number of patient in each arm
+#' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
 #' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
 #' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
@@ -26,6 +64,12 @@
 #' @param prop_mortality_benefitters named numeric vector `[0, 1]`, the proportion of patients in
 #'   each arm who are so-called mortality benefitters.
 #'
+#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
+#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#'   truth
+#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
+#'   returned object
+#'
 #' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
 #'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
 #'   below.
@@ -38,30 +82,25 @@
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
-#' @param ..., not used
+#' @param ... not used
 #'
 #' @details
 #' * `test_fun`: \[pending\]
-#'
-#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
-#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
-#'   elapsed time.
-#'
+#' @rdname simulate_trials
 #' @export
-#' @import data.table
-#' @importFrom stats setNames
 #'
-		n_trials = 100,
-		sampling_frequency = 14,
-		n_patients_ground_truth = 1000,
-		n_example_trajectories_per_arm = 50,
-
+simulate_trials.default <- function(
 		arms = c("A", "B"),
 		n_patients_per_arm = c(A = 100, B = 100),
+		sampling_frequency = c(A = 14, B = 14),
 		index_hrqol = c(A = 0.0, B = 0.0),
 		first_hrqol = c(A = 0.1, B = 0.1),
 		final_hrqol = c(A = 0.75, B = 0.75),
 		acceleration_hrqol = c(A = 0.0, B = 0.0),
+
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
+		n_example_trajectories_per_arm = 50,
 
 		mortality = c(A = 0.4, B = 0.4),
 		mortality_dampening = c(A = 0.0, B = 0.0),
@@ -135,7 +174,7 @@
 					mortality_dampening = mortality_dampening[arm],
 					mortality_rng = mortality_funs[[arm]]$r,
 
-					sampling_frequency = sampling_frequency,
+					sampling_frequency = sampling_frequency[arm],
 					n_digits = n_digits,
 					valid_hrqol_range = valid_hrqol_range
 				)
@@ -175,7 +214,7 @@
 				mortality_dampening = mortality_dampening[arm],
 				mortality_rng = mortality_funs[[arm]]$r,
 
-				sampling_frequency = sampling_frequency,
+				sampling_frequency = sampling_frequency[arm],
 				n_digits = n_digits,
 				valid_hrqol_range = valid_hrqol_range
 			)
