@@ -24,4 +24,56 @@ NULL
 #'
 print.hrqolr_examples <- function(x, prop_digits = 3, ...) {
 	print(x, digits = prop_digits)
+	invisible(x)
+}
+
+
+#' Print method for results from validation of scenario specification
+#'
+#' @describeIn print Validation results of scenario
+#' @export
+#'
+print.hrqolr_scenario_validation_results <- function(x, ...) {
+	pad_length_names <- max(sapply(names(x), nchar))
+	pad_length_colours <- max(sapply(x, function(.) nchar(.["result"])))
+	res_colours <- c("valid as is" = "green", modified = "yellow", invalid = "red")
+
+	for (arg_name in names(x)) {
+		res <- x[[arg_name]]["result"]
+		cat(
+			pad(arg_name, pad_length_names),
+			colour(pad(res, pad_length_colours), res_colours[res]),
+			x[[arg_name]]["comment"],
+			"\n",
+			sep = "  "
+		)
+	}
+
+	invisible(x)
+}
+
+
+#' Print method for scenario
+#'
+#' @describeIn print Overview of scenario settings
+#' @export
+#'
+print.hrqolr_scenario <- function(x, ...) {
+	col_widths <- 2 + c(
+		max(nchar(names(x))),
+		pmax(
+			sapply(x$arms, function(a) max(nchar(sapply(x, function(.) .[a])), na.rm = TRUE)),
+			nchar(x$arms)
+		)
+	)
+
+	for (param in names(x)) {
+		cat(colour(pad(param, col_widths[1]), "blue"))
+		for (arm in names(x[[param]])) {
+			cat(pad(x[[param]][[arm]], col_widths[arm], side = "left"))
+		}
+		cat("\n")
+	}
+
+	invisible(x)
 }
