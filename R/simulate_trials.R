@@ -40,7 +40,8 @@ simulate_trials.hrqolr_scenario <- function(
 	args <- formals() # start with defaults
 	called_args <- match.call()[-1]
 	args[names(called_args)] <- called_args
-	do.call(simulate_trials.default, args)
+	args <- c(scenario, args[names(args) != "scenario"]) # "flatten"
+	do.call("simulate_trials.default", args)
 }
 
 
@@ -50,11 +51,13 @@ simulate_trials.hrqolr_scenario <- function(
 #'   below.
 #' @param n_patients_per_arm named int vector, number of patient in each arm
 #' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
+#'
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
 #' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
 #' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
 #' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
 #'   each arm
+#'
 #' @param mortality named numeric vector in `[0, 1]`, the mortality in at end of follow-up, in each
 #'   arm
 #' @param mortality_dampening named numeric vector, dampening effect on HRQoL at ICU discharge in

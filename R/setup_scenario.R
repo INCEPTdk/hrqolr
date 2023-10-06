@@ -32,6 +32,8 @@ setup_scenario <- function(
 	args[names(called_args)] <- called_args
 	args["verbose"] <- NULL
 
+	args <- sapply(args, eval) # need evaluated values, not lazy expressions
+
 	if (is.null(arms) || length(arms) < 2 || length(unique(args)) == 1) {
 		stop0("The scenario must have at least 2 arms of different names")
 	}
@@ -56,16 +58,15 @@ setup_scenario <- function(
 	val_results <- list()
 
 	for (arg_name in names(args)) {
-		a <- eval(args[[arg_name]])
-			# eval(a) needed to handle edge case when a == -1 and, then, is considered a call
+		a <- args[[arg_name]]
 		req <- arg_requirements[[arg_name]]
 
 		val_results[[arg_name]] <- if (arg_name == "arms") {
-			args[[arg_name]] <- setNames(a, a) # need to keep the evaluated version
+			args[[arg_name]] <- setNames(a, a)
 			c(result = "valid as is", comment = "")
 		} else if (is.null(a)) {
 			c(result = "invalid", comment = "cannot be NULL")
-		} else if (length(a)) {
+		} else if (length(a) == 1) {
 			if (do.call(req$fun, c(list(a), req[-1]))) {
 				args[[arg_name]] <- setNames(rep(a, length(arms)), arms)
 				a_mod <- if (verify_chr(a)) sprintf("\"%s\"", a) else a # ensure correct printing to console
@@ -79,7 +80,7 @@ setup_scenario <- function(
 				c(result = "invalid", comment = "outside valid range or incorrect type")
 			}
 		} else {
-			if (length(setdiff(names(a), arms)) > 0 & length(a) != length(arms)) {
+			if (length(setdiff(arms, names(a))) > 0 | length(a) != length(arms)) {
 				c(result = "invalid", comment = "the names do not match the names given in 'arms'")
 			} else {
 				if (!all(sapply(a, function(x) do.call(req$fun, c(list(x), req[-1]))))) {
