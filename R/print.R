@@ -97,3 +97,23 @@ print.hrqolr_comparisons <- function(x, n_digits = 3, ...) {
 
 	invisible(x)
 }
+
+
+#' Print method for hrqolr summary statistics
+#'
+#' @param n_digits int, number of digits to show in decimal numbers
+#' @rdname print
+#' @export
+#'
+print.hrqolr_summary_stats <- function(x, n_digits = 3, ...) {
+	x_tmp <- x
+	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
+
+	print(x_tmp[
+		,
+		lapply(.SD, function(col) tryCatch(round(col, n_digits), error = function(e) col)),
+		.SDcols = names(x_tmp)
+	])
+
+	invisible(x)
+}
