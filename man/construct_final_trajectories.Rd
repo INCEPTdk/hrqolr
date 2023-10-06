@@ -11,7 +11,7 @@ construct_final_trajectories(traj, t_icu_discharge, sampling_frequency)
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
-\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
+\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 }
 \value{
 A three-element list with trajectories for each of the three assumptions as to when

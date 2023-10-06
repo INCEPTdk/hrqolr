@@ -3,9 +3,21 @@
 \name{print}
 \alias{print}
 \alias{print.hrqolr_examples}
+\alias{print.hrqolr_scenario_validation_results}
+\alias{print.hrqolr_scenario}
+\alias{print.hrqolr_comparisons}
+\alias{print.hrqolr_summary_stats}
 \title{Print methods for HRQoL results}
 \usage{
 \method{print}{hrqolr_examples}(x, prop_digits = 3, ...)
+
+\method{print}{hrqolr_scenario_validation_results}(x, ...)
+
+\method{print}{hrqolr_scenario}(x, ...)
+
+\method{print}{hrqolr_comparisons}(x, n_digits = 3, ...)
+
+\method{print}{hrqolr_summary_stats}(x, n_digits = 3, ...)
 }
 \arguments{
 \item{x}{object to print, see \strong{Details}.}
@@ -14,6 +26,8 @@
 when printing proportions.}
 
 \item{...}{passed on to methods}
+
+\item{n_digits}{int, number of digits to show in decimal numbers}
 }
 \value{
 Invisibly returns \code{x}.
@@ -25,8 +39,3 @@ Prints contents of the first input \code{x} in a human-friendly way, see
 \details{
 The behaviour depends on the class of \code{x}:
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{print(hrqolr_examples)}: Example trajectories
-
-}}
