@@ -55,6 +55,9 @@
     <loc>https://epiben.github.io/hrqolr/reference/construct_patient_trajectory.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/crayon_style.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/create_smooth_trajectory.html</loc>
   </url>
   <url>
@@ -91,6 +94,9 @@
     <loc>https://epiben.github.io/hrqolr/reference/na_matrix.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/pad.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/plot.html</loc>
   </url>
   <url>
@@ -109,6 +115,9 @@
     <loc>https://epiben.github.io/hrqolr/reference/sample_t_icu_discharge.html</loc>
   </url>
   <url>
+    <loc>https://epiben.github.io/hrqolr/reference/setup_scenario.html</loc>
+  </url>
+  <url>
     <loc>https://epiben.github.io/hrqolr/reference/simulate_trials.html</loc>
   </url>
   <url>
@@ -119,6 +128,9 @@
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/vapply_helpers.html</loc>
+  </url>
+  <url>
+    <loc>https://epiben.github.io/hrqolr/reference/verify.html</loc>
   </url>
   <url>
     <loc>https://epiben.github.io/hrqolr/reference/welch_t_test.html</loc>

@@ -48,18 +48,31 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_example_trajectories</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_example_trajectories</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for hrqolr_scenario</span></span>
+<span><span class="fu">sample_example_trajectories</span><span class="op">(</span></span>
+<span>  <span class="va">scenario</span>,</span>
+<span>  n_example_trajectories_per_arm <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">sample_example_trajectories</span><span class="op">(</span></span>
 <span>  <span class="va">arms</span>,</span>
-<span>  <span class="va">n_example_trajectories_per_arm</span>,</span>
+<span>  <span class="va">sampling_frequency</span>,</span>
 <span>  <span class="va">index_hrqol</span>,</span>
 <span>  <span class="va">first_hrqol</span>,</span>
 <span>  <span class="va">final_hrqol</span>,</span>
-<span>  <span class="va">sampling_frequency</span>,</span>
 <span>  <span class="va">acceleration_hrqol</span>,</span>
 <span>  <span class="va">mortality</span>,</span>
 <span>  <span class="va">prop_mortality_benefitters</span>,</span>
 <span>  <span class="va">mortality_trajectory_shape</span>,</span>
 <span>  <span class="va">mortality_dampening</span>,</span>
+<span>  <span class="va">n_example_trajectories_per_arm</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">valid_hrqol_range</span>,</span>
@@ -69,14 +82,41 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>arms</dt>
-<dd><p>character vector with the names of the arms. Must match the names of named vectors
-below.</p></dd>
+    <dl><dt>...</dt>
+<dd><p>not used</p></dd>
+
+
+<dt>scenario</dt>
+<dd><p>object of class 'hrqolr_scenario', the output of <a href="setup_scenario.html">setup_scenario</a></p></dd>
 
 
 <dt>n_example_trajectories_per_arm</dt>
 <dd><p>int, the number of example trajectories to include in the
 returned object</p></dd>
+
+
+<dt>n_digits</dt>
+<dd><p>int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).</p></dd>
+
+
+<dt>valid_hrqol_range</dt>
+<dd><p>two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5D-5L index values.</p></dd>
+
+
+<dt>arms</dt>
+<dd><p>character vector with the names of the arms. Must match the names of named vectors
+below.</p></dd>
+
+
+<dt>sampling_frequency</dt>
+<dd><p>named int vector, span between HRQoL sampling from patients, in each arm.</p></dd>
 
 
 <dt>index_hrqol</dt>
@@ -89,10 +129,6 @@ returned object</p></dd>
 
 <dt>final_hrqol</dt>
 <dd><p>named numeric vector, the HRQoL at end of follow-up in each arm</p></dd>
-
-
-<dt>sampling_frequency</dt>
-<dd><p>int, for span between samplings from patients by the elements.</p></dd>
 
 
 <dt>acceleration_hrqol</dt>
@@ -119,25 +155,6 @@ each arm who are so-called mortality benefitters.</p></dd>
 <dd><p>named numeric vector, dampening effect on HRQoL at ICU discharge in
 patients who die before end of follow-up</p></dd>
 
-
-<dt>n_digits</dt>
-<dd><p>int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).</p></dd>
-
-
-<dt>valid_hrqol_range</dt>
-<dd><p>two-element numeric vector, the lower and upper bounds of valid HRQoL
-values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5D-5L index values.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>not used</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -145,7 +162,7 @@ values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5
 
 <p>An object of class <code>hrqolr_examples</code> with trajectories in data.tables. The function will
 always return arm-level trajectories. If <code>n_example_trajectories_per_arm &gt; 0</code>, it will also return
-data.table with patient trajectories, with a <code>id</code> column denoting patients. with</p>
+data.table with patient trajectories, with a <code>id</code> column denoting patients.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

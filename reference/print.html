@@ -52,7 +52,19 @@ Details for more information."><!-- mathjax --><script src="https://cdnjs.cloudf
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for hrqolr_examples</span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, prop_digits <span class="op">=</span> <span class="fl">3</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, prop_digits <span class="op">=</span> <span class="fl">3</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for hrqolr_scenario_validation_results</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for hrqolr_scenario</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for hrqolr_comparisons</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, n_digits <span class="op">=</span> <span class="fl">3</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for hrqolr_summary_stats</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">x</span>, n_digits <span class="op">=</span> <span class="fl">3</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +81,10 @@ when printing proportions.</p></dd>
 <dt>...</dt>
 <dd><p>passed on to methods</p></dd>
 
+
+<dt>n_digits</dt>
+<dd><p>int, number of digits to show in decimal numbers</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -80,11 +96,6 @@ when printing proportions.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The behaviour depends on the class of <code>x</code>:</p>
     </div>
-    <div class="section level2">
-    <h2 id="methods-by-class-">Methods (by class)<a class="anchor" aria-label="anchor" href="#methods-by-class-"></a></h2>
-    
-<ul><li><p><code>print(hrqolr_examples)</code>: Example trajectories</p></li>
-</ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
