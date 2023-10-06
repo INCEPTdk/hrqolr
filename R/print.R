@@ -89,11 +89,13 @@ print.hrqolr_comparisons <- function(x, n_digits = 3, ...) {
 	x_tmp <- x
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
 
-	print(x_tmp[
+	x_tmp <- x_tmp[
 		,
 		lapply(.SD, function(col) tryCatch(round(col, n_digits), error = function(e) col)),
 		.SDcols = names(x_tmp)
-	])
+	]
+
+	print(data.table::transpose(x_tmp, keep.names = "statistic", make.names = "outcome"))
 
 	invisible(x)
 }
