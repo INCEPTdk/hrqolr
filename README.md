@@ -159,13 +159,13 @@ console (hide these with `verbose = FALSE`):
 
 ``` r
 sims <- simulate_trials(scenario)
-#> 2023-10-06 13:31:24: Estimating ground truth of arm A (0 secs)
-#> 2023-10-06 13:31:32: Finished arm 'A' in batch (7.68 secs)
-#> 2023-10-06 13:31:32: Estimating ground truth of arm B (7.69 secs)
-#> 2023-10-06 13:31:40: Finished arm 'B' in batch (8.01 secs)
-#> 2023-10-06 13:31:40: Finished batch (8.32 secs)
-#> 2023-10-06 13:31:40: Combining data into final return struct (16.15 secs)
-#> 2023-10-06 13:31:40: Wrapping up, returning output (16.18 secs)
+#> 2023-10-06 14:54:58: Estimating ground truth of arm A (0 secs)
+#> 2023-10-06 14:55:11: Finished arm 'A' in batch (12.88 secs)
+#> 2023-10-06 14:55:11: Estimating ground truth of arm B (12.89 secs)
+#> 2023-10-06 14:55:22: Finished arm 'B' in batch (10.52 secs)
+#> 2023-10-06 14:55:22: Finished batch (10.99 secs)
+#> 2023-10-06 14:55:23: Combining data into final return struct (24.13 secs)
+#> 2023-10-06 14:55:23: Wrapping up, returning output (24.17 secs)
 ```
 
 The `sims` object contains quite a lot of interesting information.
@@ -234,14 +234,14 @@ sims$comparisons
 ## Issues and enhancements
 
 We use the [GitHub issue
-tracker](https://github.com/epiben/hrqolr/issues) for all bug/issue
+tracker](https://github.com/INCEPTdk/hrqolr/issues) for all bug/issue
 reports and proposals for enhancements.
 
 ## Contributing
 
 We welcome contributions directly to the code to improve performance as
 well as new functionality. For the latter, please first explain and
-motivate it in an [issue](https://github.com/epiben/hrqolr/issues).
+motivate it in an [issue](https://github.com/INCEPTdk/hrqolr/issues).
 
 Changes to the code base should follow these steps:
 

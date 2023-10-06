@@ -137,14 +137,14 @@ sims$comparisons
 
 ## Issues and enhancements
 
-We use the [GitHub issue tracker](https://github.com/epiben/hrqolr/issues) for
+We use the [GitHub issue tracker](https://github.com/INCEPTdk/hrqolr/issues) for
 all bug/issue reports and proposals for enhancements. 
 
 ## Contributing
 
 We welcome contributions directly to the code to improve performance as well
 as new functionality. For the latter, please first explain and motivate it in an
-[issue](https://github.com/epiben/hrqolr/issues).
+[issue](https://github.com/INCEPTdk/hrqolr/issues).
 
 Changes to the code base should follow these steps:
 
