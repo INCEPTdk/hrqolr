@@ -325,7 +325,10 @@ simulate_trials.default <- function(
 	setnames(comparisons, "mean_diff", "mean_ground_truth")
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
-	setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
+	setcolorder(
+		comparisons,
+		c("outcome", "comparator", "target", "mean", "mean_ground_truth", "sd", "se")
+	)
 
 	# Prepare arguments for inclusion in function output
 	args <- formals() # start with default values
