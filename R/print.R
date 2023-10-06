@@ -19,7 +19,7 @@ NULL
 
 #' Print method for example trajectories
 #'
-#' @describeIn print Example trajectories
+#' @rdname print
 #' @export
 #'
 print.hrqolr_examples <- function(x, prop_digits = 3, ...) {
@@ -30,7 +30,7 @@ print.hrqolr_examples <- function(x, prop_digits = 3, ...) {
 
 #' Print method for results from validation of scenario specification
 #'
-#' @describeIn print Validation results of scenario
+#' @rdname print
 #' @export
 #'
 print.hrqolr_scenario_validation_results <- function(x, ...) {
@@ -42,10 +42,10 @@ print.hrqolr_scenario_validation_results <- function(x, ...) {
 		res <- x[[arg_name]]["result"]
 		cat(
 			pad(arg_name, pad_length_names),
-			colour(pad(res, pad_length_colours), res_colours[res]),
+			crayon_style(pad(res, pad_length_colours), res_colours[res]),
 			x[[arg_name]]["comment"],
 			"\n",
-			sep = "  "
+			sep = "   "
 		)
 	}
 
@@ -55,11 +55,11 @@ print.hrqolr_scenario_validation_results <- function(x, ...) {
 
 #' Print method for scenario
 #'
-#' @describeIn print Overview of scenario settings
+#' @rdname print
 #' @export
 #'
 print.hrqolr_scenario <- function(x, ...) {
-	col_widths <- 2 + c(
+	col_widths <- 3 + c(
 		max(nchar(names(x))),
 		pmax(
 			sapply(x$arms, function(a) max(nchar(sapply(x, function(.) .[a])), na.rm = TRUE)),
@@ -68,12 +68,32 @@ print.hrqolr_scenario <- function(x, ...) {
 	)
 
 	for (param in names(x)) {
-		cat(colour(pad(param, col_widths[1]), "blue"))
+		cat(crayon_style(pad(param, col_widths[1]), "blue"))
 		for (arm in names(x[[param]])) {
 			cat(pad(x[[param]][[arm]], col_widths[arm], side = "left"))
 		}
 		cat("\n")
 	}
+
+	invisible(x)
+}
+
+
+#' Print method for hrqolr comparison results
+#'
+#' @param n_digits int, number of digits to show in decimal numbers
+#' @rdname print
+#' @export
+#'
+print.hrqolr_comparisons <- function(x, n_digits = 3, ...) {
+	x_tmp <- x
+	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
+
+	print(x_tmp[
+		,
+		lapply(.SD, function(col) tryCatch(round(col, n_digits), error = function(e) col)),
+		.SDcols = names(x_tmp)
+	])
 
 	invisible(x)
 }
