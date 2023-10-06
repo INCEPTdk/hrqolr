@@ -93,22 +93,23 @@ simulate_trials.hrqolr_scenario <- function(
 #' @export
 #'
 simulate_trials.default <- function(
-		arms = c("A", "B"),
-		n_patients_per_arm = c(A = 100, B = 100),
-		sampling_frequency = c(A = 14, B = 14),
-		index_hrqol = c(A = 0.0, B = 0.0),
-		first_hrqol = c(A = 0.1, B = 0.1),
-		final_hrqol = c(A = 0.75, B = 0.75),
-		acceleration_hrqol = c(A = 0.0, B = 0.0),
+		arms,
+		n_patients_per_arm,
+		sampling_frequency,
+
+		index_hrqol,
+		first_hrqol,
+		final_hrqol,
+		acceleration_hrqol,
+
+		mortality,
+		mortality_dampening,
+		mortality_trajectory_shape,
+		prop_mortality_benefitters,
 
 		n_trials = 100,
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
-
-		mortality = c(A = 0.4, B = 0.4),
-		mortality_dampening = c(A = 0.0, B = 0.0),
-		mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
-		prop_mortality_benefitters = c(A = 0.0, B = 0.0),
 
 		test_fun = welch_t_test,
 		verbose = TRUE,

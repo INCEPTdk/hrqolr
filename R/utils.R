@@ -379,14 +379,14 @@ pad <- function(x, n, pad = " ", side = "right") {
 #' Colour text if crayon package is available
 #'
 #' @param x string to be coloured
-#' @param colour string, must be one of the colours provided by `crayon`
+#' @param style string, must be a valid `crayon` style
 #'
 #' @return Coloured string (if crayon available), otherwise the string remains unaltered
 #' @keywords internal
 #'
-colour <- function(x, colour) {
+crayon_style <- function(x, style) {
 	tryCatch(
-		eval(str2lang(paste0("crayon::", colour)))(x),
+		eval(str2lang(paste0("crayon::", style)))(x),
 		error = function() x
 	)
 }
