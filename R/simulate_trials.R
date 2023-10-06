@@ -305,6 +305,7 @@ simulate_trials.default <- function(
 		id.vars = c("outcome", "arm", "trial_id"),
 		variable.name = "analysis")
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
+	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
 	# Comparisons across trials
 	by_cols <- c("outcome", "analysis", "comparator", "target")
@@ -321,6 +322,7 @@ simulate_trials.default <- function(
 
 	comparisons <- merge(comparisons, ground_truth) # add column with ground truth mean diff
 	setnames(comparisons, "mean_diff", "mean_ground_truth")
+	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
 	setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
 
