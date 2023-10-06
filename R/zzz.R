@@ -41,9 +41,8 @@ NULL
 	packageStartupMessage(
 		"Loading 'hrqolr' package v", .hrqolr_version, ".\n",
 		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr/.\n",
-		"Consider running 'cache_hrqolr()' for faster simulations. ",
-		"If you have enough RAM, increasing the cache size might speed up things even more; \n",
-		"run '?cache_hrqolr' for details."
+		"Consider running 'cache_hrqolr()' for faster simulations. If you have enough RAM, \n",
+		"increasing the cache size might speed up things even more; run '?cache_hrqolr' for details."
 	)
 }
 
