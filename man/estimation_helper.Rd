@@ -43,7 +43,7 @@ patients who die before end of follow-up}
 
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
 
-\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
+\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
 precision but also cause longer run-times.}

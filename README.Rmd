@@ -11,15 +11,17 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "75%",
+  fig.align = "center"
 )
+options(width = 80)
 ```
 
 # hrqolr <img src="man/figures/hrqolr.png" align="right" width="120" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr)
+[![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr) 
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
@@ -56,6 +58,7 @@ remotes::install_github("INCEPTdk/hrqolr@dev")
 ```
 
 ## Example
+
 First, load the package:
 ```{r}
 library(hrqolr)
@@ -63,43 +66,46 @@ library(hrqolr)
 
 --then, we activate the cache. This is optional but highly recommended.
 
+```{r include = FALSE}
+# avoid breaking data tables
+options(width = 999)
+```
+
 ```{r eval=FALSE}
 cache_hrqolr()
 ```
 
-`hrqolr` was built to simulate many scenarios, but here we define a single scenario and use `do.call` to give the list elements as named arguments to the function:
+`hrqolr` was built to simulate many scenarios, but here we define a single scenario with the built-in helper `setup_scenario` (note the validation results printed--silence these with `verbose = FALSE`):
 
 ```{r}
-scenario <- list(
-	n_trials = 100L,
-	n_patients_per_arm = 100L,
-	sampling_frequency = 14L,
-	n_patients_ground_truth = 1000L,
-	n_example_trajectories_per_arm = 100L,
-	
+scenario <- setup_scenario(
 	arms = c("A", "B"),
-	index_hrqol = c(A = 0.0, B = 0.0),
-	first_hrqol = c(A = 0.1, B = 0.1),
+	n_patients_per_arm = 100,
+	sampling_frequency = 14,
+	index_hrqol = 0.0,
+	first_hrqol = 0.1,
 	final_hrqol = c(A = 0.8, B = 0.7),
 	acceleration_hrqol = c(A = 0.1, B = 0.0),
 	
-	mortality = c(A = 0.4, B = 0.4),
-	mortality_dampening = c(A = 0.0, B = 0.0),
-	mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
-	prop_mortality_benefitters = c(A = 0.0, B = 0.0),
-	n_digits = 3
+	mortality = 0.4,
+	mortality_dampening = 0.0,
+	mortality_trajectory_shape = "exp_decay",
+	prop_mortality_benefitters = 0.0,
 )
-
-example_trajs <- do.call(sample_example_trajectories, scenario)
-example_trajs
 ```
 
-### Visualise trajectories
+Getting an overview of the final scenario:
 ```{r}
+scenario
+```
+
+With the scenario at hand, we can sample a number of example trajectories and visualise them:
+```{r}
+example_trajs <- sample_example_trajectories(scenario, n_digits = 3)
 plot(example_trajs)
 ```
 
-You might also want to break apart the trajectories in the arms. Hiding the legend, then, makes sense as the facet strips will already provide the same information. Here, we also set the arm-level trajectory in black to set it apart from the individual patient trajectories:
+You might also want to break apart the trajectories in the arms using well-known `ggplot2` facets (but we need to load `ggplot2` first). Hiding the legend, then, makes sense as the facet strips will already provide the same information. Here, we also set the arm-level trajectory in black to set it apart from the individual patient trajectories:
 
 ```{r}
 library(ggplot2) 
@@ -115,10 +121,18 @@ Of course, we might also be interested in summarising the trajectories. Here, fo
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-The same scenario specification can, then, be used to simulate a desired number of trials:
+The same scenario specification can, then, be used to simulate a desired number of trials. By default `hrqolr` will print progress updates to the console (hide these with `verbose = FALSE`):
 ```{r}
-sims <- do.call(simulate_trials, scenario)
-sims
+sims <- simulate_trials(scenario)
+```
+
+The `sims` object contains quite a lot of interesting information. Perhaps the useful are the summary statistics by arm and head-to-head comparisons between the arms
+```{r}
+sims$summary_stats
+```
+
+```{r}
+sims$comparisons
 ```
 
 ## Issues and enhancements
@@ -146,6 +160,11 @@ of `adaptr`
 ## Citation
 
 If using `hrqolr`, please consider citing it:
+
+```{r include = FALSE}
+# ensure citation doesn't go beyond chunk
+options(width = 80)
+```
 
 ```{r}
 citation(package = "hrqolr")

@@ -42,7 +42,7 @@ trajectory}
 \item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
 patients who die before end of follow-up}
 
-\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
+\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
 precision but also cause longer run-times.}

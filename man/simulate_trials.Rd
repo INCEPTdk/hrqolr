@@ -2,23 +2,41 @@
 % Please edit documentation in R/simulate_trials.R
 \name{simulate_trials}
 \alias{simulate_trials}
+\alias{simulate_trials.hrqolr_scenario}
+\alias{simulate_trials.default}
 \title{Simulate trials}
 \usage{
-simulate_trials(
-  n_trials = 100L,
-  n_patients_per_arm = 100L,
-  sampling_frequency = 14L,
-  n_patients_ground_truth = 1000L,
-  n_example_trajectories_per_arm = 50L,
-  arms = c("A", "B"),
-  index_hrqol = c(A = 0, B = 0),
-  first_hrqol = c(A = 0.1, B = 0.1),
-  final_hrqol = c(A = 0.75, B = 0.75),
-  acceleration_hrqol = c(A = 0, B = 0),
-  mortality = c(A = 0.4, B = 0.4),
-  mortality_dampening = c(A = 0, B = 0.7),
-  mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
-  prop_mortality_benefitters = c(A = 0, B = 0),
+simulate_trials(...)
+
+\method{simulate_trials}{hrqolr_scenario}(
+  scenario,
+  n_trials = 100,
+  n_patients_ground_truth = 1000,
+  n_example_trajectories_per_arm = 50,
+  test_fun = welch_t_test,
+  verbose = TRUE,
+  n_digits = 2,
+  seed = NULL,
+  valid_hrqol_range = c(-0.757, 1),
+  alpha = 0.05,
+  ...
+)
+
+\method{simulate_trials}{default}(
+  arms,
+  n_patients_per_arm,
+  sampling_frequency,
+  index_hrqol,
+  first_hrqol,
+  final_hrqol,
+  acceleration_hrqol,
+  mortality,
+  mortality_dampening,
+  mortality_trajectory_shape,
+  prop_mortality_benefitters,
+  n_trials = 100,
+  n_patients_ground_truth = 1000,
+  n_example_trajectories_per_arm = 50,
   test_fun = welch_t_test,
   verbose = TRUE,
   n_digits = 2,
@@ -29,11 +47,11 @@ simulate_trials(
 )
 }
 \arguments{
+\item{...}{not used}
+
+\item{scenario}{object of class 'hrqolr_scenario', the output of \link{setup_scenario}}
+
 \item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given}
-
-\item{n_patients_per_arm}{int scalar}
-
-\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 
 \item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
 truth}
@@ -41,8 +59,30 @@ truth}
 \item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
 returned object}
 
+\item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
+\code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
+below.}
+
+\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
+
+\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+
+\item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
+arms.}
+
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
+
+\item{n_patients_per_arm}{named int vector, number of patient in each arm}
+
+\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 
 \item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
 
@@ -64,26 +104,6 @@ patients who die before end of follow-up}
 
 \item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
 each arm who are so-called mortality benefitters.}
-
-\item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
-\code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
-below.}
-
-\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
-
-\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.}
-
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).}
-
-\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
-values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
-
-\item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
-arms.}
-
-\item{..., }{not used}
 }
 \value{
 An object of class \code{hrqolr_results}, which is a specialised list with four elements:

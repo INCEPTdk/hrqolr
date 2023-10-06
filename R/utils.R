@@ -303,6 +303,95 @@ assert_pkgs <- function(pkgs = NULL) {
 }
 
 
+#' Verify input is single integer or numeric (potentially within range)
+#'
+#' Used internally.
+#'
+#' @param x value to check.
+#' @param min_value,max_value single integers or decimal numbers, lower and upper bounds
+#'   between which `x` should lie.
+#' @param valid_values vector of valid values (only for characters)
+#' @param open single character, determines whether `min_value` and `max_value`
+#'   are excluded or not. Valid values: `"no"` (= closed interval; `min_value`
+#'   and `max_value` included; default value), `"right"`, `"left"`, `"yes"`
+#'   (= open interval, `min_value` and `max_value` excluded).
+#'
+#' @return Single logical.
+#'
+#' @name verify
+#' @keywords internal
+#'
+NULL
+
+#' Verify integer
+#' @describeIn verify Verify input is an integer
+#'
+verify_int <- function(x, min_value = -Inf, max_value = Inf, open = "no") {
+	if (is.null(x)) return(FALSE)
+	if (!is.numeric(x)) return(FALSE)
+	is_int <- length(x) == 1 & all(!is.na(x)) & all(floor(x) == x)
+	is_above_min <- if (open %in% c("left", "yes")) min_value < x else min_value <= x
+	is_below_max <- if (open %in% c("right", "yes")) x < max_value else x <= max_value
+	all(is_int) & all(is_above_min) & all(is_below_max)
+}
+
+
+#' Verify numeric
+#' @describeIn verify Verify input is a numeric
+#'
+verify_num <- function(x, min_value = -Inf, max_value = Inf, open = "no") {
+	if (is.null(x)) return(FALSE)
+	if (!is.numeric(x)) return(FALSE)
+	is_num <- length(x) == 1 & all(!is.na(x))
+	is_above_min <- if (open %in% c("left", "yes")) min_value < x else min_value <= x
+	is_below_max <- if (open %in% c("right", "yes")) x < max_value else x <= max_value
+	all(is_num) & all(is_above_min) & all(is_below_max)
+}
+
+
+#' Verify string
+#' @describeIn verify Verify input is a string of characters, having specific values (if specified)
+#'
+verify_chr <- function(x, valid_values = NULL) {
+	if (is.null(x)) return(FALSE)
+	if (!is.character(x)) return(FALSE)
+	has_valid_value <- is.null(valid_values) || isTRUE(x %in% valid_values)
+	length(x) == 1 && all(!is.na(x)) && has_valid_value
+}
+
+
+#' Padding of string
+#'
+#' @param x string, to be padded
+#' @param n int, number of padding characters to add
+#' @param pad string, padding character(s)
+#' @param side string, where to pad `x` (default: `"right"`)
+#'
+#' @return Padded character
+#' @keywords internal
+#'
+pad <- function(x, n, pad = " ", side = "right") {
+	full_pad <- paste0(rep(pad, max(0, n - nchar(x))), collapse = "")
+	if (side == "left") paste0(full_pad, x) else paste0(x, full_pad)
+}
+
+
+#' Colour text if crayon package is available
+#'
+#' @param x string to be coloured
+#' @param style string, must be a valid `crayon` style
+#'
+#' @return Coloured string (if crayon available), otherwise the string remains unaltered
+#' @keywords internal
+#'
+crayon_style <- function(x, style) {
+	tryCatch(
+		eval(str2lang(paste0("crayon::", style)))(x),
+		error = function() x
+	)
+}
+
+
 # Legacy (to be removed later) ====
 
 #' Fast approximation function

@@ -2,21 +2,62 @@
 #'
 #' This is the key user-facing function for simulating trials.
 #'
-#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#' @param n_patients_per_arm int scalar
-#' @param sampling_frequency int, for span between samplings from patients by the elements.
-#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
-#'   truth
-#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
-#'   returned object
+#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
+#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
+#'   elapsed time.
+#'
+#' @name simulate_trials
+#'
+#' @export
+#' @import data.table
+#' @importFrom stats setNames
+#'
+simulate_trials <- function(...) {
+	UseMethod("simulate_trials")
+}
+
+
+#' Helper for when scenario given as first argument
+#'
+#' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
+#'
+#' @rdname simulate_trials
+#' @export
+#'
+simulate_trials.hrqolr_scenario <- function(
+		scenario,
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
+		n_example_trajectories_per_arm = 50,
+		test_fun = welch_t_test,
+		verbose = TRUE,
+		n_digits = 2,
+		seed = NULL,
+		valid_hrqol_range = c(-0.757, 1.0),
+		alpha = 0.05,
+		...
+) {
+	args <- formals() # start with defaults
+	called_args <- match.call()[-1]
+	args[names(called_args)] <- called_args
+	args <- c(scenario, args[names(args) != "scenario"]) # "flatten"
+	do.call("simulate_trials.default", args)
+}
+
+
+#' Work-horse
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
+#' @param n_patients_per_arm named int vector, number of patient in each arm
+#' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
+#'
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
 #' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
 #' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
 #' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
 #'   each arm
+#'
 #' @param mortality named numeric vector in `[0, 1]`, the mortality in at end of follow-up, in each
 #'   arm
 #' @param mortality_dampening named numeric vector, dampening effect on HRQoL at ICU discharge in
@@ -25,6 +66,12 @@
 #'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`. Can differ across arms.
 #' @param prop_mortality_benefitters named numeric vector `[0, 1]`, the proportion of patients in
 #'   each arm who are so-called mortality benefitters.
+#'
+#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
+#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#'   truth
+#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
+#'   returned object
 #'
 #' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
 #'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
@@ -38,36 +85,31 @@
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
-#' @param ..., not used
+#' @param ... not used
 #'
 #' @details
 #' * `test_fun`: \[pending\]
-#'
-#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
-#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
-#'   elapsed time.
-#'
+#' @rdname simulate_trials
 #' @export
-#' @import data.table
-#' @importFrom stats setNames
 #'
-simulate_trials <- function(
-		n_trials = 100L,
-		n_patients_per_arm = 100L,
-		sampling_frequency = 14L,
-		n_patients_ground_truth = 1000L,
-		n_example_trajectories_per_arm = 50L,
+simulate_trials.default <- function(
+		arms,
+		n_patients_per_arm,
+		sampling_frequency,
 
-		arms = c("A", "B"),
-		index_hrqol = c(A = 0.0, B = 0.0),
-		first_hrqol = c(A = 0.1, B = 0.1),
-		final_hrqol = c(A = 0.75, B = 0.75),
-		acceleration_hrqol = c(A = 0.0, B = 0.0),
+		index_hrqol,
+		first_hrqol,
+		final_hrqol,
+		acceleration_hrqol,
 
-		mortality = c(A = 0.4, B = 0.4),
-		mortality_dampening = c(A = 0.0, B = 0.7),
-		mortality_trajectory_shape = c(A = "exp_decay", B = "exp_decay"),
-		prop_mortality_benefitters = c(A = 0.0, B = 0.0),
+		mortality,
+		mortality_dampening,
+		mortality_trajectory_shape,
+		prop_mortality_benefitters,
+
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
+		n_example_trajectories_per_arm = 50,
 
 		test_fun = welch_t_test,
 		verbose = TRUE,
@@ -87,8 +129,8 @@ simulate_trials <- function(
 	# Setup
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	n_patients_per_batch <- n_patients_per_arm * n_trials
-	trial_ids_per_batch <- split(
+	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients_per_arm)
+	trial_ids_by_batch <- split(
 		seq_len(sum(n_trials)),
 		rep(seq_along(n_trials), n_trials)
 	)
@@ -105,11 +147,12 @@ simulate_trials <- function(
 			log_timediff(start_time, paste("STARTING BATCH", batch_idx))
 		}
 
-		n_patients <- n_patients_per_batch[[batch_idx]]
 		batch_res <- list()
 
 		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
+
+			n_patients <- n_patients_per_batch[[batch_idx]][arm]
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
@@ -135,7 +178,7 @@ simulate_trials <- function(
 					mortality_dampening = mortality_dampening[arm],
 					mortality_rng = mortality_funs[[arm]]$r,
 
-					sampling_frequency = sampling_frequency,
+					sampling_frequency = sampling_frequency[arm],
 					n_digits = n_digits,
 					valid_hrqol_range = valid_hrqol_range
 				)
@@ -175,13 +218,13 @@ simulate_trials <- function(
 				mortality_dampening = mortality_dampening[arm],
 				mortality_rng = mortality_funs[[arm]]$r,
 
-				sampling_frequency = sampling_frequency,
+				sampling_frequency = sampling_frequency[arm],
 				n_digits = n_digits,
 				valid_hrqol_range = valid_hrqol_range
 			)
 
 			# Assign trial IDs
-			res[, trial_id := sample(rep(trial_ids_per_batch[[batch_idx]], n_patients_per_arm))]
+			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients_per_arm[arm]))]
 
 			batch_res[[arm]] <- res
 
@@ -263,6 +306,7 @@ simulate_trials <- function(
 		id.vars = c("outcome", "arm", "trial_id"),
 		variable.name = "analysis")
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
+	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
 	# Comparisons across trials
 	by_cols <- c("outcome", "analysis", "comparator", "target")
@@ -279,8 +323,12 @@ simulate_trials <- function(
 
 	comparisons <- merge(comparisons, ground_truth) # add column with ground truth mean diff
 	setnames(comparisons, "mean_diff", "mean_ground_truth")
+	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
-	setcolorder(comparisons, c("outcome", "mean", "mean_ground_truth", "sd", "se"))
+	setcolorder(
+		comparisons,
+		c("outcome", "comparator", "target", "mean", "mean_ground_truth", "sd", "se")
+	)
 
 	# Prepare arguments for inclusion in function output
 	args <- formals() # start with default values

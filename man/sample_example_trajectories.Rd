@@ -2,20 +2,33 @@
 % Please edit documentation in R/sample_example_trajectories.R
 \name{sample_example_trajectories}
 \alias{sample_example_trajectories}
+\alias{sample_example_trajectories.hrqolr_scenario}
+\alias{sample_example_trajectories.default}
 \title{Sample example trajectories}
 \usage{
-sample_example_trajectories(
+sample_example_trajectories(...)
+
+\method{sample_example_trajectories}{hrqolr_scenario}(
+  scenario,
+  n_example_trajectories_per_arm = 50,
+  n_digits = 2,
+  seed = NULL,
+  valid_hrqol_range = c(-0.757, 1),
+  ...
+)
+
+\method{sample_example_trajectories}{default}(
   arms,
-  n_example_trajectories_per_arm,
+  sampling_frequency,
   index_hrqol,
   first_hrqol,
   final_hrqol,
-  sampling_frequency,
   acceleration_hrqol,
   mortality,
   prop_mortality_benefitters,
   mortality_trajectory_shape,
   mortality_dampening,
+  n_example_trajectories_per_arm,
   n_digits = 2,
   seed = NULL,
   valid_hrqol_range,
@@ -23,19 +36,32 @@ sample_example_trajectories(
 )
 }
 \arguments{
-\item{arms}{character vector with the names of the arms. Must match the names of named vectors
-below.}
+\item{...}{not used}
+
+\item{scenario}{object of class 'hrqolr_scenario', the output of \link{setup_scenario}}
 
 \item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
 returned object}
+
+\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
+precision but also cause longer run-times.}
+
+\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
+values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+
+\item{arms}{character vector with the names of the arms. Must match the names of named vectors
+below.}
+
+\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 
 \item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
 
 \item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
 
 \item{final_hrqol}{named numeric vector, the HRQoL at end of follow-up in each arm}
-
-\item{sampling_frequency}{int, for span between samplings from patients by the elements.}
 
 \item{acceleration_hrqol}{named numeric vector, relative acceleration of HRQoL improvement in
 each arm}
@@ -51,22 +77,11 @@ each arm who are so-called mortality benefitters.}
 
 \item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
 patients who die before end of follow-up}
-
-\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.}
-
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).}
-
-\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
-values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
-
-\item{...}{not used}
 }
 \value{
 An object of class \code{hrqolr_examples} with trajectories in data.tables. The function will
 always return arm-level trajectories. If \code{n_example_trajectories_per_arm > 0}, it will also return
-data.table with patient trajectories, with a \code{id} column denoting patients. with
+data.table with patient trajectories, with a \code{id} column denoting patients.
 }
 \description{
 Sample a desired number of trajectories at arm leven and for individual patients.
