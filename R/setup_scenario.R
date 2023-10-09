@@ -27,12 +27,14 @@ setup_scenario <- function(
 		verbose = TRUE
 ) {
 
-	args <- formals()
-	called_args <- match.call()[-1]
-	args[names(called_args)] <- called_args
+	called_args <- as.list(match.call())[-1]
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
 	args["verbose"] <- NULL
-
-	args <- sapply(args, eval) # need evaluated values, not lazy expressions
 
 	if (is.null(arms) || length(unique(arms)) < 2) {
 		stop0("The scenario must have at least 2 arms of different names")
