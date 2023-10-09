@@ -385,10 +385,7 @@ pad <- function(x, n, pad = " ", side = "right") {
 #' @keywords internal
 #'
 crayon_style <- function(x, style) {
-	tryCatch(
-		eval(str2lang(paste0("crayon::", style)))(x),
-		error = function() x
-	)
+	tryCatch(crayon::style(x, style), error = function() x)
 }
 
 

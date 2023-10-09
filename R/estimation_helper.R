@@ -84,9 +84,5 @@ estimation_helper <- function(
 	)
 
 	res <- data.table::as.data.table(do.call(rbind, tmp))
-	res[, n_patients_with_type := unique_patient_types$n]
-	res <- res[rep(1:.N, n_patients_with_type)] # "un-count"
-	res[, n_patients_with_type := NULL]
-
-	res
+	res[rep(1:.N, unique_patient_types$n)] # "un-count" and return in one go
 }
