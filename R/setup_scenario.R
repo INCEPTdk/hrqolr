@@ -34,7 +34,7 @@ setup_scenario <- function(
 
 	args <- sapply(args, eval) # need evaluated values, not lazy expressions
 
-	if (is.null(arms) || length(arms) < 2 || length(unique(args)) == 1) {
+	if (is.null(arms) || length(unique(arms)) < 2) {
 		stop0("The scenario must have at least 2 arms of different names")
 	}
 
