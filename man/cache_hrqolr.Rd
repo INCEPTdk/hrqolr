@@ -3,7 +3,6 @@
 \name{cache_hrqolr}
 \alias{cache_hrqolr}
 \alias{clear_hrqolr_cache}
-\alias{remove_hrqolr_cache}
 \title{Caching of hrqolr functions}
 \usage{
 cache_hrqolr(
@@ -15,8 +14,6 @@ cache_hrqolr(
 )
 
 clear_hrqolr_cache()
-
-remove_hrqolr_cache()
 }
 \arguments{
 \item{max_size}{Maximum size of the cache, in bytes. If the cache exceeds
