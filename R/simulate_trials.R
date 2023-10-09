@@ -194,10 +194,7 @@ simulate_trials.default <- function(
 				tmp <- sapply(
 					outcome_cols,
 					function(col) {
-						gt_res[, list(
-							all = fast_mean(replace_na(get(col), 0)),
-							survivors = fast_mean(get(col)[!is.na(get(col))])
-						)]
+						gt_res[, list(ground_truth = fast_mean(replace_na(get(col), 0)))]
 					},
 					simplify = FALSE
 				)
@@ -298,10 +295,9 @@ simulate_trials.default <- function(
 			)
 			tmp[, .(
 				outcome,
-				analysis,
 				comparator = arms[1],
 				target = arms[2],
-				mean_diff = get(arms[2]) - get(arms[1])
+				mean_ground_truth = get(arms[2]) - get(arms[1])
 			)]
 		}
 	))
@@ -315,26 +311,27 @@ simulate_trials.default <- function(
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
 	# Comparisons across trials
-	by_cols <- c("outcome", "analysis", "comparator", "target")
-	comparisons <- merge(results$mean_diffs, ground_truth, by = by_cols)
+	comparisons <- merge(results$mean_diffs, ground_truth)
 
+	by_cols <- c("outcome", "analysis", "comparator", "target")
 	comparisons <- merge(
 		comparisons[
-			, compute_performance_metrics(est, mean_diff, p_value, ci_lo, ci_hi, alpha), by = by_cols
+			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha), by = by_cols
 		],
 		comparisons[
 			, c(list(n_sim = .N), summarise_var(est)), by = by_cols
 		]
 	)
 
-	comparisons <- merge(comparisons, ground_truth) # add column with ground truth mean diff
-	setnames(comparisons, "mean_diff", "mean_ground_truth")
-	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
-
+	browser()
+	comparisons <- merge(comparisons, ground_truth, by = c("outcome", "comparator", "target")) # add column with ground truth mean diff
+	setnames(comparisons, "mean", "mean_estimate")
 	setcolorder(
 		comparisons,
-		c("outcome", "comparator", "target", "mean", "mean_ground_truth", "sd", "se")
+		c("outcome", "comparator", "target", "mean_estimate", "mean_ground_truth", "sd", "se")
 	)
+
+	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
 	# Prepare arguments for inclusion in function output
 	called_args <- as.list(match.call())[-1]
