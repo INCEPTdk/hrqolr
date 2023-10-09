@@ -5,14 +5,15 @@
 
 <!-- badges: start -->
 
+![Version](https://img.shields.io/badge/version-0.0.0.9001-informational.svg)
 [![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr)
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
-Package for simulating two-arm randomised clinical trials with temporal
-trajectories of health-related quality of life (HRQoL) as the outcome
-and quantifies effect sizes as single-sampled HRQoL values at end of
+Package for simulating randomised clinical trials with temporal
+trajectories of health-related quality of life (HRQoL) as the outcome,
+to quantify effect sizes as single-sampled HRQoL values at end of
 follow-up and as the area under the trajectories.
 
 Developed as part of the INCEPT (Intensive Care Platform Trial) project
@@ -54,7 +55,7 @@ First, load the package:
 
 ``` r
 library(hrqolr)
-#> Loading 'hrqolr' package v0.0.9000.
+#> Loading 'hrqolr' package v0.0.9001.
 #> For help, run 'help("hrqolr")' or check out https://inceptdk.github.io/hrqolr/.
 #> Consider running 'cache_hrqolr()' for faster simulations. If you have enough RAM, 
 #> increasing the cache size might speed up things even more; run '?cache_hrqolr' for details.
@@ -159,13 +160,13 @@ console (hide these with `verbose = FALSE`):
 
 ``` r
 sims <- simulate_trials(scenario)
-#> 2023-10-06 14:54:58: Estimating ground truth of arm A (0 secs)
-#> 2023-10-06 14:55:11: Finished arm 'A' in batch (12.88 secs)
-#> 2023-10-06 14:55:11: Estimating ground truth of arm B (12.89 secs)
-#> 2023-10-06 14:55:22: Finished arm 'B' in batch (10.52 secs)
-#> 2023-10-06 14:55:22: Finished batch (10.99 secs)
-#> 2023-10-06 14:55:23: Combining data into final return struct (24.13 secs)
-#> 2023-10-06 14:55:23: Wrapping up, returning output (24.17 secs)
+#> 2023-10-09 08:50:41: Estimating ground truth of arm A (0 secs)
+#> 2023-10-09 08:50:49: Finished arm 'A' in batch (7.94 secs)
+#> 2023-10-09 08:50:49: Estimating ground truth of arm B (7.94 secs)
+#> 2023-10-09 08:50:59: Finished arm 'B' in batch (9.74 secs)
+#> 2023-10-09 08:50:59: Finished batch (9.98 secs)
+#> 2023-10-09 08:50:59: Combining data into final return struct (18.08 secs)
+#> 2023-10-09 08:50:59: Wrapping up, returning output (18.11 secs)
 ```
 
 The `sims` object contains quite a lot of interesting information.

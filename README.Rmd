@@ -20,13 +20,14 @@ options(width = 80)
 # hrqolr <img src="man/figures/hrqolr.png" align="right" width="120" />
 
 <!-- badges: start -->
+![Version](https://img.shields.io/badge/version-0.0.0.9001-informational.svg)
 [![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr) 
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
-Package for simulating two-arm randomised clinical trials with temporal trajectories of
-health-related quality of life (HRQoL) as the outcome and quantifies effect sizes as single-sampled
+Package for simulating randomised clinical trials with temporal trajectories of
+health-related quality of life (HRQoL) as the outcome, to quantify effect sizes as single-sampled
 HRQoL values at end of follow-up and as the area under the trajectories. 
 
 Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>),
