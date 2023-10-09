@@ -32,10 +32,17 @@ sample_example_trajectories.hrqolr_scenario <- function(
 		valid_hrqol_range = c(-0.757, 1.0),
 		...
 ) {
-	args <- formals() # start with defaults
-	called_args <- match.call()[-1]
-	args[names(called_args)] <- called_args
-	args <- c(scenario, args[names(args) != "scenario"]) # "flatten"
+	called_args <- as.list(match.call())[-1]
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
+	args <- c(scenario, args) # flatten args in scenario object
+
 	do.call("sample_example_trajectories.default", args)
 }
 

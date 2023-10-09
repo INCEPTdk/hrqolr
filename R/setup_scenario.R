@@ -30,6 +30,7 @@ setup_scenario <- function(
 	called_args <- as.list(match.call())[-1]
 	default_args <- formals()
 	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+
 	args <- c(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())

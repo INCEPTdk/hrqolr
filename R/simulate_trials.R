@@ -37,10 +37,16 @@ simulate_trials.hrqolr_scenario <- function(
 		alpha = 0.05,
 		...
 ) {
-	args <- formals() # start with defaults
-	called_args <- match.call()[-1]
-	args[names(called_args)] <- called_args
-	args <- c(scenario, args[names(args) != "scenario"]) # "flatten"
+	called_args <- as.list(match.call())[-1]
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
+	args <- c(scenario, args) # flatten args in scenario object
 	do.call("simulate_trials.default", args)
 }
 
@@ -331,11 +337,16 @@ simulate_trials.default <- function(
 	)
 
 	# Prepare arguments for inclusion in function output
-	args <- formals() # start with default values
 	called_args <- as.list(match.call())[-1]
-	args[names(called_args)] <- called_args
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
 	args$seed <- seed
-	args[["..."]] <- NULL
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
 
