@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 ![Version](https://img.shields.io/badge/version-0.0.0.9001-informational.svg)
-[![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr)
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
@@ -160,13 +160,13 @@ console (hide these with `verbose = FALSE`):
 
 ``` r
 sims <- simulate_trials(scenario)
-#> 2023-10-09 08:50:41: Estimating ground truth of arm A (0 secs)
-#> 2023-10-09 08:50:49: Finished arm 'A' in batch (7.94 secs)
-#> 2023-10-09 08:50:49: Estimating ground truth of arm B (7.94 secs)
-#> 2023-10-09 08:50:59: Finished arm 'B' in batch (9.74 secs)
-#> 2023-10-09 08:50:59: Finished batch (9.98 secs)
-#> 2023-10-09 08:50:59: Combining data into final return struct (18.08 secs)
-#> 2023-10-09 08:50:59: Wrapping up, returning output (18.11 secs)
+#> 2023-10-09 09:01:46: Estimating ground truth of arm A (0 secs)
+#> 2023-10-09 09:01:56: Finished arm 'A' in batch (9.89 secs)
+#> 2023-10-09 09:01:56: Estimating ground truth of arm B (9.89 secs)
+#> 2023-10-09 09:02:05: Finished arm 'B' in batch (8.48 secs)
+#> 2023-10-09 09:02:05: Finished batch (8.72 secs)
+#> 2023-10-09 09:02:05: Combining data into final return struct (18.73 secs)
+#> 2023-10-09 09:02:05: Wrapping up, returning output (18.79 secs)
 ```
 
 The `sims` object contains quite a lot of interesting information.
