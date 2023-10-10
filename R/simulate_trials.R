@@ -260,9 +260,9 @@ simulate_trials.default <- function(
 				tmp[, analysis := label]
 				return(tmp)
 			},
-			col = outcome_cols,
-			label = c("all", "survivors"),
-			na_replacement = list(0, NULL),
+			col = rep(outcome_cols, each = 2),
+			label = c("all", "survivors"), # repeated to match col parameter (the longest)
+			na_replacement = list(0, NULL), # idem
 			SIMPLIFY = FALSE
 		)
 
