@@ -323,7 +323,6 @@ simulate_trials.default <- function(
 		]
 	)
 
-	browser()
 	comparisons <- merge(comparisons, ground_truth, by = c("outcome", "comparator", "target")) # add column with ground truth mean diff
 	setnames(comparisons, "mean", "mean_estimate")
 	setcolorder(
