@@ -155,9 +155,12 @@ simulate_trials.default <- function(
 
 	trial_results <- list()
 
-	for (batch_idx in seq_along(n_patients_per_batch)) {
-		if (isTRUE(verbose) & length(n_patients_per_batch) > 1) {
-			log_timediff(start_time, paste("STARTING BATCH", batch_idx))
+	for (batch_idx in seq_len(n_batches)) {
+		if (isTRUE(verbose) & n_batches > 1) {
+			log_timediff(
+				start_time,
+				crayon_style(sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
+			)
 		}
 
 		batch_res <- list()
@@ -170,7 +173,12 @@ simulate_trials.default <- function(
 
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
-				if (isTRUE(verbose)) log_timediff(start_time, paste("Estimating ground truth of arm", arm))
+				if (isTRUE(verbose)) {
+					log_timediff(
+						start_time,
+						sprintf("Estimating ground truth of arm '%s'", arm)
+					)
+				}
 
 				# Use different seed for ground-truth sampling as this must be entirely independent
 				current_seed <- .Random.seed
@@ -213,7 +221,11 @@ simulate_trials.default <- function(
 				.Random.seed <- current_seed
 			}
 
-			n_patients_batch <- n_patients_per_batch[[batch_idx]][arm]
+			if (isTRUE(verbose)) {
+				log_timediff(
+					start_time_arm_in_batch,
+					sprintf("Starting arm '%s' in batch", arm))
+			}
 
 			res <- estimation_helper(
 				n_patients = n_patients_batch,
