@@ -355,8 +355,10 @@ simulate_trials.default <- function(
 		class = c("hrqolr_results", "list")
 	)
 
-	if (n_example_trajectories_per_arm > 0) {
-		out[["example_trajectories"]] <- do.call(sample_example_trajectories, args)
+	out$example_trajectories <- if (n_example_trajectories_per_arm > 0) {
+		 do.call(sample_example_trajectories, args)
+	} else {
+		list(NULL)
 	}
 
 	out$elapsed_time <- Sys.time() - start_time
