@@ -134,11 +134,11 @@ simulate_trials.default <- function(
 	peak_memory_use <- NULL
 
 
-	# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
+	# Setup ====
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
+		# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
 	set.seed(seed)
 
-	# Setup
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients_per_arm)
@@ -163,6 +163,7 @@ simulate_trials.default <- function(
 
 		batch_res <- list()
 
+		# Estimation for arm in batch ====
 		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
 
@@ -170,6 +171,7 @@ simulate_trials.default <- function(
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
+			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) log_timediff(start_time, paste("Estimating ground truth of arm", arm))
 
@@ -249,7 +251,7 @@ simulate_trials.default <- function(
 		batch_res <- rbindlist(batch_res, idcol = "arm")
 		peak_memory_use <- measure_memory_use(peak_memory_use)
 
-		# Arm-level summary statistics
+		# Arm-level summary statistics ====
 		tmp <- sapply(
 			outcome_cols,
 			function(col) {
@@ -297,14 +299,13 @@ simulate_trials.default <- function(
 		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
-	# Housekeeping to free up memory
 	clear_hrqolr_cache()
 	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
 	results <- lapply(results, rbindlist)
 
-	# Combine ground truth value into a single data.table
+	# Combine ground truth value into a single data.table ====
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
 	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
 	peak_memory_use <- measure_memory_use(peak_memory_use)
@@ -326,7 +327,7 @@ simulate_trials.default <- function(
 	))
 	peak_memory_use <- measure_memory_use(peak_memory_use)
 
-	# Arm-level summary stats across trials
+	# Arm-level summary stats across trials ====
 	summary_stats <- melt(
 		results$summary_stats,
 		id.vars = c("outcome", "arm", "trial_id"),
@@ -335,7 +336,7 @@ simulate_trials.default <- function(
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 	peak_memory_use <- measure_memory_use(peak_memory_use)
 
-	# Comparisons across trials
+	# Comparisons across trials ====
 	comparisons <- merge(results$mean_diffs, ground_truth)
 
 	by_cols <- c("outcome", "analysis", "comparator", "target")
@@ -358,7 +359,7 @@ simulate_trials.default <- function(
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 	peak_memory_use <- measure_memory_use(peak_memory_use)
 
-	# Trial-level results if so desired
+	# Trial-level results if so desired ====
 	if (isFALSE(sparse)) {
 		trial_results <- rbindlist(trial_results)
 	}
@@ -372,7 +373,7 @@ simulate_trials.default <- function(
 	}
 	peak_memory_use <- measure_memory_use(peak_memory_use)
 
-	# Prepare arguments for inclusion in function output
+	# Prepare arguments for inclusion in function output ====
 	called_args <- as.list(match.call())[-1]
 	default_args <- formals()
 	default_args <- default_args[setdiff(names(default_args), names(called_args))]
