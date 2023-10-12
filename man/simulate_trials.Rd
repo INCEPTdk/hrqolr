@@ -25,7 +25,7 @@ simulate_trials(...)
 
 \method{simulate_trials}{default}(
   arms,
-  n_patients_per_arm,
+  n_patients,
   sampling_frequency,
   index_hrqol,
   first_hrqol,
@@ -85,7 +85,7 @@ arms.}
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
 
-\item{n_patients_per_arm}{named int vector, number of patient in each arm}
+\item{n_patients}{named int vector, number of patient in each arm}
 
 \item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 

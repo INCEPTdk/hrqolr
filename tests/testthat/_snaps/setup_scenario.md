@@ -1,13 +1,13 @@
 # Setup scenario handles single-value arguments
 
     Code
-      setup_scenario(arms = c("Active", "Control"), n_patients_per_arm = 500,
-      index_hrqol = 0, first_hrqol = 0, final_hrqol = 0, acceleration_hrqol = 0,
-      mortality = 0.2, mortality_dampening = 0, mortality_trajectory_shape = "exp_decay",
+      setup_scenario(arms = c("Active", "Control"), n_patients = 500, index_hrqol = 0,
+      first_hrqol = 0, final_hrqol = 0, acceleration_hrqol = 0, mortality = 0.2,
+      mortality_dampening = 0, mortality_trajectory_shape = "exp_decay",
       prop_mortality_benefitters = 0.1, sampling_frequency = 14)
     Output
       arms                         valid as is      
-      n_patients_per_arm           modified      500 --> c("Active" = 500, "Control" = 500)   
+      n_patients                   modified      500 --> c("Active" = 500, "Control" = 500)   
       index_hrqol                  modified      0 --> c("Active" = 0, "Control" = 0)   
       first_hrqol                  modified      0 --> c("Active" = 0, "Control" = 0)   
       final_hrqol                  modified      0 --> c("Active" = 0, "Control" = 0)   
@@ -18,7 +18,7 @@
       prop_mortality_benefitters   modified      0.1 --> c("Active" = 0.1, "Control" = 0.1)   
       sampling_frequency           modified      14 --> c("Active" = 14, "Control" = 14)   
       arms                               Active     Control
-      n_patients_per_arm                    500         500
+      n_patients                            500         500
       index_hrqol                             0           0
       first_hrqol                             0           0
       final_hrqol                             0           0

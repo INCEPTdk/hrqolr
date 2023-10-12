@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-![Version](https://img.shields.io/badge/version-0.0.0.9001-informational.svg)
+![Version](https://img.shields.io/badge/version-0.0.0.9002-informational.svg)
 [![R-CMD-check](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr)
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
@@ -55,7 +55,7 @@ First, load the package:
 
 ``` r
 library(hrqolr)
-#> Loading 'hrqolr' package v0.0.9001.
+#> Loading 'hrqolr' package v0.0.0.9001.
 #> For help, run 'help("hrqolr")' or check out https://inceptdk.github.io/hrqolr/.
 #> Consider running 'cache_hrqolr()' for faster simulations. If you have enough RAM, 
 #> increasing the cache size might speed up things even more; run '?cache_hrqolr' for details.
@@ -74,7 +74,7 @@ validation results printed–silence these with `verbose = FALSE`):
 ``` r
 scenario <- setup_scenario(
     arms = c("A", "B"),
-    n_patients_per_arm = 100,
+    n_patients = 100,
     sampling_frequency = 14,
     index_hrqol = 0.0,
     first_hrqol = 0.1,
@@ -87,7 +87,7 @@ scenario <- setup_scenario(
     prop_mortality_benefitters = 0.0,
 )
 #> arms                         valid as is      
-#> n_patients_per_arm           modified      100 --> c("A" = 100, "B" = 100)   
+#> n_patients                   modified      100 --> c("A" = 100, "B" = 100)   
 #> index_hrqol                  modified      0 --> c("A" = 0, "B" = 0)   
 #> first_hrqol                  modified      0.1 --> c("A" = 0.1, "B" = 0.1)   
 #> final_hrqol                  valid as is      
@@ -104,7 +104,7 @@ Getting an overview of the final scenario:
 ``` r
 scenario
 #> arms                                    A           B
-#> n_patients_per_arm                    100         100
+#> n_patients                            100         100
 #> index_hrqol                             0           0
 #> first_hrqol                           0.1         0.1
 #> final_hrqol                           0.8         0.7
@@ -124,7 +124,7 @@ example_trajs <- sample_example_trajectories(scenario, n_digits = 3)
 plot(example_trajs)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="75%" style="display: block; margin: auto;" />
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
 
 You might also want to break apart the trajectories in the arms using
 well-known `ggplot2` facets (but we need to load `ggplot2` first).
@@ -140,7 +140,7 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
     theme(legend.position = "none")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="75%" style="display: block; margin: auto;" />
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
 
 Of course, we might also be interested in summarising the trajectories.
 Here, for example, with inter-quartile ranges. Note that the ribbons
@@ -152,7 +152,7 @@ benefitters* are still alive.
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="75%" style="display: block; margin: auto;" />
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
 The same scenario specification can, then, be used to simulate a desired
 number of trials. By default `hrqolr` will print progress updates to the
@@ -160,13 +160,14 @@ console (hide these with `verbose = FALSE`):
 
 ``` r
 sims <- simulate_trials(scenario)
-#> 2023-10-09 09:01:46: Estimating ground truth of arm A (0 secs)
-#> 2023-10-09 09:01:56: Finished arm 'A' in batch (9.89 secs)
-#> 2023-10-09 09:01:56: Estimating ground truth of arm B (9.89 secs)
-#> 2023-10-09 09:02:05: Finished arm 'B' in batch (8.48 secs)
-#> 2023-10-09 09:02:05: Finished batch (8.72 secs)
-#> 2023-10-09 09:02:05: Combining data into final return struct (18.73 secs)
-#> 2023-10-09 09:02:05: Wrapping up, returning output (18.79 secs)
+#> 2023-10-12 14:24:06: Estimating ground truth of arm A (0 secs)
+#> 2023-10-12 14:24:12: Finished arm 'A' in batch (6.61 secs)
+#> 2023-10-12 14:24:13: Estimating ground truth of arm B (6.7 secs)
+#> 2023-10-12 14:24:19: Finished arm 'B' in batch (6.53 secs)
+#> 2023-10-12 14:24:20: Finished batch (7.29 secs)
+#> 2023-10-12 14:24:20: Combining data into final return struct (14.1 secs)
+#> 2023-10-12 14:24:20: Sampling example trajectories (14.49 secs)
+#> 2023-10-12 14:24:21: Wrapping up, returning output (14.7 secs)
 ```
 
 The `sims` object contains quite a lot of interesting information.
@@ -176,60 +177,60 @@ comparisons between the arms
 ``` r
 sims$summary_stats
 #>                      outcome arm  analysis     p25     p50     p75    mean    sd    se
-#>  1:    primary__hrqol_at_eof   A       all   0.448   0.478   0.501   0.475 0.040 0.004
-#>  2:    primary__hrqol_at_eof   B       all   0.393   0.423   0.445   0.422 0.034 0.003
-#>  3:       primary__hrqol_auc   A       all  65.230  69.847  73.405  69.448 5.947 0.595
-#>  4:       primary__hrqol_auc   B       all  56.509  61.127  64.056  60.856 4.968 0.497
-#>  5: secondary1__hrqol_at_eof   A       all   0.448   0.478   0.505   0.475 0.041 0.004
-#>  6: secondary1__hrqol_at_eof   B       all   0.393   0.423   0.445   0.422 0.034 0.003
-#>  7:    secondary1__hrqol_auc   A       all  65.204  69.790  73.311  69.380 5.985 0.599
-#>  8:    secondary1__hrqol_auc   B       all  56.211  60.818  63.810  60.615 4.960 0.496
-#>  9: secondary2__hrqol_at_eof   A       all   0.448   0.478   0.505   0.475 0.041 0.004
-#> 10: secondary2__hrqol_at_eof   B       all   0.393   0.423   0.445   0.422 0.034 0.003
-#> 11:    secondary2__hrqol_auc   A       all  61.554  65.727  69.221  65.131 5.570 0.557
-#> 12:    secondary2__hrqol_auc   B       all  52.792  57.059  59.826  56.862 4.626 0.463
-#> 13:    primary__hrqol_at_eof   A survivors   0.558   0.583   0.608   0.581 0.040 0.004
-#> 14:    primary__hrqol_at_eof   B survivors   0.499   0.520   0.542   0.518 0.033 0.003
-#> 15:       primary__hrqol_auc   A survivors  81.786  85.354  88.949  85.016 5.797 0.580
-#> 16:       primary__hrqol_auc   B survivors  72.059  74.451  78.379  74.650 4.756 0.476
-#> 17: secondary1__hrqol_at_eof   A survivors   0.667   0.686   0.707   0.685 0.032 0.003
-#> 18: secondary1__hrqol_at_eof   B survivors   0.588   0.609   0.627   0.608 0.031 0.003
-#> 19:    secondary1__hrqol_auc   A survivors  97.598 100.452 103.282 100.096 4.696 0.470
-#> 20:    secondary1__hrqol_auc   B survivors  84.495  87.404  90.488  87.206 4.520 0.452
-#> 21: secondary2__hrqol_at_eof   A survivors   0.780   0.786   0.792   0.785 0.010 0.001
-#> 22: secondary2__hrqol_at_eof   B survivors   0.691   0.696   0.702   0.696 0.009 0.001
-#> 23:    secondary2__hrqol_auc   A survivors 106.755 107.802 108.694 107.677 1.497 0.150
-#> 24:    secondary2__hrqol_auc   B survivors  92.990  93.795  94.494  93.709 1.225 0.123
+#>  1:    primary__hrqol_at_eof   A       all   0.456   0.476   0.507   0.482 0.042 0.004
+#>  2:    primary__hrqol_at_eof   B       all   0.401   0.422   0.446   0.423 0.034 0.003
+#>  3:       primary__hrqol_auc   A       all  66.823  69.830  73.935  70.623 6.132 0.613
+#>  4:       primary__hrqol_auc   B       all  57.753  60.547  63.952  60.988 4.869 0.487
+#>  5: secondary1__hrqol_at_eof   A       all   0.456   0.476   0.507   0.482 0.042 0.004
+#>  6: secondary1__hrqol_at_eof   B       all   0.401   0.422   0.446   0.423 0.034 0.003
+#>  7:    secondary1__hrqol_auc   A       all  66.674  69.681  73.897  70.538 6.134 0.613
+#>  8:    secondary1__hrqol_auc   B       all  57.582  60.265  63.709  60.749 4.873 0.487
+#>  9: secondary2__hrqol_at_eof   A       all   0.456   0.476   0.507   0.482 0.042 0.004
+#> 10: secondary2__hrqol_at_eof   B       all   0.401   0.422   0.446   0.423 0.034 0.003
+#> 11:    secondary2__hrqol_auc   A       all  62.710  65.321  69.572  66.197 5.731 0.573
+#> 12:    secondary2__hrqol_auc   B       all  54.123  56.568  60.007  56.955 4.526 0.453
+#> 13:    primary__hrqol_at_eof   A survivors   0.568   0.593   0.618   0.591 0.040 0.004
+#> 14:    primary__hrqol_at_eof   B survivors   0.494   0.515   0.548   0.519 0.036 0.004
+#> 15:       primary__hrqol_auc   A survivors  83.115  86.806  90.532  86.505 5.891 0.589
+#> 16:       primary__hrqol_auc   B survivors  71.581  74.143  78.838  74.746 5.136 0.514
+#> 17: secondary1__hrqol_at_eof   A survivors   0.673   0.693   0.714   0.693 0.034 0.003
+#> 18: secondary1__hrqol_at_eof   B survivors   0.589   0.608   0.631   0.608 0.033 0.003
+#> 19:    secondary1__hrqol_auc   A survivors  98.538 101.344 104.176 101.349 4.950 0.495
+#> 20:    secondary1__hrqol_auc   B survivors  84.521  87.294  90.416  87.278 4.783 0.478
+#> 21: secondary2__hrqol_at_eof   A survivors   0.780   0.787   0.793   0.785 0.011 0.001
+#> 22: secondary2__hrqol_at_eof   B survivors   0.692   0.697   0.702   0.696 0.008 0.001
+#> 23:    secondary2__hrqol_auc   A survivors 107.050 107.997 108.751 107.680 1.594 0.159
+#> 24:    secondary2__hrqol_auc   B survivors  92.928  93.729  94.464  93.722 1.137 0.114
 #>                      outcome arm  analysis     p25     p50     p75    mean    sd    se
 ```
 
 ``` r
 sims$comparisons
-#>                      statistic primary__hrqol_at_eof primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_auc
-#>  1:                 comparator                     A                  A                        A                     A                        A                     A
-#>  2:                     target                     B                  B                        B                     B                        B                     B
-#>  3:                       mean                -0.052            -10.366                   -0.052                -12.89                   -0.052               -13.968
-#>  4:          mean_ground_truth                -0.053            -12.327                   -0.053               -13.505                   -0.053               -13.468
-#>  5:                         sd                 0.054              7.559                    0.054                 6.343                    0.054                 1.975
-#>  6:                         se                 0.005              0.756                    0.005                 0.634                    0.005                 0.197
-#>  7:                   analysis                   all          survivors                      all             survivors                      all             survivors
-#>  8:                       bias                 0.001              1.962                    0.001                 0.615                    0.001                  -0.5
-#>  9:                    bias_se                 0.005              0.756                    0.005                 0.634                    0.005                 0.197
-#> 10:              relative_bias                -0.012             -0.159                   -0.011                -0.046                   -0.011                 0.037
-#> 11:           relative_bias_se                 0.101              0.061                    0.101                 0.047                    0.101                 0.015
-#> 12:                        mse                 0.003             60.413                    0.003                40.206                    0.003                 4.112
-#> 13:                     mse_se                     0                8.3                        0                 4.697                        0                 0.644
-#> 14:                   coverage                  0.94               0.96                     0.94                  0.96                     0.94                  0.92
-#> 15:                coverage_se                 0.024               0.02                    0.024                  0.02                    0.024                 0.027
-#> 16:    bias_corrected_coverage                  0.95               0.96                     0.95                  0.96                     0.95                  0.98
-#> 17: bias_corrected_coverage_se                 0.022               0.02                    0.022                  0.02                    0.022                 0.014
-#> 18:       rejection_proportion                  0.17               0.29                     0.17                  0.54                     0.17                     1
-#> 19:    rejection_proportion_se                 0.038              0.045                    0.038                  0.05                    0.038                     0
-#> 20:                      n_sim                   100                100                      100                   100                      100                   100
-#> 21:                        p25                 -0.09            -15.848                   -0.092               -17.719                   -0.092               -15.317
-#> 22:                        p50                -0.053             -9.678                   -0.053               -13.845                   -0.053               -14.011
-#> 23:                        p75                -0.011             -4.952                   -0.011                -7.714                   -0.011               -12.725
-#>                      statistic primary__hrqol_at_eof primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_auc
+#>                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc
+#>  1:                 comparator                     A                     A                  A                  A                        A                        A                     A                     A                        A                        A                     A                     A
+#>  2:                     target                     B                     B                  B                  B                        B                        B                     B                     B                        B                        B                     B                     B
+#>  3:              mean_estimate                -0.059                -0.072             -9.635            -11.758                   -0.059                   -0.085                -9.788               -14.071                   -0.059                   -0.088                -9.242               -13.958
+#>  4:          mean_ground_truth                -0.041                -0.041             -7.134             -7.134                   -0.041                   -0.041                -7.214                -7.214                   -0.041                   -0.041                -6.798                -6.798
+#>  5:                         sd                 0.052                 0.053              7.436              7.728                    0.051                    0.046                 7.458                 6.659                    0.052                    0.014                 6.986                 1.985
+#>  6:                         se                 0.005                 0.005              0.744              0.773                    0.005                    0.005                 0.746                 0.666                    0.005                    0.001                 0.699                 0.199
+#>  7:                   analysis                   all             survivors                all          survivors                      all                survivors                   all             survivors                      all                survivors                   all             survivors
+#>  8:                       bias                -0.018                -0.031             -2.501             -4.625                   -0.018                   -0.044                -2.574                -6.856                   -0.018                   -0.047                -2.444                 -7.16
+#>  9:                    bias_se                 0.005                 0.005              0.744              0.773                    0.005                    0.005                 0.746                 0.666                    0.005                    0.001                 0.699                 0.199
+#> 10:              relative_bias                 0.443                  0.76              0.351              0.648                    0.445                    1.078                 0.357                  0.95                    0.446                    1.157                  0.36                 1.053
+#> 11:           relative_bias_se                 0.126                 0.131              0.104              0.108                    0.126                    0.112                 0.103                 0.092                    0.126                    0.035                 0.103                 0.029
+#> 12:                        mse                 0.003                 0.004             60.994             80.516                    0.003                    0.004                61.695                90.915                    0.003                    0.002                54.291                55.173
+#> 13:                     mse_se                     0                     0              8.772             10.351                        0                    0.001                 8.857                11.496                        0                        0                 7.817                 2.676
+#> 14:                   coverage                  0.92                  0.91               0.92                0.9                     0.92                      0.8                  0.92                   0.8                     0.92                     0.13                  0.92                  0.12
+#> 15:                coverage_se                 0.027                 0.029              0.027               0.03                    0.027                     0.04                 0.027                  0.04                    0.027                    0.034                 0.027                 0.032
+#> 16:    bias_corrected_coverage                  0.92                  0.94               0.95               0.95                     0.92                     0.94                  0.94                  0.94                     0.92                     0.97                  0.95                  0.99
+#> 17: bias_corrected_coverage_se                 0.027                 0.024              0.022              0.022                    0.027                    0.024                 0.024                 0.024                    0.027                    0.017                 0.022                  0.01
+#> 18:       rejection_proportion                   0.2                  0.27               0.25               0.35                      0.2                     0.51                  0.25                   0.6                      0.2                        1                  0.25                     1
+#> 19:    rejection_proportion_se                  0.04                 0.044              0.043              0.048                     0.04                     0.05                 0.043                 0.049                     0.04                        0                 0.043                     0
+#> 20:                      n_sim                   100                   100                100                100                      100                      100                   100                   100                      100                      100                   100                   100
+#> 21:                        p25                -0.092                -0.103             -14.15            -16.666                   -0.092                   -0.121               -14.192               -18.803                   -0.092                   -0.096                -13.74               -15.253
+#> 22:                        p50                -0.056                -0.074             -9.476            -12.121                   -0.056                    -0.08                -9.582               -13.541                   -0.056                   -0.089                -8.686               -14.112
+#> 23:                        p75                -0.021                -0.042             -3.545             -7.112                   -0.021                   -0.053                -3.596                -9.857                   -0.021                   -0.082                -3.754               -12.977
+#>                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc
 ```
 
 ## Issues and enhancements
@@ -268,15 +269,15 @@ If using `hrqolr`, please consider citing it:
 citation(package = "hrqolr")
 #> To cite package 'hrqolr' in publications use:
 #> 
-#>   Kaas-Hansen BS, Jensen AKG, Granholm A (2023). hrqolr: an R package
-#>   for simulating health-related quality of life trajectories.
+#>   Kaas-Hansen BS, Granholm A (2023). hrqolr: an R package for
+#>   simulating health-related quality of life trajectories.
 #>   https://inceptdk.github.io/hrqolr/
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {{hrqolr}: an R package for simulating health-related quality of life trajectories},
-#>     author = {Benjamin Skov Kaas-Hansen and Aksel Karl Georg Jensen and Anders Granholm},
+#>     author = {Benjamin Skov Kaas-Hansen and Anders Granholm},
 #>     year = {2023},
 #>     url = {https://inceptdk.github.io/hrqolr/},
 #>   }

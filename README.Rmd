@@ -10,9 +10,7 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "75%",
-  fig.align = "center"
+  fig.path = "man/figures/README-"
 )
 options(width = 80)
 ```
@@ -20,7 +18,7 @@ options(width = 80)
 # hrqolr <img src="man/figures/hrqolr.png" align="right" width="120" />
 
 <!-- badges: start -->
-![Version](https://img.shields.io/badge/version-0.0.0.9001-informational.svg)
+![Version](https://img.shields.io/badge/version-0.0.0.9002-informational.svg)
 [![R-CMD-check](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr) 
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
@@ -81,7 +79,7 @@ cache_hrqolr()
 ```{r}
 scenario <- setup_scenario(
 	arms = c("A", "B"),
-	n_patients_per_arm = 100,
+	n_patients = 100,
 	sampling_frequency = 14,
 	index_hrqol = 0.0,
 	first_hrqol = 0.1,

@@ -14,7 +14,7 @@
 #'
 setup_scenario <- function(
 		arms = NULL,
-		n_patients_per_arm = NULL,
+		n_patients = NULL,
 		index_hrqol = NULL,
 		first_hrqol = NULL,
 		final_hrqol = NULL,
@@ -42,7 +42,7 @@ setup_scenario <- function(
 	}
 
 	arg_requirements <- list(
-		n_patients_per_arm = list(fun = verify_int, min_value = 1),
+		n_patients = list(fun = verify_int, min_value = 1),
 		index_hrqol = list(fun = verify_num),
 		first_hrqol = list(fun = verify_num),
 		final_hrqol = list(fun = verify_num),

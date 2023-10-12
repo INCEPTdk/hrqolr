@@ -2,7 +2,7 @@ test_that("Setup scenario handles single-value arguments", {
 	testthat::expect_snapshot(
 		setup_scenario(
 			arms = c("Active", "Control"),
-			n_patients_per_arm = 500,
+			n_patients = 500,
 			index_hrqol = 0,
 			first_hrqol = 0,
 			final_hrqol = 0,

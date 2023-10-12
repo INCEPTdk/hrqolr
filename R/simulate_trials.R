@@ -56,7 +56,7 @@ simulate_trials.hrqolr_scenario <- function(
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
-#' @param n_patients_per_arm named int vector, number of patient in each arm
+#' @param n_patients named int vector, number of patient in each arm
 #' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
 #'
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
@@ -103,7 +103,7 @@ simulate_trials.hrqolr_scenario <- function(
 #'
 simulate_trials.default <- function(
 		arms,
-		n_patients_per_arm,
+		n_patients,
 		sampling_frequency,
 
 		index_hrqol,
@@ -133,7 +133,6 @@ simulate_trials.default <- function(
 	start_time <- Sys.time()
 	peak_memory_use <- NULL
 
-
 	# Setup ====
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
 		# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
@@ -141,7 +140,7 @@ simulate_trials.default <- function(
 
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients_per_arm)
+	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients)
 	trial_ids_by_batch <- split(
 		seq_len(sum(n_trials)),
 		rep(seq_along(n_trials), n_trials)
@@ -166,8 +165,6 @@ simulate_trials.default <- function(
 		# Estimation for arm in batch ====
 		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
-
-			n_patients <- n_patients_per_batch[[batch_idx]][arm]
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
@@ -217,8 +214,10 @@ simulate_trials.default <- function(
 				.Random.seed <- current_seed
 			}
 
+			n_patients_batch <- n_patients_per_batch[[batch_idx]][arm]
+
 			res <- estimation_helper(
-				n_patients = n_patients,
+				n_patients = n_patients_batch,
 				arm = arm,
 
 				index_hrqol_arm = index_hrqol[arm],
@@ -239,7 +238,7 @@ simulate_trials.default <- function(
 			peak_memory_use <- measure_memory_use(peak_memory_use)
 
 			# Assign trial IDs
-			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients_per_arm[arm]))]
+			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
 			batch_res[[arm]] <- res
 
@@ -364,15 +363,6 @@ simulate_trials.default <- function(
 		trial_results <- rbindlist(trial_results)
 	}
 
-	# Example trajectories ====
-	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
-		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
-		do.call(sample_example_trajectories, args)
-	} else {
-		list(NULL)
-	}
-	peak_memory_use <- measure_memory_use(peak_memory_use)
-
 	# Prepare arguments for inclusion in function output ====
 	called_args <- as.list(match.call())[-1]
 	default_args <- formals()
@@ -384,6 +374,15 @@ simulate_trials.default <- function(
 		lapply(default_args, eval, envir = environment())
 	)
 	args$seed <- seed
+
+	# Example trajectories ====
+	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
+		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
+		do.call(sample_example_trajectories, args)
+	} else {
+		list(NULL)
+	}
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
 	structure(
