@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,18 +57,20 @@
 <span>  n_patients_ground_truth <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  n_example_trajectories_per_arm <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  test_fun <span class="op">=</span> <span class="va">welch_t_test</span>,</span>
+<span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  max_batch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">simulate_trials</span><span class="op">(</span></span>
 <span>  <span class="va">arms</span>,</span>
-<span>  <span class="va">n_patients_per_arm</span>,</span>
+<span>  <span class="va">n_patients</span>,</span>
 <span>  <span class="va">sampling_frequency</span>,</span>
 <span>  <span class="va">index_hrqol</span>,</span>
 <span>  <span class="va">first_hrqol</span>,</span>
@@ -81,12 +83,14 @@
 <span>  n_trials <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  n_patients_ground_truth <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  n_example_trajectories_per_arm <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  test_fun <span class="op">=</span> <span class="va">welch_t_test</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  max_batch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -121,6 +125,11 @@ returned object</p></dd>
 below.</p></dd>
 
 
+<dt>sparse</dt>
+<dd><p>logical, indicates whether trial-level results are kept. Default is <code>FALSE</code> because
+the resulting object may be very large if many trials are simulated.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical, should the function give progress timestamped updates? Default: <code>TRUE</code></p></dd>
 
@@ -145,12 +154,17 @@ values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5
 arms.</p></dd>
 
 
+<dt>max_batch_size</dt>
+<dd><p>int, the maximum number of patients to process in each batch. The default
+is to use run one batch (i.e. no upper limit)</p></dd>
+
+
 <dt>arms</dt>
 <dd><p>character vector with the names of the arms. Must match the names of named vectors
 below.</p></dd>
 
 
-<dt>n_patients_per_arm</dt>
+<dt>n_patients</dt>
 <dd><p>named int vector, number of patient in each arm</p></dd>
 
 
