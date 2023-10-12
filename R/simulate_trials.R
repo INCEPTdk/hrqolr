@@ -36,6 +36,7 @@ simulate_trials.hrqolr_scenario <- function(
 		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
+		max_batch_size = NULL,
 		...
 ) {
 	called_args <- as.list(match.call())[-1]
@@ -94,6 +95,8 @@ simulate_trials.hrqolr_scenario <- function(
 #'   arms.
 #' @param sparse logical, indicates whether trial-level results are kept. Default is `FALSE` because
 #'   the resulting object may be very large if many trials are simulated.
+#' @param max_batch_size int, the maximum number of patients to process in each batch. The default
+#'   is to use run one batch (i.e. no upper limit)
 #' @param ... not used
 #'
 #' @details
@@ -127,6 +130,7 @@ simulate_trials.default <- function(
 		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
+		max_batch_size = NULL,
 		...
 ) {
 
@@ -140,12 +144,23 @@ simulate_trials.default <- function(
 
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients)
+	# Splitting trials into batches that respect the max_batch_size argument
+	max_batch_size <- max_batch_size %||% sum(n_trials * n_patients)
+	n_patients_total <- sum(n_trials * n_patients)
+	n_trials_per_batch <- ceiling(n_trials / (n_patients_total / max_batch_size))
+	n_batches <- ceiling(n_trials / n_trials_per_batch)
+
 	trial_ids_by_batch <- split(
-		seq_len(sum(n_trials)),
-		rep(seq_along(n_trials), n_trials)
+		seq_len(n_trials),
+		rep(seq_len(n_batches), each = n_trials_per_batch)[1:n_trials]
 	)
 
+	n_patients_by_batch <- lapply(
+		trial_ids_by_batch,
+		function(trial_ids) length(trial_ids) * n_patients
+	)
+
+	# Output values
 	ground_truth <- list()
 
 	results <- list(
@@ -228,7 +243,7 @@ simulate_trials.default <- function(
 			}
 
 			res <- estimation_helper(
-				n_patients = n_patients_batch,
+				n_patients = n_patients_by_batch[[batch_idx]][arm],
 				arm = arm,
 
 				index_hrqol_arm = index_hrqol[arm],
@@ -253,8 +268,6 @@ simulate_trials.default <- function(
 			batch_res[[arm]] <- res
 			rm(res)
 			gc()
-
-			if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, sprintf("Finished arm '%s' in batch", arm))
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
