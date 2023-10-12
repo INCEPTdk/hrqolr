@@ -129,12 +129,12 @@ print.hrqolr_summary_stats <- function(x, n_digits = 3, ...) {
 #' @export
 #' @rdname print
 #'
-print.hrqolr_bytes <- function (x, digits = 3, ...) {
+print.hrqolr_bytes <- function (x, n_digits = 3, ...) {
 	power <- min(floor(log(abs(x), 1000)), 4)
 	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
 
 	formatted <- format(
-		signif(x / (1000^power), digits = digits),
+		signif(x / (1000^power), digits = n_digits),
 		big.mark = ",",
 		scientific = FALSE
 	)

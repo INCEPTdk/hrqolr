@@ -20,7 +20,7 @@
 
 \method{print}{hrqolr_summary_stats}(x, n_digits = 3, ...)
 
-\method{print}{hrqolr_bytes}(x, digits = 3, ...)
+\method{print}{hrqolr_bytes}(x, n_digits = 3, ...)
 }
 \arguments{
 \item{x}{object to print, see \strong{Details}.}
