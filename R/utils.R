@@ -389,16 +389,14 @@ crayon_style <- function(x, style) {
 }
 
 
-#' Helper to track memory use (if pryr package available)
+#' Estimate node size
 #'
-#' @param current_max `NULL`, object of class `pryr_bytes` or scalar with bytes.
+#' Based on pryr:::node_size().
 #'
 #' @keywords internal
-#' @return Numeric scalar of class `pryr_bytes`.
+#' @return Nothing
 #'
-measure_memory_use <- function(current_max) {
-	tryCatch(
-		structure(max(x, pryr::mem_used()), class = "pryr_bytes"),
-		error = function(e) { gc(); return(NULL) }
-	)
+node_size <- function() {
+	bit <- 8L * .Machine$sizeof.pointer
+	if (bit == 64L) 56L else if (bit == 32L) 28L else NA
 }

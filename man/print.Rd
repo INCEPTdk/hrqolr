@@ -7,6 +7,7 @@
 \alias{print.hrqolr_scenario}
 \alias{print.hrqolr_comparisons}
 \alias{print.hrqolr_summary_stats}
+\alias{print.hrqolr_bytes}
 \title{Print methods for HRQoL results}
 \usage{
 \method{print}{hrqolr_examples}(x, prop_digits = 3, ...)
@@ -18,6 +19,8 @@
 \method{print}{hrqolr_comparisons}(x, n_digits = 3, ...)
 
 \method{print}{hrqolr_summary_stats}(x, n_digits = 3, ...)
+
+\method{print}{hrqolr_bytes}(x, digits = 3, ...)
 }
 \arguments{
 \item{x}{object to print, see \strong{Details}.}
@@ -35,6 +38,8 @@ Invisibly returns \code{x}.
 \description{
 Prints contents of the first input \code{x} in a human-friendly way, see
 \strong{Details} for more information.
+
+Logic from pryr:::print.pryr_bytes but simplified and included here to mimise dependencies.
 }
 \details{
 The behaviour depends on the class of \code{x}:
