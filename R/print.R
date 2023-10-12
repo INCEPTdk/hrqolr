@@ -119,3 +119,27 @@ print.hrqolr_summary_stats <- function(x, n_digits = 3, ...) {
 
 	invisible(x)
 }
+
+
+#' Print method for bytes
+#'
+#' Logic from pryr:::print.pryr_bytes but simplified and included here to mimise dependencies.
+#'
+#' @param n_digits int, number of digits to show in decimal numbers
+#' @export
+#' @rdname print
+#'
+print.hrqolr_bytes <- function (x, n_digits = 3, ...) {
+	power <- min(floor(log(abs(x), 1000)), 4)
+	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
+
+	formatted <- format(
+		signif(x / (1000^power), digits = n_digits),
+		big.mark = ",",
+		scientific = FALSE
+	)
+
+	cat(formatted, " ", unit, "\n", sep = "")
+
+	invisible(x)
+}

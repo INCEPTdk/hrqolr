@@ -30,17 +30,25 @@ simulate_trials.hrqolr_scenario <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 		test_fun = welch_t_test,
+		sparse = TRUE,
 		verbose = TRUE,
 		n_digits = 2,
 		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
+		max_batch_size = NULL,
 		...
 ) {
-	args <- formals() # start with defaults
-	called_args <- match.call()[-1]
-	args[names(called_args)] <- called_args
-	args <- c(scenario, args[names(args) != "scenario"]) # "flatten"
+	called_args <- as.list(match.call())[-1]
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
+	args <- c(scenario, args) # flatten args in scenario object
 	do.call("simulate_trials.default", args)
 }
 
@@ -49,7 +57,7 @@ simulate_trials.hrqolr_scenario <- function(
 #'
 #' @param arms character vector with the names of the arms. Must match the names of named vectors
 #'   below.
-#' @param n_patients_per_arm named int vector, number of patient in each arm
+#' @param n_patients named int vector, number of patient in each arm
 #' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
 #'
 #' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
@@ -85,6 +93,10 @@ simulate_trials.hrqolr_scenario <- function(
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
+#' @param sparse logical, indicates whether trial-level results are kept. Default is `FALSE` because
+#'   the resulting object may be very large if many trials are simulated.
+#' @param max_batch_size int, the maximum number of patients to process in each batch. The default
+#'   is to use run one batch (i.e. no upper limit)
 #' @param ... not used
 #'
 #' @details
@@ -94,7 +106,7 @@ simulate_trials.hrqolr_scenario <- function(
 #'
 simulate_trials.default <- function(
 		arms,
-		n_patients_per_arm,
+		n_patients,
 		sampling_frequency,
 
 		index_hrqol,
@@ -111,53 +123,77 @@ simulate_trials.default <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 
+		sparse = TRUE,
 		test_fun = welch_t_test,
 		verbose = TRUE,
 		n_digits = 2,
 		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
+		max_batch_size = NULL,
 		...
 ) {
 
+	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
 	start_time <- Sys.time()
 
-	# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
+	# Setup ====
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
+		# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
 	set.seed(seed)
 
-	# Setup
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	n_patients_per_batch <- lapply(n_trials, function(n) n * n_patients_per_arm)
+	# Splitting trials into batches that respect the max_batch_size argument
+	max_batch_size <- max_batch_size %||% sum(n_trials * n_patients)
+	n_patients_total <- sum(n_trials * n_patients)
+	n_trials_per_batch <- ceiling(n_trials / (n_patients_total / max_batch_size))
+	n_batches <- ceiling(n_trials / n_trials_per_batch)
+
 	trial_ids_by_batch <- split(
-		seq_len(sum(n_trials)),
-		rep(seq_along(n_trials), n_trials)
+		seq_len(n_trials),
+		rep(seq_len(n_batches), each = n_trials_per_batch)[1:n_trials]
 	)
+
+	n_patients_by_batch <- lapply(
+		trial_ids_by_batch,
+		function(trial_ids) length(trial_ids) * n_patients
+	)
+
+	# Output values
+	ground_truth <- list()
 
 	results <- list(
 		summary_stats = list(),
 		mean_diffs = list()
 	)
 
-	ground_truth <- list()
+	trial_results <- list()
 
-	for (batch_idx in seq_along(n_patients_per_batch)) {
-		if (isTRUE(verbose) & length(n_patients_per_batch) > 1) {
-			log_timediff(start_time, paste("STARTING BATCH", batch_idx))
+	for (batch_idx in seq_len(n_batches)) {
+		if (isTRUE(verbose) & n_batches > 1) {
+			log_timediff(
+				start_time,
+				crayon_style(sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
+			)
 		}
 
 		batch_res <- list()
 
+		# Estimation for arm in batch ====
 		for (arm in arms) {
 			start_time_arm_in_batch <- Sys.time()
 
-			n_patients <- n_patients_per_batch[[batch_idx]][arm]
-
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
+			# Ground-truth estimation ====
 			if (batch_idx == 1) {
-				if (isTRUE(verbose)) log_timediff(start_time, paste("Estimating ground truth of arm", arm))
+				if (isTRUE(verbose)) {
+					log_timediff(
+						start_time,
+						sprintf("Estimating ground truth of arm '%s'", arm)
+					)
+				}
 
 				# Use different seed for ground-truth sampling as this must be entirely independent
 				current_seed <- .Random.seed
@@ -188,23 +224,26 @@ simulate_trials.default <- function(
 				tmp <- sapply(
 					outcome_cols,
 					function(col) {
-						gt_res[, list(
-							all = fast_mean(replace_na(get(col), 0)),
-							survivors = fast_mean(get(col)[!is.na(get(col))])
-						)]
+						gt_res[, list(ground_truth = fast_mean(replace_na(get(col), 0)))]
 					},
 					simplify = FALSE
 				)
 
 				ground_truth[[arm]] <- rbindlist(tmp, idcol = "outcome")
 
-				rm(gt_res)
+				rm(gt_res, tmp)
 				gc()
 				.Random.seed <- current_seed
 			}
 
+			if (isTRUE(verbose)) {
+				log_timediff(
+					start_time_arm_in_batch,
+					sprintf("Starting arm '%s' in batch", arm))
+			}
+
 			res <- estimation_helper(
-				n_patients = n_patients,
+				n_patients = n_patients_by_batch[[batch_idx]][arm],
 				arm = arm,
 
 				index_hrqol_arm = index_hrqol[arm],
@@ -224,16 +263,16 @@ simulate_trials.default <- function(
 			)
 
 			# Assign trial IDs
-			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients_per_arm[arm]))]
+			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
 			batch_res[[arm]] <- res
-
-			if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, sprintf("Finished arm '%s' in batch", arm))
+			rm(res)
+			gc()
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
 
-		# Arm-level summary statistics
+		# Arm-level summary statistics ====
 		tmp <- sapply(
 			outcome_cols,
 			function(col) {
@@ -246,6 +285,8 @@ simulate_trials.default <- function(
 		)
 
 		results$summary_stats[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
+		rm(tmp)
+		gc()
 
 		# Trial-level effect estimates
 		tmp <- mapply(
@@ -257,29 +298,35 @@ simulate_trials.default <- function(
 				tmp[, analysis := label]
 				return(tmp)
 			},
-			col = outcome_cols,
-			label = c("all", "survivors"),
-			na_replacement = list(0, NULL),
+			col = rep(outcome_cols, each = 2),
+			label = c("all", "survivors"), # repeated to match col parameter (the longest)
+			na_replacement = list(0, NULL), # idem
 			SIMPLIFY = FALSE
 		)
 
 		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
+		rm(tmp)
+		gc()
+
+		# Keep trial-level results if so desired
+		if (isFALSE(sparse)) {
+			trial_results[[batch_idx]] <- batch_res
+		}
 
 		# Housekeeping
-		rm(tmp, batch_res)
+		rm(batch_res)
 		gc()
 
 		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
-	# Housekeeping to free up memory
 	clear_hrqolr_cache()
+	gc()
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
-
 	results <- lapply(results, rbindlist)
 
-	# Combine ground truth value into a single data.table
+	# Combine ground truth value into a single data.table ====
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
 	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
 
@@ -292,15 +339,14 @@ simulate_trials.default <- function(
 			)
 			tmp[, .(
 				outcome,
-				analysis,
 				comparator = arms[1],
 				target = arms[2],
-				mean_diff = get(arms[2]) - get(arms[1])
+				mean_ground_truth = get(arms[2]) - get(arms[1])
 			)]
 		}
 	))
 
-	# Arm-level summary stats across trials
+	# Arm-level summary stats across trials ====
 	summary_stats <- melt(
 		results$summary_stats,
 		id.vars = c("outcome", "arm", "trial_id"),
@@ -308,50 +354,72 @@ simulate_trials.default <- function(
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
-	# Comparisons across trials
-	by_cols <- c("outcome", "analysis", "comparator", "target")
-	comparisons <- merge(results$mean_diffs, ground_truth, by = by_cols)
+	results$summary_stats <- NULL
+	gc()
 
+	# Comparisons across trials ====
+	comparisons <- merge(results$mean_diffs, ground_truth)
+	results$comparisons <- NULL
+	gc()
+
+	by_cols <- c("outcome", "analysis", "comparator", "target")
 	comparisons <- merge(
 		comparisons[
-			, compute_performance_metrics(est, mean_diff, p_value, ci_lo, ci_hi, alpha), by = by_cols
+			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha), by = by_cols
 		],
 		comparisons[
 			, c(list(n_sim = .N), summarise_var(est)), by = by_cols
 		]
 	)
 
-	comparisons <- merge(comparisons, ground_truth) # add column with ground truth mean diff
-	setnames(comparisons, "mean_diff", "mean_ground_truth")
-	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
-
+	comparisons <- merge(comparisons, ground_truth, by = c("outcome", "comparator", "target")) # add column with ground truth mean diff
+	setnames(comparisons, "mean", "mean_estimate")
 	setcolorder(
 		comparisons,
-		c("outcome", "comparator", "target", "mean", "mean_ground_truth", "sd", "se")
+		c("outcome", "comparator", "target", "mean_estimate", "mean_ground_truth", "sd", "se")
 	)
 
-	# Prepare arguments for inclusion in function output
-	args <- formals() # start with default values
+	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
+
+	# Trial-level results if so desired ====
+	if (isFALSE(sparse)) {
+		trial_results <- rbindlist(trial_results)
+	}
+
+	# Prepare arguments for inclusion in function output ====
 	called_args <- as.list(match.call())[-1]
-	args[names(called_args)] <- called_args
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
 	args$seed <- seed
-	args[["..."]] <- NULL
 
+	# Example trajectories ====
+	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
+		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
+		do.call(sample_example_trajectories, args)
+	} else {
+		list(NULL)
+	}
+
+	# Create output object ====
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
-
-	out <- structure(
+	structure(
 		list(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
-			args = args
+			args = args,
+			trial_results = if (isTRUE(sparse)) list(NULL) else trial_results,
+			example_trajectories = example_trajectories,
+			resource_use = list(
+				elapsed_time = Sys.time() - start_time,
+				peak_memory_use = structure(sum(gc()[, "max used"] * c(node_size(), 8)), class = "hrqolr_bytes")
+			)
 		),
 		class = c("hrqolr_results", "list")
 	)
-
-	if (n_example_trajectories_per_arm > 0) {
-		out[["example_trajectories"]] <- do.call(sample_example_trajectories, args)
-	}
-
-	out$elapsed_time <- Sys.time() - start_time
-	out
 }

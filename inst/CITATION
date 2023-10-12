@@ -3,13 +3,12 @@ bibentry(
   title = "{hrqolr}: an R package for simulating health-related quality of life trajectories",
   author = c(
     person("Benjamin Skov", "Kaas-Hansen"),
-    person("Aksel Karl Georg", "Jensen"),
     person("Anders", "Granholm")
   ),
   year = 2023,
   url = "https://inceptdk.github.io/hrqolr/",
   textVersion = paste(
-    "Kaas-Hansen BS, Jensen AKG, Granholm A (2023).",
+    "Kaas-Hansen BS, Granholm A (2023).",
     "hrqolr: an R package for simulating health-related quality of life trajectories.",
     "https://inceptdk.github.io/hrqolr/")
 )

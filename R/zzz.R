@@ -62,7 +62,7 @@ NULL
 		utils::globalVariables(c(
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
 			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis",
-			"outcome", "value"
+			"outcome", "value", "mean_ground_truth"
 		))
 	}
 
@@ -82,6 +82,4 @@ NULL
 	create_xout <<- custom_memoise(create_xout)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 	find_decay_halflife <<- custom_memoise(find_decay_halflife)
-
-	cache_hrqolr(1 * 1024^3) # TODO: remove before deploying
 }

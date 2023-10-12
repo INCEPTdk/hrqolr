@@ -1,7 +1,7 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.9000
-Date: 2023-09-28
+Version: 0.0.0.9003
+Date: 2023-10-09
 Authors@R: 
     c(person("Benjamin Skov", "Kaas-Hansen",
              email = "epiben@hey.com",
@@ -10,11 +10,7 @@ Authors@R:
       person("Anders", "Granholm",
              email = "andersgran@gmail.com",
              role = c("aut"),
-             comment = c(ORCID = "0000-0001-5799-7655")),
-      person("Aksel Karl Georg", "Jensen",
-             email = "akje@sund.ku.dk",
-             role = "ctb",
-             comment = c(ORCID = "0000-0002-1459-0465")))
+             comment = c(ORCID = "0000-0001-5799-7655")))
 Description: Package for simulating two-arm randomised clinical trials with temporal 
     trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
     sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 

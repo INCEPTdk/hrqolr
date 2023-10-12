@@ -6,7 +6,7 @@
 \usage{
 setup_scenario(
   arms = NULL,
-  n_patients_per_arm = NULL,
+  n_patients = NULL,
   index_hrqol = NULL,
   first_hrqol = NULL,
   final_hrqol = NULL,
@@ -23,7 +23,7 @@ setup_scenario(
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
 
-\item{n_patients_per_arm}{named int vector, number of patient in each arm}
+\item{n_patients}{named int vector, number of patient in each arm}
 
 \item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
 

@@ -10,9 +10,7 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "75%",
-  fig.align = "center"
+  fig.path = "man/figures/README-"
 )
 options(width = 80)
 ```
@@ -20,13 +18,13 @@ options(width = 80)
 # hrqolr <img src="man/figures/hrqolr.png" align="right" width="120" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiben/hrqolr/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/INCEPTdk/hrqolr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/INCEPTdk/hrqolr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/INCEPTdk/hrqolr) 
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
-Package for simulating two-arm randomised clinical trials with temporal trajectories of
-health-related quality of life (HRQoL) as the outcome and quantifies effect sizes as single-sampled
+Package for simulating randomised clinical trials with temporal trajectories of
+health-related quality of life (HRQoL) as the outcome, to quantify effect sizes as single-sampled
 HRQoL values at end of follow-up and as the area under the trajectories. 
 
 Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>),
@@ -80,7 +78,7 @@ cache_hrqolr()
 ```{r}
 scenario <- setup_scenario(
 	arms = c("A", "B"),
-	n_patients_per_arm = 100,
+	n_patients = 100,
 	sampling_frequency = 14,
 	index_hrqol = 0.0,
 	first_hrqol = 0.1,
@@ -137,14 +135,14 @@ sims$comparisons
 
 ## Issues and enhancements
 
-We use the [GitHub issue tracker](https://github.com/epiben/hrqolr/issues) for
+We use the [GitHub issue tracker](https://github.com/INCEPTdk/hrqolr/issues) for
 all bug/issue reports and proposals for enhancements. 
 
 ## Contributing
 
 We welcome contributions directly to the code to improve performance as well
 as new functionality. For the latter, please first explain and motivate it in an
-[issue](https://github.com/epiben/hrqolr/issues).
+[issue](https://github.com/INCEPTdk/hrqolr/issues).
 
 Changes to the code base should follow these steps:
 

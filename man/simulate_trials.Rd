@@ -14,17 +14,19 @@ simulate_trials(...)
   n_patients_ground_truth = 1000,
   n_example_trajectories_per_arm = 50,
   test_fun = welch_t_test,
+  sparse = TRUE,
   verbose = TRUE,
   n_digits = 2,
   seed = NULL,
   valid_hrqol_range = c(-0.757, 1),
   alpha = 0.05,
+  max_batch_size = NULL,
   ...
 )
 
 \method{simulate_trials}{default}(
   arms,
-  n_patients_per_arm,
+  n_patients,
   sampling_frequency,
   index_hrqol,
   first_hrqol,
@@ -37,12 +39,14 @@ simulate_trials(...)
   n_trials = 100,
   n_patients_ground_truth = 1000,
   n_example_trajectories_per_arm = 50,
+  sparse = TRUE,
   test_fun = welch_t_test,
   verbose = TRUE,
   n_digits = 2,
   seed = NULL,
   valid_hrqol_range = c(-0.757, 1),
   alpha = 0.05,
+  max_batch_size = NULL,
   ...
 )
 }
@@ -63,6 +67,9 @@ returned object}
 \code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
 below.}
 
+\item{sparse}{logical, indicates whether trial-level results are kept. Default is \code{FALSE} because
+the resulting object may be very large if many trials are simulated.}
+
 \item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
@@ -77,10 +84,13 @@ values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L i
 \item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
 arms.}
 
+\item{max_batch_size}{int, the maximum number of patients to process in each batch. The default
+is to use run one batch (i.e. no upper limit)}
+
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
 
-\item{n_patients_per_arm}{named int vector, number of patient in each arm}
+\item{n_patients}{named int vector, number of patient in each arm}
 
 \item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
 

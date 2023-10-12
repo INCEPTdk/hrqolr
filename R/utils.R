@@ -385,56 +385,18 @@ pad <- function(x, n, pad = " ", side = "right") {
 #' @keywords internal
 #'
 crayon_style <- function(x, style) {
-	tryCatch(
-		eval(str2lang(paste0("crayon::", style)))(x),
-		error = function() x
-	)
+	tryCatch(crayon::style(x, style), error = function() x)
 }
 
 
-# Legacy (to be removed later) ====
-
-#' Fast approximation function
+#' Estimate node size
 #'
-#' This function essentially strips unnecessary housekeeping from
-#' stats::approx() to yield some 30x speed-up. Note that this function call
-#' non-exported code from the stats package, so I've made a C++ equivalent (otherwise the package
-#' will go get on CRAN).
-#'
-#' @inheritParams stats::approx
-#' @param method int, 1 = linear, 2 = constant
+#' Based on pryr:::node_size().
 #'
 #' @keywords internal
-#' @noRd
-#' @return interpolated value(s) corresponding to `xout`
+#' @return Nothing
 #'
-fast_approx <- function(x, y, xout, method = 1, na.rm = TRUE) {
-	# .Call(stats:::C_Approx, x, y, xout, method, NA, NA, 0, na.rm)
+node_size <- function() {
+	bit <- 8L * .Machine$sizeof.pointer
+	if (bit == 64L) 56L else if (bit == 32L) 28L else NA
 }
-
-
-#' Plot simulations
-#'
-#' NB! This is an old function that might be useful and, thus, kept.
-#'
-#' @param sim_object
-#'
-# @importFrom ggplot2 ggplot aes geom_line geom_point theme_minimal stat_ecdf after_stat
-# @importFrom patchwork / + plot_layout
-# @importFrom dplyr filter group_by slice_max
-#'
-#' @noRd
-#'
-# plot_sim <- function(sim_object) {
-# 	p_trajectories <- ggplot(sim, aes(x, y)) +
-# 		geom_line(aes(colour = arm, group = patient_id), linewidth = 0.3) +
-# 		geom_point(aes(colour = arm, group = patient_id), ~ filter(group_by(., patient_id), n() == 1)) +
-# 		theme_minimal()
-#
-# 	p_at_risk <- ggplot(slice_max(group_by(sim, patient_id), x), aes(x, colour = arm)) +
-# 		stat_ecdf(aes(y = after_stat(1 - y)), pad = FALSE, show.legend = FALSE) +
-# 		theme_minimal()
-#
-# 	p_trajectories / p_at_risk +
-# 		plot_layout(heights = c(5, 1), guides = "collect")
-# }
