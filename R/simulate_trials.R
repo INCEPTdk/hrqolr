@@ -131,6 +131,8 @@ simulate_trials.default <- function(
 ) {
 
 	start_time <- Sys.time()
+	peak_memory_use <- NULL
+
 
 	# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
 	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
@@ -206,9 +208,10 @@ simulate_trials.default <- function(
 				)
 
 				ground_truth[[arm]] <- rbindlist(tmp, idcol = "outcome")
+				peak_memory_use <- measure_memory_use(peak_memory_use)
 
 				rm(gt_res)
-				gc()
+				peak_memory_use <- measure_memory_use(peak_memory_use)
 				.Random.seed <- current_seed
 			}
 
@@ -231,6 +234,7 @@ simulate_trials.default <- function(
 				n_digits = n_digits,
 				valid_hrqol_range = valid_hrqol_range
 			)
+			peak_memory_use <- measure_memory_use(peak_memory_use)
 
 			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients_per_arm[arm]))]
@@ -238,9 +242,12 @@ simulate_trials.default <- function(
 			batch_res[[arm]] <- res
 
 			if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, sprintf("Finished arm '%s' in batch", arm))
+
+			peak_memory_use <- measure_memory_use(peak_memory_use)
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		# Arm-level summary statistics
 		tmp <- sapply(
@@ -253,8 +260,10 @@ simulate_trials.default <- function(
 			},
 			simplify = FALSE
 		)
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		results$summary_stats[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		# Trial-level effect estimates
 		tmp <- mapply(
@@ -273,29 +282,32 @@ simulate_trials.default <- function(
 		)
 
 		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		# Keep trial-level results if so desired
 		if (isFALSE(sparse)) {
 			trial_results[[batch_idx]] <- batch_res
 		}
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		# Housekeeping
 		rm(tmp, batch_res)
-		gc()
+		peak_memory_use <- measure_memory_use(peak_memory_use)
 
 		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
 	}
 
 	# Housekeeping to free up memory
 	clear_hrqolr_cache()
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
-
 	results <- lapply(results, rbindlist)
 
 	# Combine ground truth value into a single data.table
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
 	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	ground_truth <- data.table::rbindlist(lapply(
 		utils::combn(arms, m = 2, simplify = FALSE),
@@ -312,6 +324,7 @@ simulate_trials.default <- function(
 			)]
 		}
 	))
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	# Arm-level summary stats across trials
 	summary_stats <- melt(
@@ -320,6 +333,7 @@ simulate_trials.default <- function(
 		variable.name = "analysis")
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	# Comparisons across trials
 	comparisons <- merge(results$mean_diffs, ground_truth)
@@ -342,11 +356,21 @@ simulate_trials.default <- function(
 	)
 
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	# Trial-level results if so desired
 	if (isFALSE(sparse)) {
 		trial_results <- rbindlist(trial_results)
 	}
+
+	# Example trajectories ====
+	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
+		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
+		do.call(sample_example_trajectories, args)
+	} else {
+		list(NULL)
+	}
+	peak_memory_use <- measure_memory_use(peak_memory_use)
 
 	# Prepare arguments for inclusion in function output
 	called_args <- as.list(match.call())[-1]
@@ -361,21 +385,18 @@ simulate_trials.default <- function(
 	args$seed <- seed
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
-
-	out <- list(
-		summary_stats = summary_stats,
-		comparisons = comparisons,
-		args = args,
-		trial_results = if (isTRUE(sparse)) list(NULL) else trial_results
+	structure(
+		list(
+			summary_stats = summary_stats,
+			comparisons = comparisons,
+			args = args,
+			trial_results = if (isTRUE(sparse)) list(NULL) else trial_results,
+			example_trajectories = example_trajectories,
+			resource_use = list(
+				elapsed_time = Sys.time() - start_time,
+				peak_memory_use = peak_memory_use %||% NA_real_
+			)
+		),
+		class = c("hrqolr_results", "list")
 	)
-
-	out$example_trajectories <- if (n_example_trajectories_per_arm > 0) {
-		 do.call(sample_example_trajectories, args)
-	} else {
-		list(NULL)
-	}
-
-	out$elapsed_time <- Sys.time() - start_time
-
-	structure(out, class = c("hrqolr_results", "list"))
 }

@@ -389,6 +389,21 @@ crayon_style <- function(x, style) {
 }
 
 
+#' Helper to track memory use (if pryr package available)
+#'
+#' @param current_max `NULL`, object of class `pryr_bytes` or scalar with bytes.
+#'
+#' @keywords internal
+#' @return Numeric scalar of class `pryr_bytes`.
+#'
+measure_memory_use <- function(current_max) {
+	tryCatch(
+		structure(max(x, pryr::mem_used()), class = "pryr_bytes"),
+		error = function(e) { gc(); return(NULL) }
+	)
+}
+
+
 # Legacy (to be removed later) ====
 
 #' Fast approximation function
