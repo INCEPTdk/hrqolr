@@ -14,6 +14,7 @@ simulate_trials(...)
   n_patients_ground_truth = 1000,
   n_example_trajectories_per_arm = 50,
   test_fun = welch_t_test,
+  sparse = TRUE,
   verbose = TRUE,
   n_digits = 2,
   seed = NULL,
@@ -37,6 +38,7 @@ simulate_trials(...)
   n_trials = 100,
   n_patients_ground_truth = 1000,
   n_example_trajectories_per_arm = 50,
+  sparse = TRUE,
   test_fun = welch_t_test,
   verbose = TRUE,
   n_digits = 2,
@@ -62,6 +64,9 @@ returned object}
 \item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
 \code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
 below.}
+
+\item{sparse}{logical, indicates whether trial-level results are kept. Default is \code{FALSE} because
+the resulting object may be very large if many trials are simulated.}
 
 \item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 

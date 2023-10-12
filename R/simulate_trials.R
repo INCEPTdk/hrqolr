@@ -30,6 +30,7 @@ simulate_trials.hrqolr_scenario <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 		test_fun = welch_t_test,
+		sparse = TRUE,
 		verbose = TRUE,
 		n_digits = 2,
 		seed = NULL,
@@ -91,6 +92,8 @@ simulate_trials.hrqolr_scenario <- function(
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
+#' @param sparse logical, indicates whether trial-level results are kept. Default is `FALSE` because
+#'   the resulting object may be very large if many trials are simulated.
 #' @param ... not used
 #'
 #' @details
@@ -117,6 +120,7 @@ simulate_trials.default <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 
+		sparse = TRUE,
 		test_fun = welch_t_test,
 		verbose = TRUE,
 		n_digits = 2,
@@ -141,12 +145,14 @@ simulate_trials.default <- function(
 		rep(seq_along(n_trials), n_trials)
 	)
 
+	ground_truth <- list()
+
 	results <- list(
 		summary_stats = list(),
 		mean_diffs = list()
 	)
 
-	ground_truth <- list()
+	trial_results <- list()
 
 	for (batch_idx in seq_along(n_patients_per_batch)) {
 		if (isTRUE(verbose) & length(n_patients_per_batch) > 1) {
@@ -268,6 +274,11 @@ simulate_trials.default <- function(
 
 		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
 
+		# Keep trial-level results if so desired
+		if (isFALSE(sparse)) {
+			trial_results[[batch_idx]] <- batch_res
+		}
+
 		# Housekeeping
 		rm(tmp, batch_res)
 		gc()
@@ -332,6 +343,11 @@ simulate_trials.default <- function(
 
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
+	# Trial-level results if so desired
+	if (isFALSE(sparse)) {
+		trial_results <- rbindlist(trial_results)
+	}
+
 	# Prepare arguments for inclusion in function output
 	called_args <- as.list(match.call())[-1]
 	default_args <- formals()
@@ -346,13 +362,11 @@ simulate_trials.default <- function(
 
 	if (isTRUE(verbose)) log_timediff(start_time, "Wrapping up, returning output")
 
-	out <- structure(
-		list(
-			summary_stats = summary_stats,
-			comparisons = comparisons,
-			args = args
-		),
-		class = c("hrqolr_results", "list")
+	out <- list(
+		summary_stats = summary_stats,
+		comparisons = comparisons,
+		args = args,
+		trial_results = if (isTRUE(sparse)) list(NULL) else trial_results
 	)
 
 	out$example_trajectories <- if (n_example_trajectories_per_arm > 0) {
@@ -362,5 +376,6 @@ simulate_trials.default <- function(
 	}
 
 	out$elapsed_time <- Sys.time() - start_time
-	out
+
+	structure(out, class = c("hrqolr_results", "list"))
 }
