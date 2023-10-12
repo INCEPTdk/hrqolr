@@ -20,6 +20,7 @@ simulate_trials(...)
   seed = NULL,
   valid_hrqol_range = c(-0.757, 1),
   alpha = 0.05,
+  max_batch_size = NULL,
   ...
 )
 
@@ -45,6 +46,7 @@ simulate_trials(...)
   seed = NULL,
   valid_hrqol_range = c(-0.757, 1),
   alpha = 0.05,
+  max_batch_size = NULL,
   ...
 )
 }
@@ -81,6 +83,9 @@ values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L i
 
 \item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
 arms.}
+
+\item{max_batch_size}{int, the maximum number of patients to process in each batch. The default
+is to use run one batch (i.e. no upper limit)}
 
 \item{arms}{character vector with the names of the arms. Must match the names of named vectors
 below.}
