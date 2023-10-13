@@ -232,7 +232,8 @@ simulate_trials.default <- function(
 			if (isTRUE(verbose)) {
 				log_timediff(
 					start_time_arm_in_batch,
-					sprintf("Starting arm '%s' in batch", arm))
+					sprintf("Starting arm '%s'%s", arm, ifelse(n_batches > 1, " in batch", ""))
+				)
 			}
 
 			res <- estimation_helper(
@@ -297,7 +298,7 @@ simulate_trials.default <- function(
 			SIMPLIFY = FALSE
 		)
 
-		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
+		results$mean_diffs[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
 		rm(tmp)
 		gc()
 
@@ -310,20 +311,21 @@ simulate_trials.default <- function(
 		rm(batch_res)
 		gc()
 
-		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
+		if (isTRUE(verbose)) {
+			log_timediff(start_time_arm_in_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
+		}
 	}
 
 	clear_hrqolr_cache()
 	gc()
 
-	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
-	results <- lapply(results, rbindlist)
+ 	results <- lapply(results, rbindlist)
 
 	# Combine ground truth value into a single data.table ====
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
-	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
+	setkey(ground_truth, "arm") # needed for subsetting by arm name directly
 
-	ground_truth <- data.table::rbindlist(lapply(
+	ground_truth <- rbindlist(lapply(
 		utils::combn(arms, m = 2, simplify = FALSE),
 		function(arms) {
 			tmp <- dcast(
@@ -343,7 +345,8 @@ simulate_trials.default <- function(
 	summary_stats <- melt(
 		results$summary_stats,
 		id.vars = c("outcome", "arm", "trial_id"),
-		variable.name = "analysis")
+		variable.name = "analysis"
+	)
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
@@ -394,7 +397,7 @@ simulate_trials.default <- function(
 	# Example trajectories ====
 	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
 		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
-		do.call(sample_example_trajectories, args)
+		do.call(sample_example_trajectories.default, args)
 	} else {
 		list(NULL)
 	}
@@ -410,7 +413,10 @@ simulate_trials.default <- function(
 			example_trajectories = example_trajectories,
 			resource_use = list(
 				elapsed_time = Sys.time() - start_time,
-				peak_memory_use = structure(sum(gc()[, "max used"] * c(node_size(), 8)), class = "hrqolr_bytes")
+				peak_memory_use = structure(
+					sum(gc()[, "max used"] * c(node_size(), 8)),
+					class = "hrqolr_bytes"
+				)
 			)
 		),
 		class = c("hrqolr_results", "list")
