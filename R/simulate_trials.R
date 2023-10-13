@@ -2,6 +2,8 @@
 #'
 #' This is the key user-facing function for simulating trials.
 #'
+#' @param ... passed on to methods
+#'
 #' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
 #'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
 #'   elapsed time.
@@ -76,7 +78,7 @@ simulate_trials.hrqolr_scenario <- function(
 		lapply(default_args, eval, envir = environment())
 	)
 
-	if (!is.null(packageName(environment(test_fun)))) {
+	if (!is.null(utils::packageName(environment(test_fun)))) {
 		attr(args$test_fun, "fun_name") <- deparse(substitute(test_fun))
 	}
 
@@ -85,28 +87,12 @@ simulate_trials.hrqolr_scenario <- function(
 }
 
 
-#' Work-horse
+#' Workhorse
 #'
-#' @param arms character vector with the names of the arms. Must match the names of named vectors
-#'   below.
-#' @param n_patients named int vector, number of patient in each arm
-#' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
+#' Internal function that shouldn't really be invoked by the user directly. The arguments given must
+#' be named vectors.
 #'
-#' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
-#' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
-#' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
-#' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
-#'   each arm
-#'
-#' @param mortality named numeric vector in `[0, 1]`, the mortality in at end of follow-up, in each
-#'   arm
-#' @param mortality_dampening named numeric vector, dampening effect on HRQoL at ICU discharge in
-#'   patients who die before end of follow-up
-#' @param mortality_trajectory_shape named character vector, valid values are: `"exp_decay"`
-#'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`. Can differ across arms.
-#' @param prop_mortality_benefitters named numeric vector `[0, 1]`, the proportion of patients in
-#'   each arm who are so-called mortality benefitters.
-#'
+#' @inheritParams setup_scenario
 #' @param ... not used
 #'
 #' @keywords internal

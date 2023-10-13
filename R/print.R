@@ -9,7 +9,7 @@
 #' @param decimals single integer (default is `3`), the number of digits
 #' @param prop_decimals single integer (default is `3`), the number of digits used
 #'   when printing proportions.
-#' @param ... passed on to methods
+#' @param ... not used
 #'
 #' @details The behaviour depends on the class of `x`:
 #'
@@ -23,7 +23,7 @@ NULL
 #' @rdname print
 #' @export
 #'
-print.hrqolr_trajectories <- function(x, prop_decimals = 3) {
+print.hrqolr_trajectories <- function(x, prop_decimals = 3, ...) {
 	print.default(x, digits = prop_decimals)
 	invisible(x)
 }

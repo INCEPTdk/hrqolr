@@ -12,15 +12,14 @@
 #' @import data.table
 #' @importFrom stats rnorm runif
 #'
-sample_example_trajectories <- function(...) {
+sample_example_trajectories <- function(scenario, ...) {
 	UseMethod("sample_example_trajectories")
 }
 
 
 #' Helper for when scenario given as first argument
 #'
-#' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
-#'
+#' @inheritParams simulate_trials.hrqolr_scenario
 #' @rdname sample_example_trajectories
 #' @export
 #'
@@ -49,9 +48,12 @@ sample_example_trajectories.hrqolr_scenario <- function(
 
 #' Workhorse
 #'
+#' Internal function that shouldn't really be invoked by the user directly. The arguments given must
+#' be named vectors.
+#'
 #' @inheritParams simulate_trials
 #' @rdname sample_example_trajectories
-#' @export
+#' @keywords internal
 #'
 sample_example_trajectories.default <- function(
 		arms,
@@ -68,8 +70,8 @@ sample_example_trajectories.default <- function(
 		mortality_dampening,
 
 		n_example_trajectories_per_arm,
-		n_digits = 2,
-		seed = NULL,
+		n_digits,
+		seed,
 		valid_hrqol_range,
 		...
 ) {
