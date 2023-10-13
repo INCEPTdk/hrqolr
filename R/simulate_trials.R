@@ -56,7 +56,7 @@ simulate_trials.hrqolr_scenario <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 		test_fun = welch_t_test,
-		sparse = TRUE,
+		include_trial_results = FALSE,
 		verbose = TRUE,
 		n_digits = 2,
 		seed = NULL,
@@ -124,7 +124,7 @@ simulate_trials.default <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 
-		sparse = TRUE,
+		include_trial_results,
 		test_fun,
 		verbose,
 		n_digits,
@@ -310,7 +310,7 @@ simulate_trials.default <- function(
 		gc()
 
 		# Keep trial-level results if so desired
-		if (isFALSE(sparse)) {
+		if (isTRUE(include_trial_results)) {
 			trial_results[[batch_idx]] <- batch_res
 		}
 
@@ -383,7 +383,7 @@ simulate_trials.default <- function(
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
 	# Trial-level results if so desired ====
-	if (isFALSE(sparse)) {
+	if (isTRUE(include_trial_results)) {
 		trial_results <- rbindlist(trial_results)
 	}
 
@@ -414,7 +414,7 @@ simulate_trials.default <- function(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
 			args = args,
-			trial_results = if (isTRUE(sparse)) list(NULL) else trial_results,
+			trial_results = if (isTRUE(include_trial_results)) trial_results else list(NULL),
 			example_trajectories = example_trajectories,
 			resource_use = list(
 				elapsed_time = Sys.time() - start_time,
