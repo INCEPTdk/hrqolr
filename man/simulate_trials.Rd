@@ -3,10 +3,9 @@
 \name{simulate_trials}
 \alias{simulate_trials}
 \alias{simulate_trials.hrqolr_scenario}
-\alias{simulate_trials.default}
 \title{Simulate trials}
 \usage{
-simulate_trials(...)
+simulate_trials(scenario, ...)
 
 \method{simulate_trials}{hrqolr_scenario}(
   scenario,
@@ -14,33 +13,7 @@ simulate_trials(...)
   n_patients_ground_truth = 1000,
   n_example_trajectories_per_arm = 50,
   test_fun = welch_t_test,
-  sparse = TRUE,
-  verbose = TRUE,
-  n_digits = 2,
-  seed = NULL,
-  valid_hrqol_range = c(-0.757, 1),
-  alpha = 0.05,
-  max_batch_size = NULL,
-  ...
-)
-
-\method{simulate_trials}{default}(
-  arms,
-  n_patients,
-  sampling_frequency,
-  index_hrqol,
-  first_hrqol,
-  final_hrqol,
-  acceleration_hrqol,
-  mortality,
-  mortality_dampening,
-  mortality_trajectory_shape,
-  prop_mortality_benefitters,
-  n_trials = 100,
-  n_patients_ground_truth = 1000,
-  n_example_trajectories_per_arm = 50,
-  sparse = TRUE,
-  test_fun = welch_t_test,
+  include_trial_results = FALSE,
   verbose = TRUE,
   n_digits = 2,
   seed = NULL,
@@ -51,9 +24,9 @@ simulate_trials(...)
 )
 }
 \arguments{
-\item{...}{not used}
-
 \item{scenario}{object of class 'hrqolr_scenario', the output of \link{setup_scenario}}
+
+\item{...}{passed on to methods}
 
 \item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given}
 
@@ -67,8 +40,8 @@ returned object}
 \code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
 below.}
 
-\item{sparse}{logical, indicates whether trial-level results are kept. Default is \code{FALSE} because
-the resulting object may be very large if many trials are simulated.}
+\item{include_trial_results}{logical, indicates whether trial-level results are kept. Default is
+\code{FALSE} because the resulting object may be very large if many trials are simulated.}
 
 \item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 
@@ -86,34 +59,6 @@ arms.}
 
 \item{max_batch_size}{int, the maximum number of patients to process in each batch. The default
 is to use run one batch (i.e. no upper limit)}
-
-\item{arms}{character vector with the names of the arms. Must match the names of named vectors
-below.}
-
-\item{n_patients}{named int vector, number of patient in each arm}
-
-\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
-
-\item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
-
-\item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
-
-\item{final_hrqol}{named numeric vector, the HRQoL at end of follow-up in each arm}
-
-\item{acceleration_hrqol}{named numeric vector, relative acceleration of HRQoL improvement in
-each arm}
-
-\item{mortality}{named numeric vector in \verb{[0, 1]}, the mortality in at end of follow-up, in each
-arm}
-
-\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
-patients who die before end of follow-up}
-
-\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
-
-\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
-each arm who are so-called mortality benefitters.}
 }
 \value{
 An object of class \code{hrqolr_results}, which is a specialised list with four elements:

@@ -3,9 +3,28 @@
 #' Inputs are validated to ensure they produce the expected results when given as the input in
 #' [simulate_trials]. Therefore, any arguments to this function can also be just a single value
 #' (except the `arms` argument), and this function will expand such single-valued arguments to be
-#' compatible with `simulate_trials`.
+#' compatible with `simulate_trials`. If arguments are named vectors, they must have exactly one
+#' value per arm, and the names must match those given in the `arms`.
 #'
-#' @inheritParams simulate_trials
+#' @param arms character vector with the names of the arms
+#' @param n_patients named int (scalar or named vector), number of patients
+#' @param sampling_frequency int (scalar or named vector), span between HRQoL sampling from patients
+#'
+#' @param index_hrqol numeric (scalar or named vector), the HRQoL at index (= enrolment)
+#' @param first_hrqol numeric (scalar or named vector), the HRQoL at ICU discharge in each arm
+#' @param final_hrqol numeric (scalar or named vector), the HRQoL at end of follow-up in each arm
+#' @param acceleration_hrqol numeric (scalar or named vector), relative acceleration of HRQoL
+#'   improvement in each arm
+#'
+#' @param mortality numeric (scalar or named vector) in \[0, 1\], the mortality in at end of
+#'   follow-up, in each arm
+#' @param mortality_dampening numeric (scalar or named vector), dampening effect on HRQoL at ICU
+#'   discharge in patients who die before end of follow-up
+#' @param mortality_trajectory_shape character (scalar or named vector), valid values are
+#'   `"exp_decay"` (default), `"linear"`, `"constant"`, `"reflected_exp_decay"` and can differ
+#'   across arms.
+#' @param prop_mortality_benefitters numeric (scalar or named vector) `[0, 1]`, the proportion of
+#'   patients in each arm who are so-called mortality benefitters.
 #' @param verbose logical, should the function provide detailed output on validation results?
 #'   Default: `TRUE`
 #'

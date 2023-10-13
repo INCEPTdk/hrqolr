@@ -4,6 +4,7 @@
 #' trial, are based on this.
 #'
 #' @inheritParams simulate_trials
+#' @inheritParams setup_scenario
 #' @param t_icu_discharge scalar, time of ICU discharge
 #' @param acceleration_hrqol scalar, acceleration of HRQoL improvement compared to baseline
 #'   trajectory

@@ -2,6 +2,8 @@
 #'
 #' This is the key user-facing function for simulating trials.
 #'
+#' @param ... passed on to methods
+#'
 #' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
 #'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
 #'   elapsed time.
@@ -12,7 +14,7 @@
 #' @import data.table
 #' @importFrom stats setNames
 #'
-simulate_trials <- function(...) {
+simulate_trials <- function(scenario, ...) {
 	UseMethod("simulate_trials")
 }
 
@@ -20,60 +22,6 @@ simulate_trials <- function(...) {
 #' Helper for when scenario given as first argument
 #'
 #' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
-#'
-#' @rdname simulate_trials
-#' @export
-#'
-simulate_trials.hrqolr_scenario <- function(
-		scenario,
-		n_trials = 100,
-		n_patients_ground_truth = 1000,
-		n_example_trajectories_per_arm = 50,
-		test_fun = welch_t_test,
-		sparse = TRUE,
-		verbose = TRUE,
-		n_digits = 2,
-		seed = NULL,
-		valid_hrqol_range = c(-0.757, 1.0),
-		alpha = 0.05,
-		max_batch_size = NULL,
-		...
-) {
-	called_args <- as.list(match.call())[-1]
-	default_args <- formals()
-	default_args <- default_args[setdiff(names(default_args), names(called_args))]
-	default_args["..."] <- NULL
-
-	args <- c(
-		lapply(called_args, eval, parent.frame()),
-		lapply(default_args, eval, envir = environment())
-	)
-	args <- c(scenario, args) # flatten args in scenario object
-	do.call("simulate_trials.default", args)
-}
-
-
-#' Work-horse
-#'
-#' @param arms character vector with the names of the arms. Must match the names of named vectors
-#'   below.
-#' @param n_patients named int vector, number of patient in each arm
-#' @param sampling_frequency named int vector, span between HRQoL sampling from patients, in each arm.
-#'
-#' @param index_hrqol named numeric vector, the HRQoL at index (= enrolment)
-#' @param first_hrqol named numeric vector, the HRQoL at ICU discharge in each arm
-#' @param final_hrqol named numeric vector, the HRQoL at end of follow-up in each arm
-#' @param acceleration_hrqol named numeric vector, relative acceleration of HRQoL improvement in
-#'   each arm
-#'
-#' @param mortality named numeric vector in `[0, 1]`, the mortality in at end of follow-up, in each
-#'   arm
-#' @param mortality_dampening named numeric vector, dampening effect on HRQoL at ICU discharge in
-#'   patients who die before end of follow-up
-#' @param mortality_trajectory_shape named character vector, valid values are: `"exp_decay"`
-#'   (default), `"linear"`, `"constant"`, `"reflected_exp_decay"`. Can differ across arms.
-#' @param prop_mortality_benefitters named numeric vector `[0, 1]`, the proportion of patients in
-#'   each arm who are so-called mortality benefitters.
 #'
 #' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
 #' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
@@ -93,16 +41,61 @@ simulate_trials.hrqolr_scenario <- function(
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
-#' @param sparse logical, indicates whether trial-level results are kept. Default is `FALSE` because
-#'   the resulting object may be very large if many trials are simulated.
+#' @param include_trial_results logical, indicates whether trial-level results are kept. Default is
+#'   `FALSE` because the resulting object may be very large if many trials are simulated.
 #' @param max_batch_size int, the maximum number of patients to process in each batch. The default
 #'   is to use run one batch (i.e. no upper limit)
-#' @param ... not used
 #'
 #' @details
 #' * `test_fun`: \[pending\]
+#'
 #' @rdname simulate_trials
 #' @export
+#'
+simulate_trials.hrqolr_scenario <- function(
+		scenario,
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
+		n_example_trajectories_per_arm = 50,
+		test_fun = welch_t_test,
+		include_trial_results = FALSE,
+		verbose = TRUE,
+		n_digits = 2,
+		seed = NULL,
+		valid_hrqol_range = c(-0.757, 1.0),
+		alpha = 0.05,
+		max_batch_size = NULL,
+		...
+) {
+
+	called_args <- as.list(match.call())[-1]
+	default_args <- formals()
+	default_args <- default_args[setdiff(names(default_args), names(called_args))]
+	default_args["..."] <- NULL
+
+	args <- c(
+		lapply(called_args, eval, parent.frame()),
+		lapply(default_args, eval, envir = environment())
+	)
+
+	if (!is.null(utils::packageName(environment(test_fun)))) {
+		attr(args$test_fun, "fun_name") <- deparse(substitute(test_fun))
+	}
+
+	args <- c(scenario, args) # flatten args in scenario object
+	do.call("simulate_trials.default", args)
+}
+
+
+#' Workhorse
+#'
+#' Internal function that shouldn't really be invoked by the user directly. The arguments given must
+#' be named vectors.
+#'
+#' @inheritParams setup_scenario
+#' @param ... not used
+#'
+#' @keywords internal
 #'
 simulate_trials.default <- function(
 		arms,
@@ -123,14 +116,14 @@ simulate_trials.default <- function(
 		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 50,
 
-		sparse = TRUE,
-		test_fun = welch_t_test,
-		verbose = TRUE,
-		n_digits = 2,
-		seed = NULL,
-		valid_hrqol_range = c(-0.757, 1.0),
-		alpha = 0.05,
-		max_batch_size = NULL,
+		include_trial_results,
+		test_fun,
+		verbose,
+		n_digits,
+		seed,
+		valid_hrqol_range,
+		alpha,
+		max_batch_size,
 		...
 ) {
 
@@ -239,7 +232,8 @@ simulate_trials.default <- function(
 			if (isTRUE(verbose)) {
 				log_timediff(
 					start_time_arm_in_batch,
-					sprintf("Starting arm '%s' in batch", arm))
+					sprintf("Starting arm '%s'%s", arm, ifelse(n_batches > 1, " in batch", ""))
+				)
 			}
 
 			res <- estimation_helper(
@@ -304,12 +298,12 @@ simulate_trials.default <- function(
 			SIMPLIFY = FALSE
 		)
 
-		results$mean_diffs[[batch_idx]] <- data.table::rbindlist(tmp, idcol = "outcome")
+		results$mean_diffs[[batch_idx]] <- rbindlist(tmp, idcol = "outcome")
 		rm(tmp)
 		gc()
 
 		# Keep trial-level results if so desired
-		if (isFALSE(sparse)) {
+		if (isTRUE(include_trial_results)) {
 			trial_results[[batch_idx]] <- batch_res
 		}
 
@@ -317,20 +311,21 @@ simulate_trials.default <- function(
 		rm(batch_res)
 		gc()
 
-		if (isTRUE(verbose)) log_timediff(start_time_arm_in_batch, "Finished batch")
+		if (isTRUE(verbose)) {
+			log_timediff(start_time_arm_in_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
+		}
 	}
 
 	clear_hrqolr_cache()
 	gc()
 
-	if (isTRUE(verbose)) log_timediff(start_time, "Combining data into final return struct")
-	results <- lapply(results, rbindlist)
+ 	results <- lapply(results, rbindlist)
 
 	# Combine ground truth value into a single data.table ====
 	ground_truth <- rbindlist(ground_truth, idcol = "arm")
-	data.table::setkey(ground_truth, "arm") # needed for subsetting by arm name directly
+	setkey(ground_truth, "arm") # needed for subsetting by arm name directly
 
-	ground_truth <- data.table::rbindlist(lapply(
+	ground_truth <- rbindlist(lapply(
 		utils::combn(arms, m = 2, simplify = FALSE),
 		function(arms) {
 			tmp <- dcast(
@@ -350,7 +345,8 @@ simulate_trials.default <- function(
 	summary_stats <- melt(
 		results$summary_stats,
 		id.vars = c("outcome", "arm", "trial_id"),
-		variable.name = "analysis")
+		variable.name = "analysis"
+	)
 	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
@@ -382,7 +378,7 @@ simulate_trials.default <- function(
 	class(comparisons) <- c("hrqolr_comparisons", class(comparisons))
 
 	# Trial-level results if so desired ====
-	if (isFALSE(sparse)) {
+	if (isTRUE(include_trial_results)) {
 		trial_results <- rbindlist(trial_results)
 	}
 
@@ -401,7 +397,7 @@ simulate_trials.default <- function(
 	# Example trajectories ====
 	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
 		if (isTRUE(verbose)) log_timediff(start_time, "Sampling example trajectories")
-		do.call(sample_example_trajectories, args)
+		do.call(sample_example_trajectories.default, args)
 	} else {
 		list(NULL)
 	}
@@ -413,11 +409,14 @@ simulate_trials.default <- function(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
 			args = args,
-			trial_results = if (isTRUE(sparse)) list(NULL) else trial_results,
+			trial_results = if (isTRUE(include_trial_results)) trial_results else list(NULL),
 			example_trajectories = example_trajectories,
 			resource_use = list(
 				elapsed_time = Sys.time() - start_time,
-				peak_memory_use = structure(sum(gc()[, "max used"] * c(node_size(), 8)), class = "hrqolr_bytes")
+				peak_memory_use = structure(
+					sum(gc()[, "max used"] * c(node_size(), 8)),
+					class = "hrqolr_bytes"
+				)
 			)
 		),
 		class = c("hrqolr_results", "list")

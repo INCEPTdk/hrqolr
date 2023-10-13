@@ -5,10 +5,11 @@
 #' Prints contents of the first input `x` in a human-friendly way, see
 #' **Details** for more information.
 #'
-#' @param x object to print, see **Details**.
-#' @param prop_digits single integer (default is `3`), the number of digits used
+#' @inheritParams base::print.default
+#' @param decimals single integer (default is `3`), the number of digits
+#' @param prop_decimals single integer (default is `3`), the number of digits used
 #'   when printing proportions.
-#' @param ... passed on to methods
+#' @param ... not used
 #'
 #' @details The behaviour depends on the class of `x`:
 #'
@@ -22,8 +23,8 @@ NULL
 #' @rdname print
 #' @export
 #'
-print.hrqolr_examples <- function(x, prop_digits = 3, ...) {
-	print(x, digits = prop_digits)
+print.hrqolr_trajectories <- function(x, prop_decimals = 3, ...) {
+	print.default(x, digits = prop_decimals)
 	invisible(x)
 }
 
@@ -81,17 +82,16 @@ print.hrqolr_scenario <- function(x, ...) {
 
 #' Print method for hrqolr comparison results
 #'
-#' @param n_digits int, number of digits to show in decimal numbers
 #' @rdname print
 #' @export
 #'
-print.hrqolr_comparisons <- function(x, n_digits = 3, ...) {
+print.hrqolr_comparisons <- function(x, decimals = 3, ...) {
 	x_tmp <- x
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
 
 	x_tmp <- x_tmp[
 		,
-		lapply(.SD, function(col) tryCatch(round(col, n_digits), error = function(e) col)),
+		lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
 		.SDcols = names(x_tmp)
 	]
 
@@ -103,17 +103,16 @@ print.hrqolr_comparisons <- function(x, n_digits = 3, ...) {
 
 #' Print method for hrqolr summary statistics
 #'
-#' @param n_digits int, number of digits to show in decimal numbers
 #' @rdname print
 #' @export
 #'
-print.hrqolr_summary_stats <- function(x, n_digits = 3, ...) {
+print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 	x_tmp <- x
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
 
 	print(x_tmp[
 		,
-		lapply(.SD, function(col) tryCatch(round(col, n_digits), error = function(e) col)),
+		lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
 		.SDcols = names(x_tmp)
 	])
 
@@ -123,18 +122,17 @@ print.hrqolr_summary_stats <- function(x, n_digits = 3, ...) {
 
 #' Print method for bytes
 #'
-#' Logic from pryr:::print.pryr_bytes but simplified and included here to mimise dependencies.
+#' Logic from pryr:::print.pryr_bytes but simplified and included here to minimise dependencies.
 #'
-#' @param n_digits int, number of digits to show in decimal numbers
 #' @export
 #' @rdname print
 #'
-print.hrqolr_bytes <- function (x, n_digits = 3, ...) {
+print.hrqolr_bytes <- function (x, digits = 3, ...) {
 	power <- min(floor(log(abs(x), 1000)), 4)
 	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
 
 	formatted <- format(
-		signif(x / (1000^power), digits = n_digits),
+		signif(x / (1000^power), digits = digits),
 		big.mark = ",",
 		scientific = FALSE
 	)

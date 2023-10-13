@@ -36,13 +36,7 @@ trajectory}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
-
-\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
-patients who die before end of follow-up}
-
-\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
+\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
 
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
 precision but also cause longer run-times.}
