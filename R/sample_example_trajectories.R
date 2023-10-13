@@ -2,7 +2,7 @@
 #'
 #' Sample a desired number of trajectories at arm leven and for individual patients.
 #'
-#' @return An object of class `hrqolr_examples` with trajectories in data.tables. The function will
+#' @return An object of class `hrqolr_trajectories` with trajectories in data.tables. The function will
 #'   always return arm-level trajectories. If `n_example_trajectories_per_arm > 0`, it will also return
 #'   data.table with patient trajectories, with a `id` column denoting patients.
 #'
