@@ -76,9 +76,9 @@ simulate_trials.hrqolr_scenario <- function(
 		lapply(default_args, eval, envir = environment())
 	)
 
-	test_fun_name <- deparse(substitute(test_fun))
-		# anonymous functions will yield their definition instead of a name
-	if (exists(test_fun_name)) attr(args$test_fun, "fun_name") <- test_fun_name
+	if (!is.null(packageName(environment(test_fun)))) {
+		attr(args$test_fun, "fun_name") <- deparse(substitute(test_fun))
+	}
 
 	args <- c(scenario, args) # flatten args in scenario object
 	do.call("simulate_trials.default", args)
