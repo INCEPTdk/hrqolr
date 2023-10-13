@@ -48,7 +48,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_trials</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_trials</span><span class="op">(</span><span class="va">scenario</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for hrqolr_scenario</span></span>
 <span><span class="fu">simulate_trials</span><span class="op">(</span></span>
@@ -57,34 +57,7 @@
 <span>  n_patients_ground_truth <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  n_example_trajectories_per_arm <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  test_fun <span class="op">=</span> <span class="va">welch_t_test</span>,</span>
-<span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  max_batch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">simulate_trials</span><span class="op">(</span></span>
-<span>  <span class="va">arms</span>,</span>
-<span>  <span class="va">n_patients</span>,</span>
-<span>  <span class="va">sampling_frequency</span>,</span>
-<span>  <span class="va">index_hrqol</span>,</span>
-<span>  <span class="va">first_hrqol</span>,</span>
-<span>  <span class="va">final_hrqol</span>,</span>
-<span>  <span class="va">acceleration_hrqol</span>,</span>
-<span>  <span class="va">mortality</span>,</span>
-<span>  <span class="va">mortality_dampening</span>,</span>
-<span>  <span class="va">mortality_trajectory_shape</span>,</span>
-<span>  <span class="va">prop_mortality_benefitters</span>,</span>
-<span>  n_trials <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  n_patients_ground_truth <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  n_example_trajectories_per_arm <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  test_fun <span class="op">=</span> <span class="va">welch_t_test</span>,</span>
+<span>  include_trial_results <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -97,12 +70,12 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>...</dt>
-<dd><p>not used</p></dd>
-
-
-<dt>scenario</dt>
+    <dl><dt>scenario</dt>
 <dd><p>object of class 'hrqolr_scenario', the output of <a href="setup_scenario.html">setup_scenario</a></p></dd>
+
+
+<dt>...</dt>
+<dd><p>passed on to methods</p></dd>
 
 
 <dt>n_trials</dt>
@@ -125,9 +98,9 @@ returned object</p></dd>
 below.</p></dd>
 
 
-<dt>sparse</dt>
-<dd><p>logical, indicates whether trial-level results are kept. Default is <code>FALSE</code> because
-the resulting object may be very large if many trials are simulated.</p></dd>
+<dt>include_trial_results</dt>
+<dd><p>logical, indicates whether trial-level results are kept. Default is
+<code>FALSE</code> because the resulting object may be very large if many trials are simulated.</p></dd>
 
 
 <dt>verbose</dt>
@@ -157,56 +130,6 @@ arms.</p></dd>
 <dt>max_batch_size</dt>
 <dd><p>int, the maximum number of patients to process in each batch. The default
 is to use run one batch (i.e. no upper limit)</p></dd>
-
-
-<dt>arms</dt>
-<dd><p>character vector with the names of the arms. Must match the names of named vectors
-below.</p></dd>
-
-
-<dt>n_patients</dt>
-<dd><p>named int vector, number of patient in each arm</p></dd>
-
-
-<dt>sampling_frequency</dt>
-<dd><p>named int vector, span between HRQoL sampling from patients, in each arm.</p></dd>
-
-
-<dt>index_hrqol</dt>
-<dd><p>named numeric vector, the HRQoL at index (= enrolment)</p></dd>
-
-
-<dt>first_hrqol</dt>
-<dd><p>named numeric vector, the HRQoL at ICU discharge in each arm</p></dd>
-
-
-<dt>final_hrqol</dt>
-<dd><p>named numeric vector, the HRQoL at end of follow-up in each arm</p></dd>
-
-
-<dt>acceleration_hrqol</dt>
-<dd><p>named numeric vector, relative acceleration of HRQoL improvement in
-each arm</p></dd>
-
-
-<dt>mortality</dt>
-<dd><p>named numeric vector in <code>[0, 1]</code>, the mortality in at end of follow-up, in each
-arm</p></dd>
-
-
-<dt>mortality_dampening</dt>
-<dd><p>named numeric vector, dampening effect on HRQoL at ICU discharge in
-patients who die before end of follow-up</p></dd>
-
-
-<dt>mortality_trajectory_shape</dt>
-<dd><p>named character vector, valid values are: <code>"exp_decay"</code>
-(default), <code>"linear"</code>, <code>"constant"</code>, <code>"reflected_exp_decay"</code>. Can differ across arms.</p></dd>
-
-
-<dt>prop_mortality_benefitters</dt>
-<dd><p>named numeric vector <code>[0, 1]</code>, the proportion of patients in
-each arm who are so-called mortality benefitters.</p></dd>
 
 </dl></div>
     <div class="section level2">
