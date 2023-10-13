@@ -6,7 +6,7 @@
 \alias{sample_example_trajectories.default}
 \title{Sample example trajectories}
 \usage{
-sample_example_trajectories(...)
+sample_example_trajectories(scenario, ...)
 
 \method{sample_example_trajectories}{hrqolr_scenario}(
   scenario,
@@ -29,16 +29,16 @@ sample_example_trajectories(...)
   mortality_trajectory_shape,
   mortality_dampening,
   n_example_trajectories_per_arm,
-  n_digits = 2,
-  seed = NULL,
+  n_digits,
+  seed,
   valid_hrqol_range,
   ...
 )
 }
 \arguments{
-\item{...}{not used}
-
 \item{scenario}{object of class 'hrqolr_scenario', the output of \link{setup_scenario}}
+
+\item{...}{passed on to methods}
 
 \item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
 returned object}
@@ -51,38 +51,16 @@ deterministic value based on the arguments given (ensuring reproducibility by de
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
-
-\item{arms}{character vector with the names of the arms. Must match the names of named vectors
-below.}
-
-\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
-
-\item{index_hrqol}{named numeric vector, the HRQoL at index (= enrolment)}
-
-\item{first_hrqol}{named numeric vector, the HRQoL at ICU discharge in each arm}
-
-\item{final_hrqol}{named numeric vector, the HRQoL at end of follow-up in each arm}
-
-\item{acceleration_hrqol}{named numeric vector, relative acceleration of HRQoL improvement in
-each arm}
-
-\item{mortality}{named numeric vector in \verb{[0, 1]}, the mortality in at end of follow-up, in each
-arm}
-
-\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
-each arm who are so-called mortality benefitters.}
-
-\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
-
-\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
-patients who die before end of follow-up}
 }
 \value{
-An object of class \code{hrqolr_examples} with trajectories in data.tables. The function will
+An object of class \code{hrqolr_trajectories} with trajectories in data.tables. The function will
 always return arm-level trajectories. If \code{n_example_trajectories_per_arm > 0}, it will also return
 data.table with patient trajectories, with a \code{id} column denoting patients.
 }
 \description{
 Sample a desired number of trajectories at arm leven and for individual patients.
+
+Internal function that shouldn't really be invoked by the user directly. The arguments given must
+be named vectors.
 }
+\keyword{internal}

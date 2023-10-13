@@ -32,18 +32,9 @@ estimation_helper(
 
 \item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement}
 
-\item{prop_mortality_benefitters}{named numeric vector \verb{[0, 1]}, the proportion of patients in
-each arm who are so-called mortality benefitters.}
-
-\item{mortality_trajectory_shape}{named character vector, valid values are: \code{"exp_decay"}
-(default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"}. Can differ across arms.}
-
-\item{mortality_dampening}{named numeric vector, dampening effect on HRQoL at ICU discharge in
-patients who die before end of follow-up}
-
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
 
-\item{sampling_frequency}{named int vector, span between HRQoL sampling from patients, in each arm.}
+\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
 
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
 precision but also cause longer run-times.}

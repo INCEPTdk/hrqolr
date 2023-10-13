@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print}
 \alias{print}
-\alias{print.hrqolr_examples}
+\alias{print.hrqolr_trajectories}
 \alias{print.hrqolr_scenario_validation_results}
 \alias{print.hrqolr_scenario}
 \alias{print.hrqolr_comparisons}
@@ -10,27 +10,35 @@
 \alias{print.hrqolr_bytes}
 \title{Print methods for HRQoL results}
 \usage{
-\method{print}{hrqolr_examples}(x, prop_digits = 3, ...)
+\method{print}{hrqolr_trajectories}(x, prop_decimals = 3, ...)
 
 \method{print}{hrqolr_scenario_validation_results}(x, ...)
 
 \method{print}{hrqolr_scenario}(x, ...)
 
-\method{print}{hrqolr_comparisons}(x, n_digits = 3, ...)
+\method{print}{hrqolr_comparisons}(x, decimals = 3, ...)
 
-\method{print}{hrqolr_summary_stats}(x, n_digits = 3, ...)
+\method{print}{hrqolr_summary_stats}(x, decimals = 3, ...)
 
-\method{print}{hrqolr_bytes}(x, n_digits = 3, ...)
+\method{print}{hrqolr_bytes}(x, digits = 3, ...)
 }
 \arguments{
-\item{x}{object to print, see \strong{Details}.}
+\item{x}{the object to be printed.}
 
-\item{prop_digits}{single integer (default is \code{3}), the number of digits used
+\item{prop_decimals}{single integer (default is \code{3}), the number of digits used
 when printing proportions.}
 
-\item{...}{passed on to methods}
+\item{...}{not used}
 
-\item{n_digits}{int, number of digits to show in decimal numbers}
+\item{decimals}{single integer (default is \code{3}), the number of digits}
+
+\item{digits}{a non-null value for \code{digits} specifies the minimum
+    number of significant digits to be printed in values.  The default,
+    \code{NULL}, uses \code{\link[base]{getOption}("digits")}.  (For the
+    interpretation for complex numbers see \code{\link[base]{signif}}.)
+    Non-integer values will be rounded down, and only values
+    greater than or equal to 1 and no greater than 22 are accepted.
+  }
 }
 \value{
 Invisibly returns \code{x}.
@@ -39,7 +47,7 @@ Invisibly returns \code{x}.
 Prints contents of the first input \code{x} in a human-friendly way, see
 \strong{Details} for more information.
 
-Logic from pryr:::print.pryr_bytes but simplified and included here to mimise dependencies.
+Logic from pryr:::print.pryr_bytes but simplified and included here to minimise dependencies.
 }
 \details{
 The behaviour depends on the class of \code{x}:
