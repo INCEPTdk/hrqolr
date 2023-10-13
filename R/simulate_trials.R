@@ -65,6 +65,7 @@ simulate_trials.hrqolr_scenario <- function(
 		max_batch_size = NULL,
 		...
 ) {
+
 	called_args <- as.list(match.call())[-1]
 	default_args <- formals()
 	default_args <- default_args[setdiff(names(default_args), names(called_args))]
@@ -74,6 +75,11 @@ simulate_trials.hrqolr_scenario <- function(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())
 	)
+
+	test_fun_name <- deparse(substitute(test_fun))
+		# anonymous functions will yield their definition instead of a name
+	if (exists(test_fun_name)) attr(args$test_fun, "fun_name") <- test_fun_name
+
 	args <- c(scenario, args) # flatten args in scenario object
 	do.call("simulate_trials.default", args)
 }
