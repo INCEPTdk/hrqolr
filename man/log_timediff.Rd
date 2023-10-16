@@ -4,12 +4,12 @@
 \alias{log_timediff}
 \title{Helper for printing time difference to stdout as message}
 \usage{
-log_timediff(start_time, mess = NULL, now = Sys.time())
+log_timediff(start_time, msg = NULL, style = NULL, now = Sys.time())
 }
 \arguments{
 \item{start_time, now}{output from \code{Sys.time()}}
 
-\item{mess}{str, message to print}
+\item{msg}{str, message to print}
 }
 \description{
 Helper for printing time difference to stdout as message

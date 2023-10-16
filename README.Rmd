@@ -67,7 +67,7 @@ scenario <- setup_scenario(
 	index_hrqol = 0.0,
 	first_hrqol = 0.1,
 	final_hrqol = c(A = 0.8, B = 0.7),
-	acceleration_hrqol = c(A = 0.1, B = 0.0),
+	acceleration_hrqol = c(A = 1.1, B = 1.0),
 	
 	mortality = 0.4,
 	mortality_dampening = 0.0,

@@ -16,7 +16,7 @@ construct_arm_level_trajectory(
 \arguments{
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
-\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
+\item{acceleration_hrqol}{scalar in \verb{[0, Inf)}, acceleration of HRQoL improvement compared to baseline
 trajectory}
 
 \item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
