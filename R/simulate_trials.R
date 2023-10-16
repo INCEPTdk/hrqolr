@@ -316,6 +316,7 @@ simulate_trials.default <- function(
 		}
 	}
 
+	max_size_of_cache <- tryCatch(lobstr::obj_size(.cache_env), error = function(e) NA)
 	clear_hrqolr_cache()
 	gc()
 
@@ -416,7 +417,8 @@ simulate_trials.default <- function(
 				peak_memory_use = structure(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
-				)
+				),
+				max_size_of_cache = max_size_of_cache
 			)
 		),
 		class = c("hrqolr_results", "list")
