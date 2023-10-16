@@ -88,12 +88,18 @@ create_xout <- function(start, end, by) {
 #' Helper for printing time difference to stdout as message
 #'
 #' @param start_time,now output from `Sys.time()`
-#' @param mess str, message to print
+#' @param msg str, message to print
 #' @keywords internal
 #'
-log_timediff <- function(start_time, mess = NULL, now = Sys.time()) {
-	dt <- now - start_time
-	message(round(now), ": ", mess, " (", round(dt, 2), " ", attr(dt, "units"), ")")
+log_timediff <- function(start_time, msg = NULL, style = NULL, now = Sys.time()) {
+	out <- paste0(round(now), ": ", msg)
+
+	if (!is.null(start_time)) {
+		dt <- now - start_time
+		out <- paste0(out," (", round(dt, 2), " ", attr(dt, "units"), ")" )
+	}
+
+	message(crayon_style(out, style))
 }
 
 
