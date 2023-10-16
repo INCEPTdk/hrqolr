@@ -59,8 +59,8 @@
 <span>  <span class="va">is_mortality_benefitter</span>,</span>
 <span>  <span class="va">mortality_trajectory_shape</span>,</span>
 <span>  <span class="va">mortality_dampening</span>,</span>
-<span>  sampling_frequency <span class="op">=</span> <span class="fl">14L</span>,</span>
-<span>  n_digits <span class="op">=</span> <span class="fl">2</span></span>
+<span>  <span class="va">sampling_frequency</span>,</span>
+<span>  <span class="va">n_digits</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -80,7 +80,7 @@ patient was still alive at end of follow-up)</p></dd>
 
 
 <dt>acceleration_hrqol</dt>
-<dd><p>scalar, acceleration of HRQoL improvement compared to baseline
+<dd><p>scalar in <code>[0, Inf)</code>, acceleration of HRQoL improvement compared to baseline
 trajectory</p></dd>
 
 

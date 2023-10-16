@@ -25,9 +25,6 @@
     <loc>https://inceptdk.github.io/hrqolr/reference/bootstrap_estimates.html</loc>
   </url>
   <url>
-    <loc>https://inceptdk.github.io/hrqolr/reference/bootstrap_mean_diffs.html</loc>
-  </url>
-  <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/cache_hrqolr.html</loc>
   </url>
   <url>
@@ -82,10 +79,10 @@
     <loc>https://inceptdk.github.io/hrqolr/reference/grapes-fi-grapes.html</loc>
   </url>
   <url>
-    <loc>https://inceptdk.github.io/hrqolr/reference/index.html</loc>
+    <loc>https://inceptdk.github.io/hrqolr/reference/hrqolr_approx.html</loc>
   </url>
   <url>
-    <loc>https://inceptdk.github.io/hrqolr/reference/linear_approx.html</loc>
+    <loc>https://inceptdk.github.io/hrqolr/reference/index.html</loc>
   </url>
   <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/log_timediff.html</loc>

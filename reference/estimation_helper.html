@@ -62,7 +62,8 @@
 <span>  <span class="va">mortality_rng</span>,</span>
 <span>  sampling_frequency <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="va">verbose</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,7 +86,8 @@
 
 
 <dt>acceleration_hrqol</dt>
-<dd><p>scalar, acceleration of HRQoL improvement</p></dd>
+<dd><p>scalar in <code>[0, Inf)</code>, acceleration of HRQoL improvement compared to baseline
+trajectory</p></dd>
 
 
 <dt>mortality_rng</dt>
@@ -104,6 +106,10 @@ precision but also cause longer run-times.</p></dd>
 <dt>valid_hrqol_range</dt>
 <dd><p>two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5D-5L index values.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>logical, should the function give progress timestamped updates? Default: <code>TRUE</code></p></dd>
 
 </dl></div>
     <div class="section level2">
