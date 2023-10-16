@@ -30,13 +30,12 @@ generate_mortality_funs <- function(
   }
 
   qemp <- function(p) {
-    out <- linear_approx(cdf$y, cdf$x, xout = p)
-    out[p > max(cdf$y)] <- censoring_value
+  	out <- hrqolr_approx(cdf$y, cdf$x, p, 0, censoring_value)
     out[p == 0] <- 0.0
     out
 
-    # Sampling between x values instead of linear interpolation because the latter
-    # will push the eCDF curve upward (aka yielding too many early sampled t_days values)
+    # Linear interpolation actually aka yields too many early sampled t_days values. This can be
+    # remedied by sampling like the following, but it's a lot slower:
     # runif(1, tail(cdf[cdf$y <= p, ]$x, 1), head(cdf[cdf$y >= p, ]$x, 1))
 
   }

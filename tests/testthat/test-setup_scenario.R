@@ -6,7 +6,7 @@ test_that("Setup scenario handles single-value arguments", {
 			index_hrqol = 0,
 			first_hrqol = 0,
 			final_hrqol = 0,
-			acceleration_hrqol = 0,
+			acceleration_hrqol = 1,
 			mortality = 0.2,
 			mortality_dampening = 0,
 			mortality_trajectory_shape = "exp_decay",
