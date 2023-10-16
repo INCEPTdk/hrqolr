@@ -23,9 +23,17 @@ compute_estimates <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency = 14L,
-		n_digits = 2
+		sampling_frequency,
+		n_digits
 ) {
+
+	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	res <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(res)) {
+		return(res)
+	}
+
 	patient_trajs <- construct_patient_trajectory(
 		t_icu_discharge = t_icu_discharge,
 		t_death = t_death,
@@ -54,6 +62,10 @@ compute_estimates <- function(
 		this_traj <- patient_trajs[[i]]
 		res[2 * i - 1] <- this_traj[nrow(this_traj), "y"]
 		res[2 * i] <- auc(this_traj[, "x"], this_traj[, "y"])
+	}
+
+	if (!is.null(hash)) {
+		.hrqolr_cache_user$set(hash, res)
 	}
 
 	return(res)

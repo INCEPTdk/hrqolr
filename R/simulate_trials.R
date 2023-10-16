@@ -316,7 +316,7 @@ simulate_trials.default <- function(
 		}
 	}
 
-	max_size_of_cache <- tryCatch(lobstr::obj_size(.cache_env), error = function(e) NA)
+	max_size_of_cache <- tryCatch(lobstr::obj_size(.hrqolr_cache_user), error = function(e) NA)
 	clear_hrqolr_cache()
 	gc()
 

@@ -26,14 +26,8 @@ cache_hrqolr <- function(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())
 	)
-	.cache_env[["shared_cache"]] <- do.call(cachem::cache_mem, args)
 
-	for (fun_name in .user_cacheable_functions) {
-		assignInMyNamespace(
-			fun_name,
-			memoise::memoise(get(fun_name), cache = .cache_env$shared_cache)
-		)
-	}
+	utils::assignInMyNamespace(".hrqolr_cache_user", do.call(cachem::cache_mem, args))
 }
 
 
@@ -41,9 +35,8 @@ cache_hrqolr <- function(
 #'
 #' @export
 #' @rdname cache_hrqolr
+#' @return Nothing, used for its side effect
 #'
 clear_hrqolr_cache <- function() {
-	for (fun_name in .user_cacheable_functions) {
-		memoise::forget(get(fun_name))
-	}
+	.hrqolr_cache_user$reset()
 }
