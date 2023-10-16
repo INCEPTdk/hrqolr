@@ -165,10 +165,7 @@ simulate_trials.default <- function(
 
 	for (batch_idx in seq_len(n_batches)) {
 		if (isTRUE(verbose) & n_batches > 1) {
-			log_timediff(
-				start_time,
-				crayon_style(sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
-			)
+			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
 		}
 
 		batch_res <- list()
@@ -182,10 +179,7 @@ simulate_trials.default <- function(
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) {
-					log_timediff(
-						start_time,
-						sprintf("Estimating ground truth of arm '%s'", arm)
-					)
+					log_timediff(start_time, sprintf("Estimating ground truth of arm '%s'", arm))
 				}
 
 				# Use different seed for ground-truth sampling as this must be entirely independent
@@ -209,7 +203,8 @@ simulate_trials.default <- function(
 
 					sampling_frequency = sampling_frequency[arm],
 					n_digits = n_digits,
-					valid_hrqol_range = valid_hrqol_range
+					valid_hrqol_range = valid_hrqol_range,
+					verbose = verbose
 				)
 
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
@@ -253,7 +248,8 @@ simulate_trials.default <- function(
 
 				sampling_frequency = sampling_frequency[arm],
 				n_digits = n_digits,
-				valid_hrqol_range = valid_hrqol_range
+				valid_hrqol_range = valid_hrqol_range,
+				verbose = verbose
 			)
 
 			# Assign trial IDs
@@ -316,7 +312,7 @@ simulate_trials.default <- function(
 		}
 	}
 
-	max_size_of_cache <- tryCatch(lobstr::obj_size(.cache_env), error = function(e) NA)
+	max_size_of_cache <- tryCatch(lobstr::obj_size(.hrqolr_cache_user), error = function(e) NA)
 	clear_hrqolr_cache()
 	gc()
 

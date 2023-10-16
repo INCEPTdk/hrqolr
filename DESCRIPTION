@@ -33,17 +33,16 @@ Imports:
 		data.table (>= 1.14.2),
 		digest (>= 0.6.33), 
 		Hmisc (>= 5.1.1),
-		memoise (>= 2.0.1),
-		Rcpp (>= 1.0.11)
+		memoise (>= 2.0.1)
 Suggests:
 		covr,
 		crayon,
 		ggplot2,
 		knitr,
 		lobstr,
+		rlang,
 		rmarkdown,
     testthat (>= 3.0.0)
-LinkingTo: Rcpp
 NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr

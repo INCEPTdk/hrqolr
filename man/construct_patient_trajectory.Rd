@@ -15,8 +15,8 @@ construct_patient_trajectory(
   is_mortality_benefitter,
   mortality_trajectory_shape,
   mortality_dampening,
-  sampling_frequency = 14L,
-  n_digits = 2
+  sampling_frequency,
+  n_digits
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ patient was still alive at end of follow-up)}
 
 \item{first_hrqol_patient}{scalar, the HRQoL value at ICU discharge of this patient}
 
-\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement compared to baseline
+\item{acceleration_hrqol}{scalar in \verb{[0, Inf)}, acceleration of HRQoL improvement compared to baseline
 trajectory}
 
 \item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}

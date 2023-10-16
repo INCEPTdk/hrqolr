@@ -64,7 +64,7 @@ plot.hrqolr_trajectories <- function(
 		ids_with_nas <- x$patient_level[is.na(y)]$id
 		ribbon_dt <- x$patient_level[
 			!id %in% ids_with_nas,
-			.(x = seq(min(x), max(x)), y = linear_approx(x, y, seq(min(x), max(x)))),
+			.(x = seq(min(x), max(x)), y = hrqolr_approx(x, y, seq(min(x), max(x)))),
 			by = c("arm", "id")
 		][
 			,

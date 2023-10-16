@@ -25,9 +25,16 @@ construct_patient_trajectory <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency = 14L,
-		n_digits = 2
+		sampling_frequency,
+		n_digits
 ) {
+
+	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	res <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(res)) {
+		return(res)
+	}
 
 	if (is.na(t_death)) {
 		# Arm-level post-ICU discharge trajectory in survivors
@@ -41,7 +48,7 @@ construct_patient_trajectory <- function(
 		)
 
 		# Enforce between-patient noise throughout trajectory
-		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * (1 + acceleration_hrqol)))
+		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * acceleration_hrqol))
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)
@@ -64,5 +71,15 @@ construct_patient_trajectory <- function(
 	traj[, "y"] <- round(traj[, "y"], n_digits)
 
 	# Enforce sampling strategies and return
-	construct_final_trajectories(traj, t_icu_discharge, sampling_frequency)
+	res <- construct_final_trajectories(
+		traj,
+		t_icu_discharge,
+		sampling_frequency
+	)
+
+	if (!is.null(hash)) {
+		.hrqolr_cache_user$set(hash, res)
+	}
+
+	return(res)
 }

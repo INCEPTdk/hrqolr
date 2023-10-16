@@ -4,7 +4,6 @@
 #' @inheritParams construct_arm_level_trajectory
 #' @param n_patients int, the number of patients for whom to estimate outcomes
 #' @param arm character scalar
-#' @param acceleration_hrqol scalar, acceleration of HRQoL improvement
 #' @param mortality_rng function, a function that produces times of death (only one parameter which should be the number of values to sample)
 #'
 #' @keywords internal
@@ -28,7 +27,8 @@ estimation_helper <- function(
 
 		sampling_frequency = NULL,
 		n_digits = 2,
-		valid_hrqol_range = c(-0.757, 1.0)
+		valid_hrqol_range = c(-0.757, 1.0),
+		verbose = verbose
 ) {
 
 	t_icu_discharge <- sample_t_icu_discharge(n_patients)
@@ -45,6 +45,7 @@ estimation_helper <- function(
 		digits = n_digits
 	)
 
+	if (isTRUE(verbose)) log_timediff(NULL, "Building data.table with patients")
 	patients <- data.table::data.table(
 		t_icu_discharge,
 		first_hrqol_patient = pmin(pmax(first_hrqol_patients, valid_hrqol_range[1]), valid_hrqol_range[2]),
@@ -52,7 +53,12 @@ estimation_helper <- function(
 		is_mortality_benefitter
 	)
 
+	if (isTRUE(verbose)) log_timediff(NULL, "Finding unique patients")
 	unique_patient_types <- patients[, .(n = .N), by = names(patients)]
+
+	if (isTRUE(verbose)) {
+		log_timediff(NULL, sprintf("Estimating for %i unique patients", nrow(unique_patient_types)))
+	}
 
 	tmp <- with(
 		unique_patient_types,
@@ -83,6 +89,7 @@ estimation_helper <- function(
 		)
 	)
 
-	res <- data.table::as.data.table(do.call(rbind, tmp))
-	res[rep(1:.N, unique_patient_types$n)] # "un-count" and return in one go
+	if (isTRUE(verbose)) log_timediff(NULL, "Assigning results to all (non-unique) patients")
+	res_unique <- data.table::as.data.table(do.call(rbind, tmp))
+	res_unique[rep(1:.N, unique_patient_types$n)] # "un-count" and return in one go
 }
