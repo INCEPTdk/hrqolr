@@ -6,7 +6,7 @@
 #' @inheritParams simulate_trials
 #' @inheritParams setup_scenario
 #' @param t_icu_discharge scalar, time of ICU discharge
-#' @param acceleration_hrqol scalar, acceleration of HRQoL improvement compared to baseline
+#' @param acceleration_hrqol scalar in `[0, Inf)`, acceleration of HRQoL improvement compared to baseline
 #'   trajectory
 #' @param first_hrqol_arm scalar, HRQoL at ICU discharge (at arm level)
 #' @param final_hrqol_arm scalar HRQoL at end of follow-up (at arm level)
@@ -39,7 +39,7 @@ construct_arm_level_trajectory <- function(
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
 	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - first_hrqol_arm))) + first_hrqol_arm
-	y_tmp <- y_tmp * seq(1 + acceleration_hrqol, 1, length = length(y_tmp))
+	y_tmp <- y_tmp * seq(acceleration_hrqol, 1, length = length(y_tmp))
 	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
 	rbind(c(x = 0, y = index_hrqol_arm[[1]]), as.matrix(traj))

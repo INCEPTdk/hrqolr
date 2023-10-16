@@ -18,7 +18,8 @@ estimation_helper(
   mortality_rng,
   sampling_frequency = NULL,
   n_digits = 2,
-  valid_hrqol_range = c(-0.757, 1)
+  valid_hrqol_range = c(-0.757, 1),
+  verbose = verbose
 )
 }
 \arguments{
@@ -30,7 +31,8 @@ estimation_helper(
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{acceleration_hrqol}{scalar, acceleration of HRQoL improvement}
+\item{acceleration_hrqol}{scalar in \verb{[0, Inf)}, acceleration of HRQoL improvement compared to baseline
+trajectory}
 
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
 
@@ -41,6 +43,8 @@ precision but also cause longer run-times.}
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+
+\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 }
 \value{
 Data.table with outcome results for all patients. NB! There are no trial_id indicator as

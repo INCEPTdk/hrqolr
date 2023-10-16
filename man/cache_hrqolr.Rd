@@ -37,6 +37,8 @@ when a cache pruning occurs. Currently, \code{"lru"} and \code{"fifo"} are suppo
 \value{
 NULL, these functions are called for their side effects: caching (or clearing caches) of
 select \code{hrqolr} functions.
+
+Nothing, used for its side effect
 }
 \description{
 TODO: Later on, we may implement our own memoisation logic that is lighter than that of

@@ -1,28 +1,23 @@
 #' Stuff to make Rcpp work (to put the right instructions in the NAMESPACE file)
 #'
-#' @importFrom Rcpp evalCpp
-#' @useDynLib hrqolr, .registration=TRUE
 #' @noRd
-#'
+#' @useDynLib hrqolr, .registration=TRUE
+# THIS IS NEEDED FOR Rcpp CODE TO WORK: @importFrom Rcpp evalCpp
 NULL
 
 
 # Save package version
 .hrqolr_version <- as.character(packageVersion("hrqolr"))
 
-# Helper to identify hrqolr functions that the user can choose to cache
-.user_cacheable_functions <- c(
-	"compute_estimates",
-	"construct_final_trajectories",
-	"construct_patient_trajectory"
-)
-
 # Set up cache environment
 #
 # This way, the user need to opt in to use caching and can specify the cache settings. That more
 # tricky if cache is set up while loading the package.
 #
-.cache_env <- new.env(parent = emptyenv())
+.hrqolr_cache_user <- cachem::cache_mem(
+	max_size = 128 * 1024^2, # 125 MB
+	evict = "lru"
+)
 
 
 #' Print package startup message
@@ -67,12 +62,13 @@ NULL
 	}
 
 	# Setting up cache (as per "Details" in ?memoise::memoise)
-	shared_cache <- cachem::cache_mem(
-		max_size = 256 * 1024^2, # MBs
+	.hrqolr_cache_pkg <- cachem::cache_mem(
+		max_size = 256 * 1024^2, # 256 MB
 		evict = "lru"
 	)
+
 	custom_memoise <- function(fun) {
-		memoise::memoise(fun, cache = shared_cache)
+		memoise::memoise(fun, cache = .hrqolr_cache_pkg)
 	}
 
 	# These functions will always be cached

@@ -10,6 +10,13 @@
 #'   sampling can start.
 #'
 construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequency) {
+	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	res <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(res)) {
+		return(res)
+	}
+
 	t_hosp_discharge <- compute_hosp_discharge(t_icu_discharge)
 	eof <- traj[nrow(traj), "x"] # end of follow-up
 	index_hrqol <- traj[1, "y"]
@@ -23,15 +30,15 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 		))
 	}
 
-	out <- list()
+	res <- list()
 
 	traj_x <- traj[, "x"]
 	traj_y <- traj[, "y"]
 
-	out$primary <- if (eof >= t_icu_discharge) {
+	res$primary <- if (eof >= t_icu_discharge) {
 		x_grid <- create_xout(t_icu_discharge, eof, sampling_frequency)
 		matrix(
-			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, hrqolr_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))
@@ -40,10 +47,10 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 		na_matrix(index_hrqol, t_icu_discharge)
 	}
 
-	out$secondary1 <- if (eof >= t_hosp_discharge) {
+	res$secondary1 <- if (eof >= t_hosp_discharge) {
 		x_grid <- create_xout(t_hosp_discharge, eof, sampling_frequency)
 		matrix(
-			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, hrqolr_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))
@@ -52,10 +59,10 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 		na_matrix(index_hrqol, t_hosp_discharge)
 	}
 
-	out$secondary2 <- if (eof >= 90) {
+	res$secondary2 <- if (eof >= 90) {
 		x_grid <- create_xout(90, eof, sampling_frequency)
 		matrix(
-			c(x_grid, linear_approx(traj_x, traj_y, x_grid)),
+			c(x_grid, hrqolr_approx(traj_x, traj_y, x_grid)),
 			ncol = 2,
 			byrow = FALSE,
 			dimnames = list(NULL, c("x", "y"))
@@ -64,5 +71,9 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 		na_matrix(index_hrqol, 90)
 	}
 
-	out
+	if (!is.null(hash)) {
+		.hrqolr_cache_user$set(hash, res)
+	}
+
+	return(res)
 }
