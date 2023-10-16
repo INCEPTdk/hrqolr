@@ -9,4 +9,4 @@ legacy/
 ^docs$
 ^pkgdown$
 ^\.github$
-README.Rmd
+^README\.Rmd$

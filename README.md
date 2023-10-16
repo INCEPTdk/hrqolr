@@ -29,26 +29,7 @@ Sygeforsikringen “danmark” (<https://www.sygeforsikring.dk/>).
   Anaesthesiologica Scandinavica outlining the first scientific study to
   use `hrqolr`
 
-## Installation
-
-`hrqolr` isn’t on CRAN yet but can be installed from GitHub if you have
-the `remotes` package installed:
-
-``` r
-# install.packages("remotes") 
-remotes::install_github("INCEPTdk/hrqolr")
-```
-
-You can also install the **development version** from directly from
-GitHub. Doing this requires the *remotes*-package installed. The
-development version may contain additional features not yet available in
-the stable CRAN version, but may be unstable or lack documentation.
-
-``` r
-remotes::install_github("INCEPTdk/hrqolr@dev")
-```
-
-## Example
+## Getting started
 
 First, load the package:
 
@@ -60,15 +41,18 @@ library(hrqolr)
 #> increasing the cache size might speed up things even more; run '?cache_hrqolr' for details.
 ```
 
-–then, we activate the cache. This is optional but highly recommended.
+–then, we activate the cache; although optional, it’s highly
+recommended. Here, we choose a cache of max. 2 GB of memory
+($2 \cdot 1024^3$ bytes)–`hrqolr` currently only allows in-memory
+caching.
 
 ``` r
-cache_hrqolr()
+cache_hrqolr(2 * 1024^3)
 ```
 
-`hrqolr` was built to simulate many scenarios, but here we define a
-single scenario with the built-in helper `setup_scenario` (note the
-validation results printed–silence these with `verbose = FALSE`):
+The preferred way to design a scenario is by using the `setup_scenario`
+function to validate the input and give it the right format. Set
+`verbose = FALSE` to silence the validation results.
 
 ``` r
 scenario <- setup_scenario(
@@ -123,13 +107,13 @@ example_trajs <- sample_example_trajectories(scenario, n_digits = 3)
 plot(example_trajs)
 ```
 
-![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
-You might also want to break apart the trajectories in the arms using
-well-known `ggplot2` facets (but we need to load `ggplot2` first).
-Hiding the legend, then, makes sense as the facet strips will already
-provide the same information. Here, we also set the arm-level trajectory
-in black to set it apart from the individual patient trajectories:
+`sample_example_trajectories` returns a `ggplot`, allowing you to
+fine-tune its appearance for your needs. For example, breaking apart the
+trajectories in the arms apart with facets and hide the legend (remember
+to load `ggplot2` first). Here, we also set the arm-level trajectory in
+black to make it stand out better:
 
 ``` r
 library(ggplot2) 
@@ -139,38 +123,35 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
     theme(legend.position = "none")
 ```
 
-![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
 
-Of course, we might also be interested in summarising the trajectories.
-Here, for example, with inter-quartile ranges. Note that the ribbons
-become a bit wonky at end of follow-up because there are increasingly
-few observations, and some of them may be low because, e.g., *mortality
-benefitters* are still alive.
+You can also summarise the trajectories, e.g., with inter-quartile
+ranges. The ribbons become a bit wonky at end of follow-up due to
+increasingly few observations some of which might be low:
 
 ``` r
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
 
 The same scenario specification can, then, be used to simulate a desired
 number of trials. By default `hrqolr` will print progress updates to the
-console (hide these with `verbose = FALSE`):
+console (silence these with `verbose = FALSE`):
 
 ``` r
 sims <- simulate_trials(scenario)
-#> 2023-10-13 13:46:42: Estimating ground truth of arm 'A' (0 secs)
-#> 2023-10-13 13:46:44: Starting arm 'A' (1.77 secs)
-#> 2023-10-13 13:46:49: Estimating ground truth of arm 'B' (6.96 secs)
-#> 2023-10-13 13:46:51: Starting arm 'B' (1.33 secs)
-#> 2023-10-13 13:46:56: Finished (7 secs)
-#> 2023-10-13 13:46:56: Sampling example trajectories (14.24 secs)
-#> 2023-10-13 13:46:57: Wrapping up, returning output (14.34 secs)
+#> 2023-10-16 09:43:58: Estimating ground truth of arm 'A' (0 secs)
+#> 2023-10-16 09:44:00: Starting arm 'A' (2.14 secs)
+#> 2023-10-16 09:44:07: Estimating ground truth of arm 'B' (8.76 secs)
+#> 2023-10-16 09:44:09: Starting arm 'B' (1.58 secs)
+#> 2023-10-16 09:44:17: Finished (10.04 secs)
+#> 2023-10-16 09:44:18: Sampling example trajectories (19.4 secs)
+#> 2023-10-16 09:44:18: Wrapping up, returning output (19.53 secs)
 ```
 
-The `sims` object contains quite a lot of interesting information.
-Perhaps the useful are the summary statistics by arm and head-to-head
-comparisons between the arms
+The returned object contains quite a lot of interesting information. For
+example, summary statistics by arm:
 
 ``` r
 sims$summary_stats
@@ -202,6 +183,8 @@ sims$summary_stats
 #>                      outcome arm  analysis     p25     p50     p75    mean    sd    se
 ```
 
+–and head-to-head comparisons between the arms:
+
 ``` r
 sims$comparisons
 #>                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc
@@ -229,6 +212,25 @@ sims$comparisons
 #> 22:                        p50                -0.055                -0.058             -9.236            -10.306                   -0.053                   -0.077                -9.315               -13.129                   -0.053                   -0.094                -8.512               -14.583
 #> 23:                        p75                 -0.01                -0.029             -3.001             -5.914                    -0.01                   -0.049                -2.925                -9.431                    -0.01                   -0.085                -2.738               -13.588
 #>                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc
+```
+
+## Installation
+
+`hrqolr` isn’t on CRAN yet but can be installed from GitHub if you have
+the `remotes` package installed:
+
+``` r
+# install.packages("remotes") 
+remotes::install_github("INCEPTdk/hrqolr")
+```
+
+You can also install the **development version** from directly from
+GitHub. Doing this requires the *remotes*-package installed. The
+development version may contain additional features not yet available in
+the stable CRAN version, but may be unstable or lack documentation.
+
+``` r
+remotes::install_github("INCEPTdk/hrqolr@dev")
 ```
 
 ## Issues and enhancements

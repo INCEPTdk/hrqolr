@@ -23,9 +23,9 @@ options(width = 80)
 <!-- ![total downloads from RStudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/hrqolr) -->
 <!-- badges: end -->
 
-Package for simulating randomised clinical trials with temporal trajectories of
-health-related quality of life (HRQoL) as the outcome, to quantify effect sizes as single-sampled
-HRQoL values at end of follow-up and as the area under the trajectories. 
+Package for simulating randomised clinical trials with temporal trajectories of health-related 
+quality of life (HRQoL) as the outcome, to quantify effect sizes as single-sampled HRQoL values at 
+end of follow-up and as the area under the trajectories. 
 
 Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>),
 which is primarily supported by a grant from Sygeforsikringen "danmark"
@@ -38,43 +38,27 @@ package documentation
 * [Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study](https://doi.org/10.1111/aas.14324) -
 article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use `hrqolr`
 
-## Installation
-
-`hrqolr` isn't on CRAN yet but can be installed from GitHub if you have the `remotes` package installed:
-
-```{r eval = FALSE}
-# install.packages("remotes") 
-remotes::install_github("INCEPTdk/hrqolr")
-```
-
-You can also install the **development version** from directly from GitHub. Doing this
-requires the *remotes*-package installed. The development version may contain
-additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.
-
-```{r eval = FALSE}
-remotes::install_github("INCEPTdk/hrqolr@dev")
-```
-
-## Example
+## Getting started
 
 First, load the package:
 ```{r}
 library(hrqolr)
 ```
 
---then, we activate the cache. This is optional but highly recommended.
-
 ```{r include = FALSE}
 # avoid breaking data tables
 options(width = 999)
 ```
 
-```{r eval=FALSE}
-cache_hrqolr()
+--then, we activate the cache; although optional, it's highly recommended. Here, we choose a cache 
+of max. 2 GB of memory ($2 \cdot 1024^3$ bytes)--`hrqolr` currently only allows in-memory caching.
+
+```{r}
+cache_hrqolr(2 * 1024^3)
 ```
 
-`hrqolr` was built to simulate many scenarios, but here we define a single scenario with the built-in helper `setup_scenario` (note the validation results printed--silence these with `verbose = FALSE`):
-
+The preferred way to design a scenario is by using the `setup_scenario` function to validate the 
+input and give it the right format. Set `verbose = FALSE` to silence the validation results.
 ```{r}
 scenario <- setup_scenario(
 	arms = c("A", "B"),
@@ -103,8 +87,10 @@ example_trajs <- sample_example_trajectories(scenario, n_digits = 3)
 plot(example_trajs)
 ```
 
-You might also want to break apart the trajectories in the arms using well-known `ggplot2` facets (but we need to load `ggplot2` first). Hiding the legend, then, makes sense as the facet strips will already provide the same information. Here, we also set the arm-level trajectory in black to set it apart from the individual patient trajectories:
-
+`sample_example_trajectories` returns a `ggplot`, allowing you to fine-tune its appearance for your
+needs. For example, breaking apart the trajectories in the arms apart with facets and hide the 
+legend (remember to load `ggplot2` first). Here, we also set the arm-level trajectory in black to 
+make it stand out better:
 ```{r}
 library(ggplot2) 
 
@@ -113,24 +99,44 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
 	theme(legend.position = "none")
 ```
 
-Of course, we might also be interested in summarising the trajectories. Here, for example, with inter-quartile ranges. Note that the ribbons become a bit wonky at end of follow-up because there are increasingly few observations, and some of them may be low because, e.g., *mortality benefitters* are still alive.
-
+You can also summarise the trajectories, e.g., with inter-quartile ranges. The ribbons become a bit 
+wonky at end of follow-up due to increasingly few observations some of which might be low:
 ```{r}
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
 
-The same scenario specification can, then, be used to simulate a desired number of trials. By default `hrqolr` will print progress updates to the console (hide these with `verbose = FALSE`):
+The same scenario specification can, then, be used to simulate a desired number of trials. By 
+default `hrqolr` will print progress updates to the console (silence these with `verbose = FALSE`):
 ```{r}
 sims <- simulate_trials(scenario)
 ```
 
-The `sims` object contains quite a lot of interesting information. Perhaps the useful are the summary statistics by arm and head-to-head comparisons between the arms
+The returned object contains quite a lot of interesting information. For example, summary statistics 
+by arm:
 ```{r}
 sims$summary_stats
 ```
 
+--and head-to-head comparisons between the arms:
 ```{r}
 sims$comparisons
+```
+
+## Installation
+
+`hrqolr` isn't on CRAN yet but can be installed from GitHub if you have the `remotes` package installed:
+
+```{r eval = FALSE}
+# install.packages("remotes") 
+remotes::install_github("INCEPTdk/hrqolr")
+```
+
+You can also install the **development version** from directly from GitHub. Doing this
+requires the *remotes*-package installed. The development version may contain
+additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.
+
+```{r eval = FALSE}
+remotes::install_github("INCEPTdk/hrqolr@dev")
 ```
 
 ## Issues and enhancements
