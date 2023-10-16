@@ -48,7 +48,7 @@ construct_patient_trajectory <- function(
 		)
 
 		# Enforce between-patient noise throughout trajectory
-		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * (1 + acceleration_hrqol)))
+		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * acceleration_hrqol))
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)
