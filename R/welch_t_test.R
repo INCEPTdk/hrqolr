@@ -29,11 +29,11 @@ welch_t_test <- function (vals, grps, arms = unique(grps), na_replacement = NULL
 	y <- vals[grps == arms[1]]
 
 	nx <- length(x)
-	mx <- mean(x)
+	mx <- .Call("C_Mean", x, PACKAGE = "hrqolr")
 	stderrx <- sqrt(stats::var(x) / nx)
 
 	ny <- length(y)
-	my <- mean(y)
+	my <- .Call("C_Mean", y, PACKAGE = "hrqolr")
 	stderry <- sqrt(stats::var(y) / ny)
 
 	stderr <- sqrt(stderrx^2 + stderry^2)

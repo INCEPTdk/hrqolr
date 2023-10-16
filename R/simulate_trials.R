@@ -212,7 +212,9 @@ simulate_trials.default <- function(
 				tmp <- sapply(
 					outcome_cols,
 					function(col) {
-						gt_res[, list(ground_truth = fast_mean(replace_na(get(col), 0)))]
+						gt_res[
+							, list(ground_truth = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"))
+						]
 					},
 					simplify = FALSE
 				)
@@ -267,8 +269,8 @@ simulate_trials.default <- function(
 			outcome_cols,
 			function(col) {
 				batch_res[, .(
-					all = fast_mean(replace_na(get(col), 0)),
-					survivors = fast_mean(get(col)[!is.na(get(col))])
+					all = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"),
+					survivors = .Call("C_Mean", get(col)[!is.na(get(col))], PACKAGE = "hrqolr")
 				), by = c("trial_id", "arm")]
 			},
 			simplify = FALSE

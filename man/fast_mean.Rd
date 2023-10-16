@@ -10,7 +10,7 @@ fast_mean(x)
 \item{x}{numeric vector}
 }
 \value{
-Scalar with the mean, after handling NA's as per the \code{na_replacement} parameter
+Scalar with the mean.
 }
 \description{
 R's built-it \code{mean} function has a lot of overhead which is redundant for the internal workings

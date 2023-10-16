@@ -16,10 +16,10 @@ rescale <- function(x) {
 #' @param x numeric vector
 #'
 #' @keywords internal
-#' @return Scalar with the mean, after handling NA's as per the `na_replacement` parameter
+#' @return Scalar with the mean.
 #'
 fast_mean <- function(x) {
-	sum(x) / length(x)
+	.Call("C_Mean", x, PACKAGE = "hrqolr")
 }
 
 
@@ -161,8 +161,9 @@ bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 
 	# }
 	# boot_samples <- sapply(seq_len(n_samples), bootstrap_fun, idx = seq_along(vals))
 
-	est <- mean(vals[grps == "actv"]) - mean(vals[grps == "ctrl"])
-	wald_statistic <- (mean(boot_samples) - est)^2 / stats::var(boot_samples)
+	est <- .Call("C_Mean", vals[grps == "actv"], PACKAGE = "hrqolr") -
+		.Call("C_Mean", vals[grps == "ctrl"], PACKAGE = "hrqolr")
+	wald_statistic <- (.Call("C_Mean", boot_samples, PACKAGE = "hrqolr") - est)^2 / stats::var(boot_samples)
 	p_value <- 1 - stats::pchisq(wald_statistic, df = 1)
 	conf_int <- stats::quantile(boot_samples, c(alpha/2, 1 - alpha/2))
 
@@ -198,7 +199,7 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 	if (isTRUE(na_rm)) x <- x[!is.na(x)]
 
 	as.list(setNames(
-		c(stats::quantile(x, probs = probs), mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
+		c(stats::quantile(x, probs = probs), fast_mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
 		c(paste0("p", 100 * probs), "mean", "sd", "se")
 	))
 }
