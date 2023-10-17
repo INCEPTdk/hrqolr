@@ -91,13 +91,7 @@ setup_scenario <- function(
 		} else if (length(a) == 1) {
 			if (do.call(req$fun, c(list(a), req[-1]))) {
 				args[[arg_name]] <- setNames(rep(a, length(arms)), arms)
-				a_mod <- if (verify_chr(a)) sprintf("\"%s\"", a) else a # ensure correct printing to console
-				c(
-					result = "modified",
-					comment = paste(a_mod, "-->", sprintf(
-						"c(%s)", paste(sprintf("\"%s\"", arms), "=", a_mod, collapse = ", "))
-					)
-				)
+				c(result = "modified", comment = paste(deparse(a), "-->", deparse(args[[arg_name]])))
 			} else {
 				c(result = "invalid", comment = "outside valid range or incorrect type")
 			}
