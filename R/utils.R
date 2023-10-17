@@ -19,7 +19,7 @@ rescale <- function(x) {
 #' @return Scalar with the mean.
 #'
 fast_mean <- function(x) {
-	.Call("C_Mean", x, PACKAGE = "hrqolr")
+	.Call("C_Mean", as.double(x), PACKAGE = "hrqolr")
 }
 
 
