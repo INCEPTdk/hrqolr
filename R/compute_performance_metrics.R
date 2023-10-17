@@ -18,10 +18,14 @@ compute_performance_metrics <- function(theta_hat, theta, p_value, ci_lo, ci_hi,
 	bias <- .Call("C_Mean", theta_hat - theta, PACKAGE = "hrqolr")
 	relative_bias <- .Call("C_Mean", (theta_hat - theta) / theta, PACKAGE = "hrqolr")
 	mse <- .Call("C_Mean", (theta_hat - theta)^2, PACKAGE = "hrqolr")
-	coverage <- .Call("C_Mean", ci_lo <= theta & theta <= ci_hi, PACKAGE = "hrqolr")
-	rejection_prop <- .Call("C_Mean", p_value <= alpha, PACKAGE = "hrqolr")
-	be_coverage <- .Call("C_Mean", ci_lo <= theta_hat, PACKAGE = "hrqolr") &
-		.Call("C_Mean", theta_hat <= ci_hi, PACKAGE = "hrqolr")
+	coverage <- .Call(
+		"C_Mean",
+		as.double(ci_lo <= theta & theta <= ci_hi),
+		PACKAGE = "hrqolr"
+	)
+	rejection_prop <- .Call("C_Mean", as.double(p_value <= alpha), PACKAGE = "hrqolr")
+	be_coverage <- .Call("C_Mean", as.double(ci_lo <= theta_hat), PACKAGE = "hrqolr") &
+		.Call("C_Mean", as.double(theta_hat <= ci_hi), PACKAGE = "hrqolr")
 
 	list(
 		bias = bias,
