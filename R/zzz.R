@@ -12,10 +12,12 @@ NULL
 # Set up cache environment
 #
 # This way, the user need to opt in to use caching and can specify the cache settings. That more
-# tricky if cache is set up while loading the package.
+# tricky if cache is set up while loading the package. By default, the cache is 2 GB, which is
+# probably enough for most uses; at least, it was enough for simulating 100k trials with N = 4000.
+# If not, the user should increase it.
 #
 .hrqolr_cache_user <- cachem::cache_mem(
-	max_size = 128 * 1024^2, # 125 MB
+	max_size = 2 * 1024^3,
 	evict = "lru"
 )
 
@@ -35,9 +37,7 @@ NULL
 .onAttach <- function(libname, pkgname) {
 	packageStartupMessage(
 		"Loading 'hrqolr' package v", .hrqolr_version, ".\n",
-		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr/.\n",
-		"Consider running 'cache_hrqolr()' for faster simulations. If you have enough RAM, \n",
-		"increasing the cache size might speed up things even more; run '?cache_hrqolr' for details."
+		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr/.\n"
 	)
 }
 
@@ -57,13 +57,13 @@ NULL
 		utils::globalVariables(c(
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
 			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis",
-			"outcome", "value", "mean_ground_truth"
+			"outcome", "value", "mean_ground_truth", "..outcome_cols"
 		))
 	}
 
 	# Setting up cache (as per "Details" in ?memoise::memoise)
 	.hrqolr_cache_pkg <- cachem::cache_mem(
-		max_size = 256 * 1024^2, # 256 MB
+		max_size = 5 * 1024^2, # 5 MB
 		evict = "lru"
 	)
 
@@ -78,4 +78,6 @@ NULL
 	create_xout <<- custom_memoise(create_xout)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 	find_decay_halflife <<- custom_memoise(find_decay_halflife)
+
+	cache_hrqolr()
 }
