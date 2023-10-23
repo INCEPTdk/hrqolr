@@ -154,11 +154,11 @@ simulate_trials.default <- function(
 	)
 
 	# Output values
-	ground_truth <- list()
+	ground_truth <- setNames(vector("list", length(arms)), arms)
 
 	results <- list(
-		summary_stats = list(),
-		mean_diffs = list()
+		summary_stats = vector("list", n_batches),
+		mean_diffs = vector("list", n_batches)
 	)
 
 	trial_results <- if (isTRUE(include_trial_results)) {
@@ -172,7 +172,7 @@ simulate_trials.default <- function(
 			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
 		}
 
-		batch_res <- list()
+		batch_res <- setNames(vector("list", length(arms)), arms)
 
 		# Estimation for arm in batch ====
 		for (arm in arms) {
