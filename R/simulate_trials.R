@@ -161,7 +161,11 @@ simulate_trials.default <- function(
 		mean_diffs = list()
 	)
 
-	trial_results <- list()
+	trial_results <- if (isTRUE(include_trial_results)) {
+		vector("list", n_batches)
+	} else {
+		list(NULL) # to have something to include in returned object
+	}
 
 	for (batch_idx in seq_len(n_batches)) {
 		if (isTRUE(verbose) & n_batches > 1) {
@@ -408,7 +412,7 @@ simulate_trials.default <- function(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
 			args = args,
-			trial_results = if (isTRUE(include_trial_results)) trial_results else list(NULL),
+			trial_results = trial_results,
 			example_trajectories = example_trajectories,
 			resource_use = list(
 				elapsed_time = Sys.time() - start_time,
