@@ -168,6 +168,8 @@ simulate_trials.default <- function(
 	}
 
 	for (batch_idx in seq_len(n_batches)) {
+		start_time_batch <- Sys.time()
+
 		if (isTRUE(verbose) & n_batches > 1) {
 			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
 		}
@@ -176,14 +178,13 @@ simulate_trials.default <- function(
 
 		# Estimation for arm in batch ====
 		for (arm in arms) {
-			start_time_arm_in_batch <- Sys.time()
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) {
-					log_timediff(start_time, sprintf("Estimating ground truth of arm '%s'", arm))
+					log_timediff(start_time_batch, sprintf("Estimating ground truth of arm '%s'", arm))
 				}
 
 				# Use different seed for ground-truth sampling as this must be entirely independent
@@ -230,12 +231,7 @@ simulate_trials.default <- function(
 				.Random.seed <- current_seed
 			}
 
-			if (isTRUE(verbose)) {
-				log_timediff(
-					start_time_arm_in_batch,
-					sprintf("Starting arm '%s'%s", arm, ifelse(n_batches > 1, " in batch", ""))
-				)
-			}
+			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
 
 			res <- estimation_helper(
 				n_patients = n_patients_by_batch[[batch_idx]][arm],
@@ -314,11 +310,14 @@ simulate_trials.default <- function(
 		gc()
 
 		if (isTRUE(verbose)) {
-			log_timediff(start_time_arm_in_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
+			log_timediff(start_time_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
 		}
 	}
 
-	max_size_of_cache <- tryCatch(lobstr::obj_size(.hrqolr_cache_user), error = function(e) NA)
+	max_size_of_cache <- tryCatch(
+		lobstr::obj_size(.hrqolr_cache_user),
+		error = function(e) NA
+	)
 	clear_hrqolr_cache()
 	gc()
 
