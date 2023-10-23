@@ -213,18 +213,15 @@ simulate_trials.default <- function(
 				)
 
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
-
 				tmp <- sapply(
-					outcome_cols,
-					function(col) {
-						gt_res[
-							, list(ground_truth = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"))
-						]
-					},
-					simplify = FALSE
+					nafill(gt_res[, ..outcome_cols], "const", 0),
+					function(col) .Call("C_Mean", col, PACKAGE = "hrqolr")
 				)
 
-				ground_truth[[arm]] <- rbindlist(tmp, idcol = "outcome")
+				ground_truth[[arm]] <- data.table(
+					outcome = outcome_cols,
+					ground_truth = tmp
+				)
 
 				rm(gt_res, tmp)
 				gc()
