@@ -19,7 +19,7 @@ estimation_helper(
   sampling_frequency = NULL,
   n_digits = 2,
   valid_hrqol_range = c(-0.757, 1),
-  verbose = verbose
+  verbose = FALSE
 )
 }
 \arguments{
