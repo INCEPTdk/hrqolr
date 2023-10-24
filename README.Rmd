@@ -50,13 +50,6 @@ library(hrqolr)
 options(width = 999)
 ```
 
---then, we activate the cache; although optional, it's highly recommended. Here, we choose a cache 
-of max. 2 GB of memory ($2 \cdot 1024^3$ bytes)--`hrqolr` currently only allows in-memory caching.
-
-```{r}
-cache_hrqolr(2 * 1024^3)
-```
-
 The preferred way to design a scenario is by using the `setup_scenario` function to validate the 
 input and give it the right format. Set `verbose = FALSE` to silence the validation results.
 ```{r}
