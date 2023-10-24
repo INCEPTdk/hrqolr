@@ -80,35 +80,37 @@ setup_scenario <- function(
 	val_results <- list()
 
 	for (arg_name in names(args)) {
+		result <- "invalid"
+		remark <- ""
+
 		a <- args[[arg_name]]
 		req <- arg_requirements[[arg_name]]
 
-		val_results[[arg_name]] <- if (arg_name == "arms") {
+		if (arg_name == "arms") {
 			args[[arg_name]] <- setNames(a, a)
-			c(result = "valid as is", comment = "")
+			result <- "valid as is"
 		} else if (is.null(a)) {
-			c(result = "invalid", comment = "cannot be NULL")
+			remark <- "cannot be NULL"
 		} else if (length(a) == 1) {
 			if (do.call(req$fun, c(list(a), req[-1]))) {
 				args[[arg_name]] <- setNames(rep(a, length(arms)), arms)
-				c(result = "modified", comment = paste(deparse(a), "-->", deparse(args[[arg_name]])))
+				result <- "modified"
+				remark <- paste(deparse(a), "-->", deparse(args[[arg_name]]))
 			} else {
-				c(result = "invalid", comment = "outside valid range or incorrect type")
+				remark <- "outside valid range or incorrect type"
 			}
 		} else {
 			if (length(setdiff(arms, names(a))) > 0 | length(a) != length(arms)) {
-				c(result = "invalid", comment = "the names do not match the names given in 'arms'")
+				remark <- "the names do not match the names given in 'arms'"
 			} else {
 				if (!all(sapply(a, function(x) do.call(req$fun, c(list(x), req[-1]))))) {
-					c(
-						result = "invalid",
-						comment = "at least one value outside valid range or of incorrect type"
-					)
+					remark <- "at least one value outside valid range or of incorrect type"
 				} else {
-					c(result = "valid as is", comment = "")
+					result <- "valid as is"
 				}
 			}
 		}
+		val_results[[arg_name]] <- c(result = result, comment = remark)
 	}
 	attr(val_results, "class") <- "hrqolr_scenario_validation_results"
 
