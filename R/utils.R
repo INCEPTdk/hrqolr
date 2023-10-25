@@ -295,7 +295,7 @@ assert_pkgs <- function(pkgs = NULL) {
 		stop0(
 			"Could not load the following required package(s): ",
 			paste(unavailable_pkgs, collapse = ", "),
-			". \nConsider installing with the following command:\n",
+			". Consider installing with the following command:\n",
 			crayon_style(
 				sprintf("install.packages(%s)", deparse(unavailable_pkgs)),
 				"cyan"
