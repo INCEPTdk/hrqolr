@@ -26,10 +26,11 @@ fast_mean <- function(x) {
 #' Compute deterministic day of hospital discharge based on day of ICU discharge
 #'
 #' @param t_icu_discharge int, day of ICU discharge
+#' @param a,b numeric scalars, coefficients
 #' @keywords internal
 #'
-compute_hosp_discharge <- function(t_icu_discharge) {
-	ceiling(t_icu_discharge^0.518 * 9.310)
+compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
+	ceiling(t_icu_discharge^a * b)
 }
 
 #' Default value for NULL
@@ -292,16 +293,12 @@ assert_pkgs <- function(pkgs = NULL) {
 
 	if (any(checks)) {
 		stop0(
-			"Could not load the following required package(s)",
+			"Could not load the following required package(s): ",
 			paste(unavailable_pkgs, collapse = ", "),
-			". \nConsider installing with the following command: ",
-			sprintf(
-				"install.packages(%s)",
-				paste0(
-					if (sum(checks) > 1) "c(" else "",
-					paste0("\"", unavailable_pkgs, "\"", collapse = ", "),
-					if (sum(checks) > 1) ")" else ""
-				)
+			". \nConsider installing with the following command:\n",
+			crayon_style(
+				sprintf("install.packages(%s)", deparse(unavailable_pkgs)),
+				"cyan"
 			)
 		)
 	}
