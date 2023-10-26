@@ -10,3 +10,4 @@ legacy/
 ^pkgdown$
 ^\.github$
 ^README\.Rmd$
+.covrignore
