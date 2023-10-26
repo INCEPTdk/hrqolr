@@ -10,16 +10,17 @@ rescale <- function(x) {
 
 #' Mean value without the housekeeping
 #'
-#' R's built-it `mean` function has a lot of overhead which is redundant for the internal workings
-#' of `hrqolr`.
+#' R's built-it `mean` function has a lot of overhead which is redundant for the
+#' internal workings of `hrqolr`.
 #'
-#' @param x numeric vector
+#' @param x numeric vector, crucially this must be a numeric vector; e.g.
+#'   logical vectors must be wrapped in `as.double()`
 #'
 #' @keywords internal
 #' @return Scalar with the mean.
 #'
 fast_mean <- function(x) {
-	.Call("C_Mean", as.double(x), PACKAGE = "hrqolr")
+	.Call("C_Mean", x, PACKAGE = "hrqolr")
 }
 
 
