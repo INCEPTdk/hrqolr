@@ -16,10 +16,10 @@ simulate_trials(scenario, ...)
   include_trial_results = FALSE,
   verbose = TRUE,
   n_digits = 2,
-  seed = NULL,
   valid_hrqol_range = c(-0.757, 1),
   alpha = 0.05,
   max_batch_size = NULL,
+  seed = NULL,
   ...
 )
 }
@@ -48,9 +48,6 @@ below.}
 \item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
 precision but also cause longer run-times.}
 
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).}
-
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 
@@ -59,6 +56,9 @@ arms.}
 
 \item{max_batch_size}{int, the maximum number of patients to process in each batch. The default
 is to use run one batch (i.e. no upper limit)}
+
+\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).}
 }
 \value{
 An object of class \code{hrqolr_results}, which is a specialised list with four elements:

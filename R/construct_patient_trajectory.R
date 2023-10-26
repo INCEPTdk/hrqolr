@@ -29,7 +29,11 @@ construct_patient_trajectory <- function(
 		n_digits
 ) {
 
-	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	mc <- match.call()
+	hash <- rlang::hash(c(
+		deparse(mc[1]),
+		lapply(match.call()[-1], eval, parent.frame())
+	))
 	res <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(res)) {
@@ -61,7 +65,8 @@ construct_patient_trajectory <- function(
 			t_death = t_death,
 			t_icu_discharge = t_icu_discharge,
 			index_hrqol = index_hrqol_arm,
-			first_hrqol = first_hrqol_patient * (1 - mortality_dampening * (first_hrqol_patient > 0)),
+			first_hrqol = first_hrqol_patient *
+				(1 - mortality_dampening * (first_hrqol_patient > 0)),
 				# no dampening in patients who start with HRQoL <= 0
 			mortality_trajectory_shape = mortality_trajectory_shape,
 			resolution = 100

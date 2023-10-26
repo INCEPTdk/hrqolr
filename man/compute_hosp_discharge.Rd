@@ -4,10 +4,12 @@
 \alias{compute_hosp_discharge}
 \title{Compute deterministic day of hospital discharge based on day of ICU discharge}
 \usage{
-compute_hosp_discharge(t_icu_discharge)
+compute_hosp_discharge(t_icu_discharge, a = 0.518, b = 9.31)
 }
 \arguments{
 \item{t_icu_discharge}{int, day of ICU discharge}
+
+\item{a, b}{numeric scalars, coefficients}
 }
 \description{
 Compute deterministic day of hospital discharge based on day of ICU discharge

@@ -1,22 +1,22 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9003
+Version: 0.0.0.9005
 Date: 2023-10-09
 Authors@R: 
-    c(person("Benjamin Skov", "Kaas-Hansen",
-             email = "epiben@hey.com",
-             role = c("aut", "cre"),
-             comment = c(ORCID = "0000-0003-1023-0371")),
-      person("Anders", "Granholm",
-             email = "andersgran@gmail.com",
-             role = c("aut"),
-             comment = c(ORCID = "0000-0001-5799-7655")))
+	c(person("Benjamin Skov", "Kaas-Hansen",
+	         email = "epiben@hey.com",
+	         role = c("aut", "cre"),
+	         comment = c(ORCID = "0000-0003-1023-0371")),
+	  person("Anders", "Granholm",
+	         email = "andersgran@gmail.com",
+	         role = c("aut"),
+	         comment = c(ORCID = "0000-0001-5799-7655")))
 Description: Package for simulating two-arm randomised clinical trials with temporal 
-    trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
-    sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
-    Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>), 
-    which is primarily supported by a grant from Sygeforsikringen "danmark" 
-    (<https://www.sygeforsikring.dk/>).
+	trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
+	sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
+	Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>), 
+	which is primarily supported by a grant from Sygeforsikringen "danmark" 
+	(<https://www.sygeforsikring.dk/>).
 Type: Package
 BugReports: https://github.com/INCEPTdk/hrqolr/issues
 URL: https://inceptdk.github.io/hrqolr/, https://github.com/INCEPTdk/hrqolr/, https://incept.dk/
@@ -27,22 +27,22 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
-     R (>= 2.10)
+	R (>= 2.10)
 Imports:
-		cachem (>= 1.0.8),
-		data.table (>= 1.14.2),
-		digest (>= 0.6.33), 
-		Hmisc (>= 5.1.1),
-		memoise (>= 2.0.1)
+	cachem (>= 1.0.8),
+	data.table (>= 1.14.2),
+	Hmisc (>= 5.1.1),
+	memoise (>= 2.0.1)
 Suggests:
-		covr,
-		crayon,
-		ggplot2,
-		knitr,
-		lobstr,
-		rlang,
-		rmarkdown,
-    testthat (>= 3.0.0)
+	covr,
+	crayon,
+	ggplot2,
+	knitr,
+	lobstr,
+	rlang,
+	rmarkdown,
+	testthat (>= 3.0.0),
+	vdiffr
 NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -10,10 +10,15 @@
 #'   sampling can start.
 #'
 construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequency) {
-	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	mc <- match.call()
+	hash <- rlang::hash(c(
+		deparse(mc[1]),
+		lapply(match.call()[-1], eval, parent.frame())
+	))
 	res <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(res)) {
+		print("hej det virker")
 		return(res)
 	}
 
@@ -23,14 +28,21 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 
 	if (nrow(traj) <= 2 && is.na(traj[2, "y"])) {
 		# These patients die before ICU discharge
-		return(list(
+		res <- list(
 			primary = na_matrix(index_hrqol, t_icu_discharge),
 			secondary1 = na_matrix(index_hrqol, t_hosp_discharge),
 			secondary2 = na_matrix(index_hrqol, 90)
-		))
+		)
+
+		if (!is.null(hash)) {
+			.hrqolr_cache_user$set(hash, res)
+		}
+
+		return(res)
 	}
 
-	res <- list()
+	res <- vector("list", 3)
+	names(res) <- c("primary", "secondary1", "secondary2")
 
 	traj_x <- traj[, "x"]
 	traj_y <- traj[, "y"]

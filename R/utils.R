@@ -10,26 +10,28 @@ rescale <- function(x) {
 
 #' Mean value without the housekeeping
 #'
-#' R's built-it `mean` function has a lot of overhead which is redundant for the internal workings
-#' of `hrqolr`.
+#' R's built-it `mean` function has a lot of overhead which is redundant for the
+#' internal workings of `hrqolr`.
 #'
-#' @param x numeric vector
+#' @param x numeric vector, crucially this must be a numeric vector; e.g.
+#'   logical vectors must be wrapped in `as.double()`
 #'
 #' @keywords internal
-#' @return Scalar with the mean, after handling NA's as per the `na_replacement` parameter
+#' @return Scalar with the mean.
 #'
 fast_mean <- function(x) {
-	sum(x) / length(x)
+	.Call("C_Mean", x, PACKAGE = "hrqolr")
 }
 
 
 #' Compute deterministic day of hospital discharge based on day of ICU discharge
 #'
 #' @param t_icu_discharge int, day of ICU discharge
+#' @param a,b numeric scalars, coefficients
 #' @keywords internal
 #'
-compute_hosp_discharge <- function(t_icu_discharge) {
-	ceiling(t_icu_discharge^0.518 * 9.310)
+compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
+	ceiling(t_icu_discharge^a * b)
 }
 
 #' Default value for NULL
@@ -132,44 +134,6 @@ replace_na <- function(x, replacement) {
 }
 
 
-#' Bootstrap confidence intervals and p values
-#'
-#' @inheritParams welch_t_test
-#' @param n_samples scalar, number of bootstrap samples
-#'
-#' @keywords internal
-#' @return A four-element vector with point estimate, p value and confidence internal
-#'
-bootstrap_estimates <- function (vals, grps, na_replacement = NULL, n_samples = 2000, alpha = 0.05) {
-	if (!is.null(na_replacement)) {
-		vals <- replace_na(vals, na_replacement)
-	} else {
-		na_idx <- is.na(vals)
-		vals <- vals[!na_idx]
-		grps <- grps[!na_idx]
-	}
-
-	boot_samples <- bootstrap_mean_diffs(vals, grps == "ctrl", B = n_samples)
-		# must convert grps to integer vector
-
-	# This is one R-only version (some 12-18 times slower, and .Internal() makes R CMD check fail...):
-	# bootstrap_fun <- function(i, idx) {
-	# 	boot_idx <- sample(idx, replace = TRUE)
-	# 	actv_idx <- grps[boot_idx] == "actv"
-	# 	.Internal(mean(vals[boot_idx][actv_idx])) -
-	# 		.Internal(mean(vals[boot_idx][!actv_idx]))
-	# }
-	# boot_samples <- sapply(seq_len(n_samples), bootstrap_fun, idx = seq_along(vals))
-
-	est <- mean(vals[grps == "actv"]) - mean(vals[grps == "ctrl"])
-	wald_statistic <- (mean(boot_samples) - est)^2 / stats::var(boot_samples)
-	p_value <- 1 - stats::pchisq(wald_statistic, df = 1)
-	conf_int <- stats::quantile(boot_samples, c(alpha/2, 1 - alpha/2))
-
-	setNames(c(est, conf_int, p_value), c("point_est", "ci_lo", "ci_hi", "p_values"))
-}
-
-
 #' Sample time to ICU discharge
 #'
 #' Helper function.
@@ -198,7 +162,7 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 	if (isTRUE(na_rm)) x <- x[!is.na(x)]
 
 	as.list(setNames(
-		c(stats::quantile(x, probs = probs), mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
+		c(stats::quantile(x, probs = probs), fast_mean(x), stats::sd(x), stats::sd(x)/sqrt(length(x))),
 		c(paste0("p", 100 * probs), "mean", "sd", "se")
 	))
 }
@@ -291,16 +255,12 @@ assert_pkgs <- function(pkgs = NULL) {
 
 	if (any(checks)) {
 		stop0(
-			"Could not load the following required package(s)",
+			"Could not load the following required package(s): ",
 			paste(unavailable_pkgs, collapse = ", "),
-			". \nConsider installing with the following command: ",
-			sprintf(
-				"install.packages(%s)",
-				paste0(
-					if (sum(checks) > 1) "c(" else "",
-					paste0("\"", unavailable_pkgs, "\"", collapse = ", "),
-					if (sum(checks) > 1) ")" else ""
-				)
+			". Consider installing with the following command:\n",
+			crayon_style(
+				sprintf("install.packages(%s)", deparse(unavailable_pkgs)),
+				"cyan"
 			)
 		)
 	}

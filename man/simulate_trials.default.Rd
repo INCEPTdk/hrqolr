@@ -23,10 +23,10 @@
   test_fun,
   verbose,
   n_digits,
-  seed,
   valid_hrqol_range,
   alpha,
   max_batch_size,
+  seed = NULL,
   ...
 )
 }

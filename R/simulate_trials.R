@@ -61,10 +61,10 @@ simulate_trials.hrqolr_scenario <- function(
 		include_trial_results = FALSE,
 		verbose = TRUE,
 		n_digits = 2,
-		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
 		max_batch_size = NULL,
+		seed = NULL,
 		...
 ) {
 
@@ -120,21 +120,29 @@ simulate_trials.default <- function(
 		test_fun,
 		verbose,
 		n_digits,
-		seed,
 		valid_hrqol_range,
 		alpha,
 		max_batch_size,
+		seed = NULL,
 		...
 ) {
 
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
 	start_time <- Sys.time()
 
-	# Setup ====
-	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
-		# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
+	# Handling seeds ====
+	try({ # will fail e.g. if called from parallel::parLapply
+		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
+		on.exit(
+			assign(".Random.seed", value = old_seed, envir = globalenv(), inherits = FALSE),
+			add = TRUE,
+			after = FALSE
+		)
+	}, silent = TRUE)
+	RNGkind("Mersenne-Twister")
 	set.seed(seed)
 
+	# Setup ====
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Splitting trials into batches that respect the max_batch_size argument
@@ -154,37 +162,38 @@ simulate_trials.default <- function(
 	)
 
 	# Output values
-	ground_truth <- list()
+	ground_truth <- setNames(vector("list", length(arms)), arms)
 
 	results <- list(
-		summary_stats = list(),
-		mean_diffs = list()
+		summary_stats = vector("list", n_batches),
+		mean_diffs = vector("list", n_batches)
 	)
 
-	trial_results <- list()
+	trial_results <- if (isTRUE(include_trial_results)) {
+		vector("list", n_batches)
+	} else {
+		list(NULL) # to have something to include in returned object
+	}
 
 	for (batch_idx in seq_len(n_batches)) {
+		start_time_batch <- Sys.time()
+
 		if (isTRUE(verbose) & n_batches > 1) {
 			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
 		}
 
-		batch_res <- list()
+		batch_res <- setNames(vector("list", length(arms)), arms)
 
 		# Estimation for arm in batch ====
 		for (arm in arms) {
-			start_time_arm_in_batch <- Sys.time()
 
 			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
 
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) {
-					log_timediff(start_time, sprintf("Estimating ground truth of arm '%s'", arm))
+					log_timediff(start_time_batch, sprintf("Estimating ground truth of arm '%s'", arm))
 				}
-
-				# Use different seed for ground-truth sampling as this must be entirely independent
-				current_seed <- .Random.seed
-				set.seed(digest::digest2int(paste(c(match.call(), arm), collapse = ", ")))
 
 				gt_res <- estimation_helper(
 					n_patients = n_patients_ground_truth,
@@ -208,28 +217,22 @@ simulate_trials.default <- function(
 				)
 
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
-
 				tmp <- sapply(
-					outcome_cols,
-					function(col) {
-						gt_res[, list(ground_truth = fast_mean(replace_na(get(col), 0)))]
-					},
-					simplify = FALSE
+					nafill(gt_res[, ..outcome_cols], "const", 0),
+					function(col) .Call("C_Mean", col, PACKAGE = "hrqolr")
 				)
 
-				ground_truth[[arm]] <- rbindlist(tmp, idcol = "outcome")
+				ground_truth[[arm]] <- data.table(
+					outcome = outcome_cols,
+					ground_truth = tmp
+				)
 
 				rm(gt_res, tmp)
 				gc()
-				.Random.seed <- current_seed
+				# .Random.seed <- current_seed
 			}
 
-			if (isTRUE(verbose)) {
-				log_timediff(
-					start_time_arm_in_batch,
-					sprintf("Starting arm '%s'%s", arm, ifelse(n_batches > 1, " in batch", ""))
-				)
-			}
+			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
 
 			res <- estimation_helper(
 				n_patients = n_patients_by_batch[[batch_idx]][arm],
@@ -267,8 +270,8 @@ simulate_trials.default <- function(
 			outcome_cols,
 			function(col) {
 				batch_res[, .(
-					all = fast_mean(replace_na(get(col), 0)),
-					survivors = fast_mean(get(col)[!is.na(get(col))])
+					all = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"),
+					survivors = .Call("C_Mean", get(col)[!is.na(get(col))], PACKAGE = "hrqolr")
 				), by = c("trial_id", "arm")]
 			},
 			simplify = FALSE
@@ -308,11 +311,14 @@ simulate_trials.default <- function(
 		gc()
 
 		if (isTRUE(verbose)) {
-			log_timediff(start_time_arm_in_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
+			log_timediff(start_time_batch, ifelse(n_batches > 1, "Finished batch", "Finished"))
 		}
 	}
 
-	max_size_of_cache <- tryCatch(lobstr::obj_size(.hrqolr_cache_user), error = function(e) NA)
+	max_size_of_cache <- tryCatch(
+		lobstr::obj_size(.hrqolr_cache_user),
+		error = function(e) NA
+	)
 	clear_hrqolr_cache()
 	gc()
 
@@ -406,7 +412,7 @@ simulate_trials.default <- function(
 			summary_stats = summary_stats,
 			comparisons = comparisons,
 			args = args,
-			trial_results = if (isTRUE(include_trial_results)) trial_results else list(NULL),
+			trial_results = trial_results,
 			example_trajectories = example_trajectories,
 			resource_use = list(
 				elapsed_time = Sys.time() - start_time,
@@ -414,7 +420,13 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_size_of_cache = max_size_of_cache
+				max_cache_sizes = list(
+					user = max_size_of_cache,
+					package = tryCatch(
+						lobstr::obj_size(.hrqolr_cache_user),
+						error = function(e) NA
+					)
+				)
 			)
 		),
 		class = c("hrqolr_results", "list")

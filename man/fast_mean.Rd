@@ -7,13 +7,14 @@
 fast_mean(x)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{numeric vector, crucially this must be a numeric vector; e.g.
+logical vectors must be wrapped in \code{as.double()}}
 }
 \value{
-Scalar with the mean, after handling NA's as per the \code{na_replacement} parameter
+Scalar with the mean.
 }
 \description{
-R's built-it \code{mean} function has a lot of overhead which is redundant for the internal workings
-of \code{hrqolr}.
+R's built-it \code{mean} function has a lot of overhead which is redundant for the
+internal workings of \code{hrqolr}.
 }
 \keyword{internal}

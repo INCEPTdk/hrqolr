@@ -30,7 +30,7 @@ sample_example_trajectories(scenario, ...)
   mortality_dampening,
   n_example_trajectories_per_arm,
   n_digits,
-  seed,
+  seed = NULL,
   valid_hrqol_range,
   ...
 )

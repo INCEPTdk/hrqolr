@@ -71,18 +71,25 @@ sample_example_trajectories.default <- function(
 
 		n_example_trajectories_per_arm,
 		n_digits,
-		seed,
+		seed = NULL,
 		valid_hrqol_range,
 		...
 ) {
+
+	try({ # will fail e.g. if called from parallel::parLapply
+		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
+		on.exit(
+			assign(".Random.seed", value = old_seed, envir = globalenv(), inherits = FALSE),
+			add = TRUE,
+			after = FALSE
+		)
+	}, silent = TRUE)
+	set.seed(seed)
 
 	out <- list(
 		arm_level = list(),
 		patient_level = list()
 	)
-
-	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
-	set.seed(seed)
 
 	t_icu_discharge <- sample_t_icu_discharge(n_example_trajectories_per_arm)
 	# the same for all arms to easy comparison ("counter-factual"-like)

@@ -27,7 +27,11 @@ compute_estimates <- function(
 		n_digits
 ) {
 
-	hash <- rlang::hash(lapply(match.call(), eval, parent.frame()))
+	mc <- match.call()
+	hash <- rlang::hash(c(
+		deparse(mc[1]),
+		lapply(match.call()[-1], eval, parent.frame())
+	))
 	res <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(res)) {

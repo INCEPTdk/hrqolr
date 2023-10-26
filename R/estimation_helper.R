@@ -28,7 +28,7 @@ estimation_helper <- function(
 		sampling_frequency = NULL,
 		n_digits = 2,
 		valid_hrqol_range = c(-0.757, 1.0),
-		verbose = verbose
+		verbose = FALSE
 ) {
 
 	t_icu_discharge <- sample_t_icu_discharge(n_patients)
