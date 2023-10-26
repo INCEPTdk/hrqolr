@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,10 +60,10 @@
 <span>  include_trial_results <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  valid_hrqol_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.757</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  max_batch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -112,11 +112,6 @@ below.</p></dd>
 precision but also cause longer run-times.</p></dd>
 
 
-<dt>seed</dt>
-<dd><p>int, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).</p></dd>
-
-
 <dt>valid_hrqol_range</dt>
 <dd><p>two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5D-5L index values.</p></dd>
@@ -130,6 +125,11 @@ arms.</p></dd>
 <dt>max_batch_size</dt>
 <dd><p>int, the maximum number of patients to process in each batch. The default
 is to use run one batch (i.e. no upper limit)</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>int, optional seed for reproducible pseudo-random number generation. Defaults to a
+deterministic value based on the arguments given (ensuring reproducibility by default).</p></dd>
 
 </dl></div>
     <div class="section level2">
