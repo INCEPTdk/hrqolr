@@ -31,7 +31,6 @@ Depends:
 Imports:
 	cachem (>= 1.0.8),
 	data.table (>= 1.14.2),
-	digest (>= 0.6.33), 
 	Hmisc (>= 5.1.1),
 	memoise (>= 2.0.1)
 Suggests:
