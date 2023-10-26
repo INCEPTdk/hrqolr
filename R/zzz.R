@@ -37,7 +37,7 @@ NULL
 .onAttach <- function(libname, pkgname) {
 	packageStartupMessage(
 		"Loading 'hrqolr' package v", .hrqolr_version, ".\n",
-		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr/.\n"
+		"For help, run 'help(\"hrqolr\")' or check out https://inceptdk.github.io/hrqolr."
 	)
 }
 
@@ -77,7 +77,6 @@ NULL
 	create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
 	create_xout <<- custom_memoise(create_xout)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
-	find_decay_halflife <<- custom_memoise(find_decay_halflife)
 
 	cache_hrqolr()
 }
