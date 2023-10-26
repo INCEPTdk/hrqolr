@@ -61,10 +61,10 @@ simulate_trials.hrqolr_scenario <- function(
 		include_trial_results = FALSE,
 		verbose = TRUE,
 		n_digits = 2,
-		seed = NULL,
 		valid_hrqol_range = c(-0.757, 1.0),
 		alpha = 0.05,
 		max_batch_size = NULL,
+		seed = NULL,
 		...
 ) {
 
@@ -120,21 +120,29 @@ simulate_trials.default <- function(
 		test_fun,
 		verbose,
 		n_digits,
-		seed,
 		valid_hrqol_range,
 		alpha,
 		max_batch_size,
+		seed = NULL,
 		...
 ) {
 
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
 	start_time <- Sys.time()
 
-	# Setup ====
-	seed <- seed %||% digest::digest2int(paste(match.call(), collapse = ", "))
-		# If no seed provided, one is created in a deterministic (yet, uncorrelated) way
+	# Handling seeds ====
+	try({ # will fail e.g. if called from parallel::parLapply
+		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
+		on.exit(
+			assign(".Random.seed", value = old_seed, envir = globalenv(), inherits = FALSE),
+			add = TRUE,
+			after = FALSE
+		)
+	}, silent = TRUE)
+	RNGkind("Mersenne-Twister")
 	set.seed(seed)
 
+	# Setup ====
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Splitting trials into batches that respect the max_batch_size argument
@@ -187,10 +195,6 @@ simulate_trials.default <- function(
 					log_timediff(start_time_batch, sprintf("Estimating ground truth of arm '%s'", arm))
 				}
 
-				# Use different seed for ground-truth sampling as this must be entirely independent
-				current_seed <- .Random.seed
-				set.seed(digest::digest2int(paste(c(match.call(), arm), collapse = ", ")))
-
 				gt_res <- estimation_helper(
 					n_patients = n_patients_ground_truth,
 					arm = arm,
@@ -225,7 +229,7 @@ simulate_trials.default <- function(
 
 				rm(gt_res, tmp)
 				gc()
-				.Random.seed <- current_seed
+				# .Random.seed <- current_seed
 			}
 
 			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
