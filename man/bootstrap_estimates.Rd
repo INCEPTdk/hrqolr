@@ -7,11 +7,10 @@
 bootstrap_estimates(
   vals,
   grps,
-  reference_arm = head(sort(unique(grps)), 1),
+  reference_arm = sort(unique(grps))[[1]],
   na_replacement = NULL,
   n_samples = 2000,
-  alpha = 0.05,
-  seed = 42
+  alpha = 0.05
 )
 }
 \arguments{
@@ -20,14 +19,14 @@ bootstrap_estimates(
 \item{grps}{character vector, allowed values are "ctrl" and "actv" and used to slice \code{x} into two
 vectors with values to be compared.}
 
+\item{reference_arm}{scalar, name of the reference arm in \code{grps}}
+
 \item{na_replacement}{scalar (or \code{NULL}), if \code{NULL} missing values will be removed. Otherwise,
 missing values will be replaced by the value of \code{na_replacement}}
 
 \item{n_samples}{scalar, number of bootstrap samples}
 
 \item{alpha}{numeric, 1.0 - confidence_level}
-
-\item{seed}{int, seed for pseudo-random number generation}
 }
 \value{
 A four-element vector with point estimate, p value and confidence internal
