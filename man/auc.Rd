@@ -14,6 +14,7 @@ computed}
 scalar
 }
 \description{
-Assumes x and y are the same length. Checking will mean huge performance hit.
+Assumes x and y are the same length and of type \code{double}. Checking would
+cause huge performance hit and, so, is foregone.
 }
 \keyword{internal}

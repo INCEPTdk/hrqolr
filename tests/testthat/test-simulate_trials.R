@@ -1,4 +1,6 @@
 test_that("simulate_trials S3 method works", {
+	cache_hrqolr() # needed to use caching also during tests
+
 	scenario <- setup_scenario(
 		arms = c("Active", "Control"),
 		n_patients = 50,

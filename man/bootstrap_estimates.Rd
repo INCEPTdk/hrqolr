@@ -7,6 +7,7 @@
 bootstrap_estimates(
   vals,
   grps,
+  reference_arm = sort(unique(grps))[[1]],
   na_replacement = NULL,
   n_samples = 2000,
   alpha = 0.05
@@ -17,6 +18,8 @@ bootstrap_estimates(
 
 \item{grps}{character vector, allowed values are "ctrl" and "actv" and used to slice \code{x} into two
 vectors with values to be compared.}
+
+\item{reference_arm}{scalar, name of the reference arm in \code{grps}}
 
 \item{na_replacement}{scalar (or \code{NULL}), if \code{NULL} missing values will be removed. Otherwise,
 missing values will be replaced by the value of \code{na_replacement}}
@@ -31,4 +34,3 @@ A four-element vector with point estimate, p value and confidence internal
 \description{
 Bootstrap confidence intervals and p values
 }
-\keyword{internal}

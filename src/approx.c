@@ -86,11 +86,14 @@ static double approx1(double v, double *x, double *y, int n,
     if(v == x[i]) return y[i];
     /* impossible: if(x[j] == x[i]) return y[i]; */
 
-    if(Meth->kind == 1) /* linear */
-			return y[i] + (y[j] - y[i]) * ((v - x[i])/(x[j] - x[i]));
-    else /* 2 : constant */
-			return (Meth->f1 != 0.0 ? y[i] * Meth->f1 : 0.0)
-    			 + (Meth->f2 != 0.0 ? y[j] * Meth->f2 : 0.0);
+    // Branching commented out as we don't use it; kept for provenance
+		// if(Meth->kind == 1) /* linear */
+		// 	return y[i] + (y[j] - y[i]) * ((v - x[i])/(x[j] - x[i]));
+		// else /* 2 : constant */
+		// 	return (Meth->f1 != 0.0 ? y[i] * Meth->f1 : 0.0)
+		// 			 + (Meth->f2 != 0.0 ? y[j] * Meth->f2 : 0.0);
+
+		return y[i] + (y[j] - y[i]) * ((v - x[i])/(x[j] - x[i]));
 }/* approx1() */
 
 
