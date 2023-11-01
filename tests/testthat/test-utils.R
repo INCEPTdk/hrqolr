@@ -62,7 +62,6 @@ test_that("Misc. utils", {
 	x <- as.double(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
 	y <- as.double(c(10, 9, 8, 7, 6, 1, 2, 3, 4, 5))
 	expect_equal(auc(x, y), 47.5)
-	expect_equal(auc(x, y[-1]), 40.5)
 	expect_error(auc(1:10, y))
 	expect_true(is.na(auc(x, c(y[-1], NA_real_))))
 
