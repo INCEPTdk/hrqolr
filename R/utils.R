@@ -170,7 +170,8 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 
 #' Compute area under the curve
 #'
-#' Assumes x and y are the same length. Checking will mean huge performance hit.
+#' Assumes x and y are the same length and of type `double`. Checking would
+#' cause huge performance hit and, so, is foregone.
 #'
 #' @param x,y vectors, coordinates of the curve under which the area is to be
 #'   computed
@@ -179,15 +180,7 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 #' @keywords internal
 #'
 auc <- function(x, y) {
-	n <- length(x)
-
-	dy <- y[-1] - y[-n]
-	dx <- x[-1] - x[-n]
-
-	sum(
-		dx * y[-n], # rectangles
-		dx * dy * 0.5 # triangles
-	)
+	.Call("C_Auc", x, y, PACKAGE = "hrqolr")
 }
 
 

@@ -59,9 +59,10 @@ test_that("Misc. utils", {
 	)
 
 	# auc ====
-	expect_equal(auc(1:10, c(6:10, 1:5)), 49.5)
-	expect_warning(auc(1:10, 1:9))
-	expect_true(is.na(auc(1:10, c(1:9, NA))))
+	expect_equal(auc(as.double(1:10), as.double(c(6:10, 1:5))), 49.5)
+	expect_equal(hrqolr:::auc(as.double(1:10), as.double(1:9)), 44.5)
+	expect_error(auc(1:10, c(6:10, 1:5)))
+	expect_true(is.na(auc(as.double(1:10), as.double(c(1:9, NA)))))
 
 	# assert_pkgs ====
 	expect_true(assert_pkgs("stats"))
