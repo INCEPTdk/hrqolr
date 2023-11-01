@@ -7,9 +7,11 @@
 bootstrap_estimates(
   vals,
   grps,
+  reference_arm = head(sort(unique(grps)), 1),
   na_replacement = NULL,
   n_samples = 2000,
-  alpha = 0.05
+  alpha = 0.05,
+  seed = 42
 )
 }
 \arguments{
@@ -24,6 +26,8 @@ missing values will be replaced by the value of \code{na_replacement}}
 \item{n_samples}{scalar, number of bootstrap samples}
 
 \item{alpha}{numeric, 1.0 - confidence_level}
+
+\item{seed}{int, seed for pseudo-random number generation}
 }
 \value{
 A four-element vector with point estimate, p value and confidence internal
@@ -31,4 +35,3 @@ A four-element vector with point estimate, p value and confidence internal
 \description{
 Bootstrap confidence intervals and p values
 }
-\keyword{internal}
