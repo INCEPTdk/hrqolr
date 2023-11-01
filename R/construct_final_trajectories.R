@@ -18,7 +18,6 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 	res <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(res)) {
-		print("hej det virker")
 		return(res)
 	}
 
