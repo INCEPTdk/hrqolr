@@ -28,9 +28,10 @@ test_that("C_Bootstrap_mean_diffs works", {
 		1.49, -1.49, -1.43, -0.57, -1.86
 	)
 	g <- rep(0:1, length(x) / 2)
+	set.seed(42)
 	expect_equal(
-		bootstrap_estimates(x, g, seed = 42),
-		c(point_est = 0.1445, ci_lo = -0.588141571969697, ci_hi = 0.835524025420443,  p_value = 0.999022028057891)
+		bootstrap_estimates(x, g),
+		c(point_est = 0.1445, ci_lo = -0.53609, ci_hi = 0.855255208333333, p_value = 0.993060740290883)
 	)
 })
 

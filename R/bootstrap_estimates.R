@@ -1,8 +1,8 @@
 #' Bootstrap confidence intervals and p values
 #'
 #' @inheritParams welch_t_test
+#' @param reference_arm scalar, name of the reference arm in `grps`
 #' @param n_samples scalar, number of bootstrap samples
-#' @param seed int, seed for pseudo-random number generation
 #'
 #' @export
 #' @return A four-element vector with point estimate, p value and confidence internal
@@ -10,12 +10,12 @@
 bootstrap_estimates <- function (
 		vals,
 		grps,
-		reference_arm = head(sort(unique(grps)), 1),
+		reference_arm = sort(unique(grps))[[1]],
 		na_replacement = NULL,
 		n_samples = 2000,
-		alpha = 0.05,
-		seed = 42
+		alpha = 0.05
 ) {
+
 	if (!is.null(na_replacement)) {
 		vals[is.na(vals)] <- na_replacement
 	} else {
@@ -31,8 +31,9 @@ bootstrap_estimates <- function (
 		vals,
 		grps == reference_arm, # must be integer input
 		n_samples,
-		seed
+		PACKAGE = "hrqolr"
 	)
+
 	boot_samples <- boot_samples[!is.na(boot_samples)]
 		# happens in the unlikely event that all values are taken from the same arm
 		# in which case the mean difference is undefined
