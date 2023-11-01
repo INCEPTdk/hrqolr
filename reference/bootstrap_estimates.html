@@ -51,6 +51,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bootstrap_estimates</span><span class="op">(</span></span>
 <span>  <span class="va">vals</span>,</span>
 <span>  <span class="va">grps</span>,</span>
+<span>  reference_arm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">grps</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  na_replacement <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_samples <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.05</span></span>
@@ -66,6 +67,10 @@
 <dt>grps</dt>
 <dd><p>character vector, allowed values are "ctrl" and "actv" and used to slice <code>x</code> into two
 vectors with values to be compared.</p></dd>
+
+
+<dt>reference_arm</dt>
+<dd><p>scalar, name of the reference arm in <code>grps</code></p></dd>
 
 
 <dt>na_replacement</dt>
