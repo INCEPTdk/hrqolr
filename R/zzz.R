@@ -75,7 +75,6 @@ NULL
 	compute_eof <<- custom_memoise(compute_eof)
 	construct_arm_level_trajectory <<- custom_memoise(construct_arm_level_trajectory)
 	create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
-	create_xout <<- custom_memoise(create_xout)
 	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 
 	cache_hrqolr()
