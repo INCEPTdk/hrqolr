@@ -30,7 +30,7 @@ compute_estimates <- function(
 	mc <- match.call()
 	hash <- rlang::hash(c(
 		deparse(mc[1]),
-		lapply(match.call()[-1], eval, parent.frame())
+		lapply(mc[-1], eval, parent.frame())
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
