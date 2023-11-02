@@ -229,7 +229,6 @@ simulate_trials.default <- function(
 
 				rm(gt_res, tmp)
 				gc()
-				# .Random.seed <- current_seed
 			}
 
 			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
