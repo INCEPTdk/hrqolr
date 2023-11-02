@@ -77,13 +77,15 @@ na_matrix <- function(index_hrqol, t) {
 
 #' Create xout vector for approx()
 #'
-#' Cached. Used in `construct_final_trajectories()`.
+#' Importantly, there are no checks so if, e.g., `end = NA`, the functions
+#' happily spits out a vector with some 2^29 elements. This lack of check is
+#' intentional to keep this (internal) function fast.
 #'
-#' @inheritParams base::seq
+#' @param start,end,by int scalars
 #' @keywords internal
 #'
 create_xout <- function(start, end, by) {
-	unique(c(0.0, seq(start, end, by), end))
+	.Call("C_Create_xout", start, end, by, PACKAGE = "hrqolr")
 }
 
 

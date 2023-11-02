@@ -7,9 +7,11 @@
 create_xout(start, end, by)
 }
 \arguments{
-\item{by}{number: increment of the sequence.}
+\item{start, end, by}{int scalars}
 }
 \description{
-Cached. Used in \code{construct_final_trajectories()}.
+Importantly, there are no checks so if, e.g., \code{end = NA}, the functions
+happily spits out a vector with some 2^29 elements. This lack of check is
+intentional to keep this (internal) function fast.
 }
 \keyword{internal}
