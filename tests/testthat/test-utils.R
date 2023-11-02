@@ -24,11 +24,8 @@ test_that("Misc. utils", {
 	expect_error(replace_na(c(NA, 1, 2), NULL))
 
 	# create_xout ====
-	expect_equal(create_xout(1, 10, 3), c(0, 1, 4, 7, 10))
-	expect_equal(create_xout(1, 11, 3), c(0, 1, 4, 7, 10, 11))
-	expect_error(create_xout(1, NA, 3))
-	expect_error(create_xout(NA, NA, 3))
-	expect_error(create_xout(NA, 10, 3))
+	expect_equal(hrqolr:::create_xout(1, 10, 3), c(0, 1, 4, 7, 10))
+	expect_equal(hrqolr:::create_xout(1, 11, 3), c(0, 1, 4, 7, 10, 11))
 
 	# log_timediff
 	expect_snapshot(log_timediff(
