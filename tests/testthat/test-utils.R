@@ -27,12 +27,19 @@ test_that("Misc. utils", {
 	expect_equal(hrqolr:::create_xout(1, 10, 3), c(0, 1, 4, 7, 10))
 	expect_equal(hrqolr:::create_xout(1, 11, 3), c(0, 1, 4, 7, 10, 11))
 
-	# log_timediff
-	expect_snapshot(log_timediff(
-		start = as.POSIXct("2023-10-25 10:00:00 CEST"),
-		msg = "Message",
-		now = as.POSIXct("2023-10-25 11:00:00 CEST")
-	))
+	# log_timediff and est_remaining_time
+	start_ <- as.POSIXct("2023-10-25 10:00:00 CEST")
+	end_ <- as.POSIXct("2023-10-25 11:00:00 CEST")
+	expect_snapshot(log_timediff(start = start_, msg = "Message", now = end_))
+
+	expect_equal(
+		est_remaining_time(start = start_, i = 1, n = 40, now = end_),
+		"unknown"
+	)
+	expect_equal(
+		est_remaining_time(start = start_, i = 2, n = 40, now = end_),
+		"39.00 hours"
+	)
 
 	# compute_eof ====
 	expect_equal(compute_eof(5), 187)
