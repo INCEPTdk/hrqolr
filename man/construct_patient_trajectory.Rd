@@ -15,8 +15,7 @@ construct_patient_trajectory(
   is_mortality_benefitter,
   mortality_trajectory_shape,
   mortality_dampening,
-  sampling_frequency,
-  n_digits
+  sampling_frequency
 )
 }
 \arguments{
@@ -37,9 +36,6 @@ trajectory}
 \item{is_mortality_benefitter}{logical, is patient a mortality benefitters? Defaults to FALSE.}
 
 \item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
-
-\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.}
 }
 \value{
 A three-element list with trajectories for each of the three assumptions as to when

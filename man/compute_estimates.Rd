@@ -15,8 +15,7 @@ compute_estimates(
   final_hrqol_arm,
   mortality_trajectory_shape,
   mortality_dampening,
-  sampling_frequency,
-  n_digits
+  sampling_frequency
 )
 }
 \arguments{
@@ -37,9 +36,6 @@ trajectory}
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
 \item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
-
-\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.}
 }
 \value{
 A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area
