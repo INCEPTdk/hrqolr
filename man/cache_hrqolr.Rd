@@ -6,7 +6,7 @@
 \title{Caching of hrqolr functions}
 \usage{
 cache_hrqolr(
-  max_size = 1 * 1024^3,
+  max_size = 2 * 1024^3,
   max_age = Inf,
   max_n = Inf,
   logfile = NULL,

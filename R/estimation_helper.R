@@ -77,8 +77,7 @@ estimation_helper <- function(
 					mortality_trajectory_shape = mortality_trajectory_shape,
 					mortality_dampening = mortality_dampening,
 
-					sampling_frequency = sampling_frequency,
-					n_digits = n_digits
+					sampling_frequency = sampling_frequency
 				)
 			},
 			t_icu_discharge,

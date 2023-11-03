@@ -43,8 +43,8 @@ sample_example_trajectories(scenario, ...)
 \item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
 returned object}
 
-\item{n_digits}{int, the number of digits of HRQoL values. More digits will yield greater
-precision but also cause longer run-times.}
+\item{n_digits}{int, the number of decimal places of in the first HRQoL values of patients.
+More digits will yield greater precision but also cause longer run-times.}
 
 \item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
 deterministic value based on the arguments given (ensuring reproducibility by default).}

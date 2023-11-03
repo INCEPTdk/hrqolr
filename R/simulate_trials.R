@@ -35,8 +35,8 @@ simulate_trials <- function(scenario, ...) {
 #' @param verbose logical, should the function give progress timestamped updates? Default: `TRUE`
 #' @param seed int, optional seed for reproducible pseudo-random number generation. Defaults to a
 #'   deterministic value based on the arguments given (ensuring reproducibility by default).
-#' @param n_digits int, the number of digits of HRQoL values. More digits will yield greater
-#'   precision but also cause longer run-times.
+#' @param n_digits int, the number of decimal places of in the first HRQoL values of patients.
+#'   More digits will yield greater precision but also cause longer run-times.
 #' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
 #'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
 #' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
@@ -179,7 +179,15 @@ simulate_trials.default <- function(
 		start_time_batch <- Sys.time()
 
 		if (isTRUE(verbose) & n_batches > 1) {
-			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
+			log_timediff(
+				start_time,
+				sprintf(
+					"BATCH %s of %s - remaining: %s",
+					batch_idx,
+					n_batches,
+					est_remaining_time(start_time, batch_idx, n_batches)
+				),
+				"cyan")
 		}
 
 		batch_res <- setNames(vector("list", length(arms)), arms)
@@ -229,7 +237,6 @@ simulate_trials.default <- function(
 
 				rm(gt_res, tmp)
 				gc()
-				# .Random.seed <- current_seed
 			}
 
 			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))

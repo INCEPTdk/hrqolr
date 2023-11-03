@@ -1,8 +1,7 @@
 # Misc. utils
 
     Code
-      log_timediff(start = as.POSIXct("2023-10-25 10:00:00 CEST"), msg = "Message",
-      now = as.POSIXct("2023-10-25 11:00:00 CEST"))
+      log_timediff(start = start_, msg = "Message", now = end_)
     Message
       2023-10-25 11:00:00: Message (1 hours)
 

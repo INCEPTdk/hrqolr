@@ -107,6 +107,27 @@ log_timediff <- function(start_time, msg = NULL, style = NULL, now = Sys.time())
 }
 
 
+#' Estimate remaining time
+#'
+#' Uses a counter and the total iterations to estimate how much time remains
+#'
+#' @param start_time object of time `"POSIXct"` (e.g. output from `Sys.time()`)
+#' @param i int, current iteration
+#' @param n int, total number iteration to go through
+#'
+#' @return Character string with estimate
+#' @keywords internal
+#'
+est_remaining_time <- function(start_time, i, n, now = Sys.time()) {
+	if (i == 1) {
+		"unknown"
+	} else {
+		t_togo <- (now - start_time) * (n - i + 1) / (i - 1)
+		sprintf("%.2f %s", t_togo, attr(t_togo, "units"))
+	}
+}
+
+
 #' Compute end of follow-up
 #'
 #' Cached. Based entirely on day of ICU discharge and sampling frequency

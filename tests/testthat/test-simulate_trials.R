@@ -1,7 +1,7 @@
 test_that("simulate_trials S3 method works", {
 	cache_hrqolr() # needed to use caching also during tests
 
-	scenario <- setup_scenario(
+	scenario1 <- setup_scenario(
 		arms = c("Active", "Control"),
 		n_patients = 50,
 		index_hrqol = 0,
@@ -17,7 +17,7 @@ test_that("simulate_trials S3 method works", {
 	)
 
 	sims_single_batch <- suppressMessages(simulate_trials(
-		scenario,
+		scenario1,
 		n_trials = 10,
 		n_patients_ground_truth = 10,
 		n_example_trajectories_per_arm = 10,
@@ -30,17 +30,60 @@ test_that("simulate_trials S3 method works", {
 	sims_single_batch$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_single_batch)
 
-	sims_two_batches <- suppressMessages(simulate_trials(
-		scenario,
+	sims_two_batches_verbose <- suppressMessages(simulate_trials(
+		scenario1,
 		n_trials = 10,
 		max_batch_size = 500,
 		n_patients_ground_truth = 10,
 		n_example_trajectories_per_arm = 10,
-		verbose = FALSE,
+		verbose = TRUE,
 		test_fun = welch_t_test,
 		seed = 42
 	))
-	sims_two_batches$resource_use <- NULL # will change from run to run
-	sims_two_batches$args$test_fun <- "welch_t_test"
-	expect_snapshot(sims_two_batches)
+	sims_two_batches_verbose$resource_use <- NULL # will change from run to run
+	sims_two_batches_verbose$args$test_fun <- "welch_t_test"
+	expect_snapshot(sims_two_batches_verbose)
+
+	sims_single_batch_without_examples <- suppressMessages(simulate_trials(
+		scenario1,
+		n_trials = 10,
+		n_patients_ground_truth = 10,
+		n_example_trajectories_per_arm = 0,
+		verbose = TRUE,
+		test_fun = welch_t_test,
+		include_trial_results = TRUE,
+		seed = 42
+	))
+	sims_single_batch_without_examples$resource_use <- NULL # will change from run to run
+	sims_single_batch_without_examples$args$test_fun <- "welch_t_test"
+	expect_snapshot(sims_single_batch_without_examples)
+
+	scenario2 <- setup_scenario(
+		arms = c("Active", "Control"),
+		n_patients = 50,
+		index_hrqol = 0,
+		first_hrqol = 0.2,
+		final_hrqol = c(Active = 0.7, Control = 0.5),
+		acceleration_hrqol = 0,
+		mortality = 0.2,
+		mortality_dampening = 0,
+		mortality_trajectory_shape = "exp_decay",
+		prop_mortality_benefitters = 0.0,
+		sampling_frequency = 14,
+		verbose = FALSE
+	)
+
+	sims_single_batch_no_mort_benefitters <- suppressMessages(simulate_trials(
+		scenario2,
+		n_trials = 10,
+		n_patients_ground_truth = 10,
+		n_example_trajectories_per_arm = 10,
+		verbose = TRUE,
+		test_fun = welch_t_test,
+		include_trial_results = TRUE,
+		seed = 42
+	))
+	sims_single_batch_no_mort_benefitters$resource_use <- NULL # will change from run to run
+	sims_single_batch_no_mort_benefitters$args$test_fun <- "welch_t_test"
+	expect_snapshot(sims_single_batch_no_mort_benefitters)
 })

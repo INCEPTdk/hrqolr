@@ -13,7 +13,7 @@
 #' @importFrom utils assignInMyNamespace
 #'
 cache_hrqolr <- function(
-		max_size = 1 * 1024^3,
+		max_size = 2 * 1024^3,
 		max_age = Inf,
 		max_n = Inf,
 		logfile = NULL,

@@ -23,14 +23,13 @@ compute_estimates <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency,
-		n_digits
+		sampling_frequency
 ) {
 
 	mc <- match.call()
 	hash <- rlang::hash(c(
 		deparse(mc[1]),
-		lapply(match.call()[-1], eval, parent.frame())
+		lapply(mc[-1], eval, parent.frame())
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
@@ -51,8 +50,7 @@ compute_estimates <- function(
 		mortality_trajectory_shape = mortality_trajectory_shape,
 		mortality_dampening = mortality_dampening,
 
-		sampling_frequency = sampling_frequency,
-		n_digits = n_digits
+		sampling_frequency = sampling_frequency
 	)
 
 	res <- numeric(6)

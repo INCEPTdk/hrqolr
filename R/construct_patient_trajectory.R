@@ -25,14 +25,13 @@ construct_patient_trajectory <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency,
-		n_digits
+		sampling_frequency
 ) {
 
 	mc <- match.call()
 	hash <- rlang::hash(c(
 		deparse(mc[1]),
-		lapply(match.call()[-1], eval, parent.frame())
+		lapply(mc[-1], eval, parent.frame())
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
@@ -72,8 +71,6 @@ construct_patient_trajectory <- function(
 			resolution = 100
 		)
 	}
-
-	traj[, "y"] <- round(traj[, "y"], n_digits)
 
 	# Enforce sampling strategies and return
 	res <- construct_final_trajectories(
