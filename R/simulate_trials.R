@@ -179,7 +179,15 @@ simulate_trials.default <- function(
 		start_time_batch <- Sys.time()
 
 		if (isTRUE(verbose) & n_batches > 1) {
-			log_timediff(start_time, sprintf("BATCH %s of %s", batch_idx, n_batches), "cyan")
+			log_timediff(
+				start_time,
+				sprintf(
+					"BATCH %s of %s - remaining: %s",
+					batch_idx,
+					n_batches,
+					est_remaining_time(start_time, batch_idx, n_batches)
+				),
+				"cyan")
 		}
 
 		batch_res <- setNames(vector("list", length(arms)), arms)
