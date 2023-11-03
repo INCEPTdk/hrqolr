@@ -137,8 +137,7 @@ sample_example_trajectories.default <- function(
 						acceleration_hrqol = acceleration_hrqol[arm],
 						mortality_trajectory_shape = mortality_trajectory_shape[arm],
 						mortality_dampening = mortality_dampening[arm],
-						sampling_frequency = sampling_frequency[arm],
-						n_digits = n_digits
+						sampling_frequency = sampling_frequency[arm]
 					)$primary
 					as.data.table(traj)
 				},

@@ -25,8 +25,7 @@ construct_patient_trajectory <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency,
-		n_digits
+		sampling_frequency
 ) {
 
 	mc <- match.call()
@@ -72,8 +71,6 @@ construct_patient_trajectory <- function(
 			resolution = 100
 		)
 	}
-
-	traj[, "y"] <- round(traj[, "y"], n_digits)
 
 	# Enforce sampling strategies and return
 	res <- construct_final_trajectories(

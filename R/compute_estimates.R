@@ -23,8 +23,7 @@ compute_estimates <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency,
-		n_digits
+		sampling_frequency
 ) {
 
 	mc <- match.call()
@@ -51,8 +50,7 @@ compute_estimates <- function(
 		mortality_trajectory_shape = mortality_trajectory_shape,
 		mortality_dampening = mortality_dampening,
 
-		sampling_frequency = sampling_frequency,
-		n_digits = n_digits
+		sampling_frequency = sampling_frequency
 	)
 
 	res <- numeric(6)
