@@ -4,8 +4,10 @@
 SEXP C_Auc(SEXP x, SEXP y)
 {
 	int n = length(x);
-	double *px = REAL(x);
-	double *py = REAL(y);
+	double *px, *py;
+	px = REAL(x);
+	py = REAL(y);
+
 	double *auc = (double *) R_alloc(1, sizeof(double));
 	*auc = 0.0;
 
