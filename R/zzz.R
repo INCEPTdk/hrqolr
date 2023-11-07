@@ -62,20 +62,19 @@ NULL
 	}
 
 	# Setting up cache (as per "Details" in ?memoise::memoise)
-	.hrqolr_cache_pkg <- cachem::cache_mem(
-		max_size = 5 * 1024^2, # 5 MB
-		evict = "lru"
-	)
+	# .hrqolr_cache_pkg <- cachem::cache_mem(
+	# 	max_size = 5 * 1024^2, # 5 MB
+	# 	evict = "lru"
+	# )
 
-	custom_memoise <- function(fun) {
-		memoise::memoise(fun, cache = .hrqolr_cache_pkg)
-	}
+	# custom_memoise <- function(fun) {
+	# 	memoise::memoise(fun, cache = .hrqolr_cache_pkg)
+	# }
 
 	# These functions will always be cached
-	compute_eof <<- custom_memoise(compute_eof)
-	construct_arm_level_trajectory <<- custom_memoise(construct_arm_level_trajectory)
-	create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
-	generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
+	# construct_arm_level_trajectory <<- custom_memoise(construct_arm_level_trajectory)
+	# create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
+	# generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 
 	cache_hrqolr()
 }

@@ -16,6 +16,13 @@ generate_mortality_funs <- function(
     censoring_value = NA
 ) {
 
+	hash <- rlang::hash(c("generate_mortality_funs", cum_mortality, censoring_value))
+	out <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(out)) {
+		return(out)
+	}
+
   cdf <- with(CLASSIC_cum_mortality_curve, create_smooth_trajectory(t, p_death))
 	cum_mortality <- cum_mortality %||% max(cdf$y)
 
@@ -44,10 +51,16 @@ generate_mortality_funs <- function(
   	ceiling(qemp(stats::runif(n)))
   }
 
-  list(
+  out <- list(
     d = demp,
     p = pemp,
     q = qemp,
     r = remp
   )
+
+  if (!is.null(hash)) {
+  	.hrqolr_cache_user$set(hash, out)
+  }
+
+  return(out)
 }
