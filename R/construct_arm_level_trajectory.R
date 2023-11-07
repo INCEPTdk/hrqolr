@@ -23,6 +23,21 @@ construct_arm_level_trajectory <- function(
 		sampling_frequency = 14L
 ) {
 
+	hash <- rlang::hash(c(
+		"construct_arm_level_trajectory",
+		t_icu_discharge,
+		acceleration_hrqol,
+		index_hrqol_arm,
+		first_hrqol_arm,
+		final_hrqol_arm,
+		sampling_frequency
+	))
+	out <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(out)) {
+		return(out)
+	}
+
 	# Base trajectory
 	t <- c(
 		icu_discharge = t_icu_discharge,
@@ -42,7 +57,13 @@ construct_arm_level_trajectory <- function(
 	y_tmp <- y_tmp * seq(acceleration_hrqol, 1, length = length(y_tmp))
 	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
-	rbind(c(x = 0, y = index_hrqol_arm[[1]]), as.matrix(traj))
-		# concatenate index values (i.e. values at enrolment)
-		# I use double brackets to remove the name of the value (5 times faster than unname())
+	out <- rbind(c(x = 0, y = index_hrqol_arm[[1]]), as.matrix(traj))
+		# Concatenate index values (i.e. values at enrolment)
+		# Double brackets remove the name of the value (5 x faster than unname())
+
+	if (!is.null(hash)) {
+		.hrqolr_cache_user$set(hash, out)
+	}
+
+	return(out)
 }

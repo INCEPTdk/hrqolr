@@ -1,7 +1,9 @@
-#' Below we repeatedlyl invoke clear_hrqolr_cache() to avoid strange "nothing
+#' Below we repeatedly invoke clear_hrqolr_cache() to avoid strange "nothing
 #' to compact" message from cachem. Haven't been able to find anything else
 #' about this than the source code:
 # https://github.com/r-lib/cachem/blob/62051fe/R/cache-mem.R#L557-L560
+
+cache_hrqolr()
 
 test_that("Trajetory plots with linear mortality shape", {
 	scenario <- setup_scenario(
@@ -26,7 +28,6 @@ test_that("Trajetory plots with linear mortality shape", {
 		n_digits = 3
 	)
 
-	clear_hrqolr_cache()
 	p <- plot(trajectories)
 	vdiffr::expect_doppelganger("trajectories__linear_shape", p)
 })
@@ -54,7 +55,6 @@ test_that("Trajetory plots with exp. decay mortality shape", {
 		n_digits = 3
 	)
 
-	clear_hrqolr_cache()
 	p <- plot(trajectories)
 	vdiffr::expect_doppelganger("trajectories__exp_decay_shape", p)
 })
@@ -82,7 +82,6 @@ test_that("Trajetory plots with constant mortality shape", {
 		n_digits = 3
 	)
 
-	clear_hrqolr_cache()
 	p <- plot(trajectories)
 	vdiffr::expect_doppelganger("trajectories__constnat_shape", p)
 })
@@ -110,7 +109,6 @@ test_that("Trajetory plots with reflect exp. decay mortality shape", {
 		n_digits = 3
 	)
 
-	clear_hrqolr_cache()
 	p <- plot(trajectories)
 	vdiffr::expect_doppelganger("trajectories__reflected_exp_decay_shape", p)
 })
@@ -137,8 +135,6 @@ test_that("Summarised trajectory plot works", {
 		seed = 42,
 		n_digits = 3
 	)
-
-	clear_hrqolr_cache()
 
 	# Default settings
 	p <- plot(trajectories, which = "summarise")
@@ -172,9 +168,7 @@ test_that("Arm and patient trajectories are plotted correctly", {
 		n_digits = 3
 	)
 
-	clear_hrqolr_cache()
-
-	# Patient trajectories onlye
+	# Patient trajectories only
 	p <- plot(trajectories, which = "patient")
 	vdiffr::expect_doppelganger("patient_trajs_only__default", p)
 
@@ -191,5 +185,3 @@ test_that("Arm and patient trajectories are plotted correctly", {
 	p <- plot(trajectories, which = "arm", arm_aes = c(linetype = 2))
 	vdiffr::expect_doppelganger("arm_trajs_only__dashed_lines2", p)
 })
-
-

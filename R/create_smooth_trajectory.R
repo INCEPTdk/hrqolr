@@ -19,7 +19,12 @@
 #' @export
 #'
 create_smooth_trajectory <- function(x, y, alpha = 0.5, epsilon = 1e-4) {
-	# alpha = 0.5 yields centripetal Catmull-Rom curve
+	hash <- rlang::hash(c("create_smooth_trajectory", x, y, alpha, epsilon))
+	out <- .hrqolr_cache_user$get(hash)
+
+	if (!cachem::is.key_missing(out)) {
+		return(out)
+	}
 
 	stopifnot(length(x) == length(y))
 
@@ -44,5 +49,11 @@ create_smooth_trajectory <- function(x, y, alpha = 0.5, epsilon = 1e-4) {
 		res[[i]] <- Hmisc::bezier(points[, 1], points[, 2])
 	}
 
-	unique(data.table::rbindlist(res))
+	out <- unique(data.table::rbindlist(res))
+
+	if (!is.null(hash)) {
+		.hrqolr_cache_user$set(hash, out)
+	}
+
+	return(out)
 }

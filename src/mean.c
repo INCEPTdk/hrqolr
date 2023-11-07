@@ -4,7 +4,8 @@
 SEXP C_Mean(SEXP x)
 {
 	int n = length(x);
-	double *px = REAL(x);
+	double *px;
+	px = REAL(x);
 
 	double *sum = (double *) R_alloc(1, sizeof(double));
 	*sum = 0.0;

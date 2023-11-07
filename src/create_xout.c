@@ -3,11 +3,10 @@
 
 SEXP C_Create_xout(SEXP start, SEXP end, SEXP by)
 {
-
-	int start_ = asInteger(start);
-	int end_ = asInteger(end);
-	int by_ = asInteger(by);
-	int n = 2 + (end_ - start_) / by_;
+	int _start = asInteger(start);
+	int _end = asInteger(end);
+	int _by = asInteger(by);
+	int n = 2 + (_end - _start) / _by;
 
 	SEXP out = PROTECT(allocVector(INTSXP, n));
 	int *pout;
@@ -15,10 +14,10 @@ SEXP C_Create_xout(SEXP start, SEXP end, SEXP by)
 
 	pout[0] = 0;
 	for (int i = 1; i < n; i++) {
-		pout[i] = start_ + (i-1) * by_;
+		pout[i] = _start + (i - 1) * _by;
 	}
 
-	if ((start_ + (n - 2) * by_) == end_) {
+	if ((_start + (n - 2) * _by) == _end) {
 		// Nothing to append
 		UNPROTECT(1);
 
@@ -30,7 +29,7 @@ SEXP C_Create_xout(SEXP start, SEXP end, SEXP by)
 		pout2 = INTEGER(out2);
 
 		memcpy(pout2, pout, sizeof(int) * n);
-		pout2[n] = end_;
+		pout2[n] = _end;
 
 		UNPROTECT(2);
 
