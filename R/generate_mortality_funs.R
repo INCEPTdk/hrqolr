@@ -29,11 +29,11 @@ generate_mortality_funs <- function(
 	cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))
 
   pemp <- function(q) {
-    approxfun(cdf$x, cdf$y, method = "linear")(q)
+    stats::approxfun(cdf$x, cdf$y, method = "linear")(q)
   }
 
   demp <- function(t) {
-    with(cdf, approxfun(x[-length(x)], diff(y)/diff(x)))(t)
+    with(cdf, stats::approxfun(x[-length(x)], diff(y)/diff(x)))(t)
   }
 
   qemp <- function(p) {
