@@ -15,22 +15,17 @@ compute_performance_metrics <- function(theta_hat, theta, p_value, ci_lo, ci_hi,
 
 	n <- length(theta_hat)
 	n_prefix <- 1 / (n * (n - 1))
-	bias <- .Call("C_Mean", theta_hat - theta, PACKAGE = "hrqolr")
-	relative_bias <- .Call("C_Mean", (theta_hat - theta) / theta, PACKAGE = "hrqolr")
-	mse <- .Call("C_Mean", (theta_hat - theta)^2, PACKAGE = "hrqolr")
-	coverage <- .Call(
-		"C_Mean",
-		as.double(ci_lo <= theta & theta <= ci_hi),
-		PACKAGE = "hrqolr"
-	)
-	rejection_prop <- .Call("C_Mean", as.double(p_value <= alpha), PACKAGE = "hrqolr")
-	be_coverage <- .Call("C_Mean", as.double(ci_lo <= theta_hat), PACKAGE = "hrqolr") &
-		.Call("C_Mean", as.double(theta_hat <= ci_hi), PACKAGE = "hrqolr")
+	bias <- fast_mean(theta_hat - theta)
+	relative_bias <- fast_mean((theta_hat - theta) / theta)
+	mse <- fast_mean((theta_hat - theta)^2)
+	coverage <- fast_mean(as.double(ci_lo <= theta & theta <= ci_hi))
+	rejection_prop <- fast_mean(as.double(p_value <= alpha))
+	be_coverage <- fast_mean(as.double(ci_lo <= theta_hat & theta_hat <= ci_hi))
 
 	list(
 		bias = bias,
-		bias_se = sqrt(n_prefix * sum((theta_hat - .Call("C_Mean", theta_hat, PACKAGE = "hrqolr"))^2)),
-		# TODO: isn't it theta instead of .Call("C_Mean", theta_hat)?
+		bias_se = sqrt(n_prefix * sum((theta_hat - fast_mean(theta_hat))^2)),
+		# TODO: isn't it theta instead of fast_mean(theta_hat)?
 		relative_bias = relative_bias,
 		relative_bias_se = sqrt(n_prefix * sum(((theta_hat - theta) / theta - relative_bias)^2)),
 		mse = mse,
