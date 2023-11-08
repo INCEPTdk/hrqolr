@@ -27,7 +27,7 @@ compute_estimates <- function(
 ) {
 
 	mc <- match.call()
-	hash <- rlang::hash(c(
+	hash <- rlang::hash(c( ### AG: Don't we need to check if package available here? rlang is in suggests
 		deparse(mc[1]),
 		lapply(mc[-1], eval, parent.frame())
 	))
@@ -70,5 +70,5 @@ compute_estimates <- function(
 		.hrqolr_cache_user$set(hash, res)
 	}
 
-	return(res)
+	res
 }
