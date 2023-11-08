@@ -4,6 +4,8 @@
 .Ruserdata
 .DS_Store
 
+src/*.o
+
 internal/
 legacy/
 .vscode/

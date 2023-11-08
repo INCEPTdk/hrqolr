@@ -18,18 +18,18 @@
       598: Control 187.00 0.500000
       
       $patient_level
-                arm  id  x     y
-         1:  Active   1  0 0.000
-         2:  Active   1 21 0.260
-         3:  Active   1 35 0.322
-         4:  Active   1 49 0.393
-         5:  Active   1 63 0.487
-        ---                     
-      1208: Control  99  0 0.000
-      1209: Control  99  4 0.390
-      1210: Control  99 17 0.000
-      1211: Control 100  0 0.000
-      1212: Control 100 10    NA
+                arm  id   x      y
+         1:  Active   1   0 0.0000
+         2:  Active   1  21 0.0000
+         3:  Active   1  35 0.0621
+         4:  Active   1  49 0.1334
+         5:  Active   1  63 0.2271
+        ---                       
+      1220: Control 100 136 0.3946
+      1221: Control 100 150 0.4138
+      1222: Control 100 164 0.4330
+      1223: Control 100 178 0.4548
+      1224: Control 100 192 0.5000
       
       attr(,"class")
       [1] "hrqolr_trajectories" "list"               

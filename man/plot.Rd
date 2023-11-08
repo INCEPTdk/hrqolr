@@ -3,6 +3,7 @@
 \name{plot}
 \alias{plot}
 \alias{plot.hrqolr_trajectories}
+\alias{plot.hrqolr_trial}
 \title{Plotting methods for HRQoL results}
 \usage{
 \method{plot}{hrqolr_trajectories}(
@@ -14,6 +15,8 @@
   ribbon_percentiles = c(0.25, 0.75),
   ...
 )
+
+\method{plot}{hrqolr_trial}(x, analysis = "all", ecdf = TRUE, ...)
 }
 \arguments{
 \item{x}{object to plot, see \emph{Details}.}
@@ -29,6 +32,10 @@ ribbon layers.}
 drawn to summarise patient trajectories}
 
 \item{...}{passed on to methods}
+
+\item{analysis}{character, \code{"all"} (include non-survivors and set their HRQoL to 0) or \code{"survivors"}.}
+
+\item{ecdf}{logical, whether to plot the empiricial cumulative distribution (default) or not}
 }
 \value{
 A ggplot2 object.
@@ -39,9 +46,13 @@ A \code{ggplot}.
 Plotting methods for HRQoL results
 
 Plot method for example trajectories
+
+Plot results from single trial
 }
 \section{Methods (by class)}{
 \itemize{
 \item \code{plot(hrqolr_trajectories)}: Example trajectories
+
+\item \code{plot(hrqolr_trial)}: Single trial
 
 }}

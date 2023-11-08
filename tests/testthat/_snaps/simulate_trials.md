@@ -4,184 +4,184 @@
       sims_single_batch
     Output
       $summary_stats
-                           outcome     arm  analysis     p25     p50     p75    mean
-       1:    primary__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-       2:    primary__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-       3:       primary__hrqol_auc  Active       all  84.267  89.076  89.440  87.086
-       4:       primary__hrqol_auc Control       all  70.139  72.803  74.618  71.962
-       5: secondary1__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-       6: secondary1__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-       7:    secondary1__hrqol_auc  Active       all  83.135  87.849  88.547  85.978
-       8:    secondary1__hrqol_auc Control       all  68.870  71.463  73.326  70.681
-       9: secondary2__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-      10: secondary2__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-      11:    secondary2__hrqol_auc  Active       all  78.074  82.272  83.514  80.882
-      12:    secondary2__hrqol_auc Control       all  63.112  66.344  67.827  65.468
-      13:    primary__hrqol_at_eof  Active survivors   0.754   0.781   0.833   0.794
-      14:    primary__hrqol_at_eof Control survivors   0.602   0.620   0.637   0.617
-      15:       primary__hrqol_auc  Active survivors  92.634  95.596 101.581  96.845
-      16:       primary__hrqol_auc Control survivors  77.539  79.005  79.466  78.370
-      17: secondary1__hrqol_at_eof  Active survivors   0.832   0.846   0.864   0.854
-      18: secondary1__hrqol_at_eof Control survivors   0.650   0.666   0.673   0.662
-      19:    secondary1__hrqol_auc  Active survivors 100.052 102.104 104.605 102.867
-      20:    secondary1__hrqol_auc Control survivors  80.450  82.840  83.970  82.588
-      21: secondary2__hrqol_at_eof  Active survivors   0.885   0.890   0.895   0.892
-      22: secondary2__hrqol_at_eof Control survivors   0.684   0.698   0.704   0.693
-      23:    secondary2__hrqol_auc  Active survivors 100.479 101.038 101.874 101.072
-      24:    secondary2__hrqol_auc Control survivors  79.046  80.519  81.541  80.100
-                           outcome     arm  analysis     p25     p50     p75    mean
+                           outcome     arm  analysis    p25    p50    p75   mean
+       1:    primary__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+       2:    primary__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+       3:       primary__hrqol_auc  Active       all 55.147 58.705 61.908 57.836
+       4:       primary__hrqol_auc Control       all 39.609 41.298 45.578 42.267
+       5: secondary1__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+       6: secondary1__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+       7:    secondary1__hrqol_auc  Active       all 55.535 59.081 62.346 58.209
+       8:    secondary1__hrqol_auc Control       all 39.979 41.640 46.067 42.617
+       9: secondary2__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+      10: secondary2__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+      11:    secondary2__hrqol_auc  Active       all 55.899 59.241 62.261 58.333
+      12:    secondary2__hrqol_auc Control       all 39.804 41.462 45.778 42.324
+      13:    primary__hrqol_at_eof  Active survivors  0.598  0.623  0.654  0.623
+      14:    primary__hrqol_at_eof Control survivors  0.427  0.445  0.457  0.444
+      15:       primary__hrqol_auc  Active survivors 61.603 64.566 67.862 64.505
+      16:       primary__hrqol_auc Control survivors 44.498 46.720 47.554 46.408
+      17: secondary1__hrqol_at_eof  Active survivors  0.655  0.667  0.683  0.668
+      18: secondary1__hrqol_at_eof Control survivors  0.456  0.471  0.477  0.468
+      19:    secondary1__hrqol_auc  Active survivors 68.192 69.692 71.633 69.581
+      20:    secondary1__hrqol_auc Control survivors 48.104 49.577 50.071 49.414
+      21: secondary2__hrqol_at_eof  Active survivors  0.700  0.700  0.700  0.698
+      22: secondary2__hrqol_at_eof Control survivors  0.500  0.500  0.500  0.500
+      23:    secondary2__hrqol_auc  Active survivors 72.883 73.098 73.191 72.927
+      24:    secondary2__hrqol_auc Control survivors 52.262 52.369 52.417 52.384
+                           outcome     arm  analysis    p25    p50    p75   mean
              sd    se
-       1: 0.041 0.013
-       2: 0.032 0.010
-       3: 5.407 1.710
-       4: 3.665 1.159
-       5: 0.041 0.013
-       6: 0.032 0.010
-       7: 5.327 1.685
-       8: 3.641 1.151
-       9: 0.041 0.013
-      10: 0.032 0.010
-      11: 4.939 1.562
-      12: 3.461 1.094
-      13: 0.043 0.013
-      14: 0.022 0.007
-      15: 5.707 1.805
-      16: 2.572 0.813
-      17: 0.029 0.009
-      18: 0.018 0.006
-      19: 4.095 1.295
-      20: 2.660 0.841
-      21: 0.013 0.004
-      22: 0.012 0.004
-      23: 2.024 0.640
-      24: 1.770 0.560
+       1: 0.044 0.014
+       2: 0.031 0.010
+       3: 4.696 1.485
+       4: 3.252 1.028
+       5: 0.044 0.014
+       6: 0.031 0.010
+       7: 4.699 1.486
+       8: 3.294 1.042
+       9: 0.044 0.014
+      10: 0.031 0.010
+      11: 4.526 1.431
+      12: 3.220 1.018
+      13: 0.040 0.013
+      14: 0.020 0.006
+      15: 4.410 1.394
+      16: 2.029 0.641
+      17: 0.026 0.008
+      18: 0.017 0.005
+      19: 2.771 0.876
+      20: 1.747 0.552
+      21: 0.005 0.002
+      22: 0.000 0.000
+      23: 0.587 0.186
+      24: 0.174 0.055
              sd    se
       
       $comparisons
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
        1:                 comparator                Active                Active
        2:                     target               Control               Control
-       3:              mean_estimate                -0.147                -0.176
-       4:          mean_ground_truth                -0.165                -0.165
-       5:                         sd                 0.056                 0.052
-       6:                         se                 0.018                 0.017
+       3:              mean_estimate                -0.155                -0.179
+       4:          mean_ground_truth                 -0.11                 -0.11
+       5:                         sd                 0.052                 0.039
+       6:                         se                 0.017                 0.012
        7:                   analysis                   all             survivors
-       8:                       bias                 0.018                -0.011
-       9:                    bias_se                 0.018                 0.017
-      10:              relative_bias                 -0.11                 0.069
-      11:           relative_bias_se                 0.107                   0.1
-      12:                        mse                 0.003                 0.003
-      13:                     mse_se                 0.001                 0.001
-      14:                   coverage                     1                     1
-      15:                coverage_se                     0                     0
+       8:                       bias                -0.045                -0.069
+       9:                    bias_se                 0.017                 0.012
+      10:              relative_bias                 0.405                 0.631
+      11:           relative_bias_se                 0.151                 0.111
+      12:                        mse                 0.004                 0.006
+      13:                     mse_se                 0.001                 0.002
+      14:                   coverage                   0.8                   0.6
+      15:                coverage_se                 0.126                 0.155
       16:    bias_corrected_coverage                     1                     1
       17: bias_corrected_coverage_se                     0                     0
-      18:       rejection_proportion                   0.7                     1
-      19:    rejection_proportion_se                 0.145                     0
+      18:       rejection_proportion                   0.9                     1
+      19:    rejection_proportion_se                 0.095                     0
       20:                      n_sim                    10                    10
-      21:                        p25                -0.179                -0.221
-      22:                        p50                -0.147                -0.178
-      23:                        p75                -0.123                -0.134
+      21:                        p25                -0.187                -0.206
+      22:                        p50                -0.162                -0.181
+      23:                        p75                -0.116                -0.158
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
        1:             Active             Active                   Active
        2:            Control            Control                  Control
-       3:            -15.124            -18.475                   -0.147
-       4:            -15.897            -15.897                   -0.165
-       5:              7.377              6.532                    0.056
-       6:              2.333              2.066                    0.018
+       3:            -15.569            -18.097                   -0.155
+       4:            -10.135            -10.135                    -0.11
+       5:              5.511              4.154                    0.052
+       6:              1.743              1.314                    0.017
        7:                all          survivors                      all
-       8:              0.772             -2.579                    0.018
-       9:              2.333              2.066                    0.018
-      10:             -0.049              0.162                    -0.11
-      11:              0.147               0.13                    0.107
-      12:              49.58             45.053                    0.003
-      13:             25.053             14.887                    0.001
-      14:                  1                  1                        1
-      15:                  0                  0                        0
+       8:             -5.434             -7.962                   -0.045
+       9:              1.743              1.314                    0.017
+      10:              0.536              0.786                    0.405
+      11:              0.172               0.13                    0.151
+      12:             56.868             78.931                    0.004
+      13:             18.678             20.684                    0.001
+      14:                0.8                0.6                      0.8
+      15:              0.126              0.155                    0.126
       16:                  1                  1                        1
       17:                  0                  0                        0
-      18:                0.5                0.6                      0.7
-      19:              0.158              0.155                    0.145
+      18:                0.8                  1                      0.9
+      19:              0.126                  0                    0.095
       20:                 10                 10                       10
-      21:            -19.485            -24.839                   -0.179
-      22:            -14.994            -18.794                   -0.147
-      23:            -13.042            -12.004                   -0.123
+      21:            -19.263            -21.648                   -0.187
+      22:            -16.055            -18.078                   -0.162
+      23:            -11.276            -15.548                   -0.116
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
        1:                   Active                Active                Active
        2:                  Control               Control               Control
-       3:                   -0.192               -15.298               -20.279
-       4:                   -0.165               -16.027               -16.027
-       5:                    0.022                 7.286                 3.301
-       6:                    0.007                 2.304                 1.044
+       3:                   -0.199               -15.592               -20.168
+       4:                    -0.11                -10.41                -10.41
+       5:                    0.038                 5.532                 3.897
+       6:                    0.012                 1.749                 1.232
        7:                survivors                   all             survivors
-       8:                   -0.027                 0.729                -4.253
-       9:                    0.007                 2.304                 1.044
-      10:                    0.162                -0.045                 0.265
-      11:                    0.043                 0.144                 0.065
-      12:                    0.001                48.309                27.889
-      13:                        0                 23.89                 9.907
-      14:                        1                     1                     1
-      15:                        0                     0                     0
+       8:                   -0.089                -5.182                -9.758
+       9:                    0.012                 1.749                 1.232
+      10:                    0.813                 0.498                 0.937
+      11:                    0.109                 0.168                 0.118
+      12:                    0.009                54.394               108.876
+      13:                    0.002                17.985                24.169
+      14:                      0.1                   0.8                   0.1
+      15:                    0.095                 0.126                 0.095
       16:                        1                     1                     1
       17:                        0                     0                     0
-      18:                        1                   0.5                     1
-      19:                        0                 0.158                     0
+      18:                        1                   0.8                     1
+      19:                        0                 0.126                     0
       20:                       10                    10                    10
-      21:                   -0.207               -19.717               -22.494
-      22:                   -0.184               -15.219                -19.81
-      23:                   -0.178                -12.96               -18.856
+      21:                   -0.236                -19.31               -23.456
+      22:                   -0.189               -16.074               -19.063
+      23:                   -0.179               -11.367               -18.152
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
        1:                   Active                   Active                Active
        2:                  Control                  Control               Control
-       3:                   -0.147                   -0.199               -15.414
-       4:                   -0.165                   -0.165               -18.976
-       5:                    0.056                    0.017                 6.587
-       6:                    0.018                    0.005                 2.083
+       3:                   -0.155                   -0.198               -16.009
+       4:                    -0.11                    -0.11               -12.193
+       5:                    0.052                    0.005                 5.434
+       6:                    0.017                    0.002                 1.719
        7:                      all                survivors                   all
-       8:                    0.018                   -0.034                 3.563
-       9:                    0.018                    0.005                 2.083
-      10:                    -0.11                    0.203                -0.188
-      11:                    0.107                    0.032                  0.11
-      12:                    0.003                    0.001                51.744
-      13:                    0.001                        0                26.329
-      14:                        1                      0.7                   0.9
-      15:                        0                    0.145                 0.095
+       8:                   -0.045                   -0.088                -3.816
+       9:                    0.017                    0.002                 1.719
+      10:                    0.405                    0.803                 0.313
+      11:                    0.151                    0.015                 0.141
+      12:                    0.004                    0.008                41.139
+      13:                    0.001                        0                13.602
+      14:                      0.8                        0                   0.8
+      15:                    0.126                        0                 0.126
       16:                        1                        1                     1
       17:                        0                        0                     0
-      18:                      0.7                        1                   0.5
-      19:                    0.145                        0                 0.158
+      18:                      0.9                        1                   0.9
+      19:                    0.095                        0                 0.095
       20:                       10                       10                    10
-      21:                   -0.179                   -0.208               -19.391
-      22:                   -0.147                   -0.196               -15.776
-      23:                   -0.123                   -0.188               -13.108
+      21:                   -0.187                     -0.2               -19.621
+      22:                   -0.162                     -0.2               -16.568
+      23:                   -0.116                     -0.2               -12.131
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
           secondary2__hrqol_auc
        1:                Active
        2:               Control
-       3:               -20.973
-       4:               -18.976
-       5:                 2.564
-       6:                 0.811
+       3:               -20.543
+       4:               -12.193
+       5:                  0.63
+       6:                 0.199
        7:             survivors
-       8:                -1.996
-       9:                 0.811
-      10:                 0.105
-      11:                 0.043
-      12:                 9.901
-      13:                 4.779
-      14:                     1
+       8:                 -8.35
+       9:                 0.199
+      10:                 0.685
+      11:                 0.016
+      12:                70.078
+      13:                 3.161
+      14:                     0
       15:                     0
       16:                     1
       17:                     0
       18:                     1
       19:                     0
       20:                    10
-      21:               -22.373
-      22:               -20.852
-      23:               -19.316
+      21:                -20.89
+      22:               -20.635
+      23:               -20.466
           secondary2__hrqol_auc
       
       $args
@@ -278,41 +278,41 @@
       
       $trial_results
                 arm primary__hrqol_at_eof primary__hrqol_auc secondary1__hrqol_at_eof
-         1:  Active                    NA                 NA                       NA
-         2:  Active                  0.91         113.723744                     0.91
-         3:  Active                    NA                 NA                       NA
-         4:  Active                    NA                 NA                       NA
-         5:  Active                  0.85         101.957065                     0.85
+         1:  Active                   0.7           73.69512                      0.7
+         2:  Active                   0.7           73.69512                      0.7
+         3:  Active                   0.7           73.69512                      0.7
+         4:  Active                   0.7           73.69512                      0.7
+         5:  Active                   0.7           73.69512                      0.7
         ---                                                                          
-       996: Control                  0.72          95.030462                     0.72
-       997: Control                  0.00           4.203257                       NA
-       998: Control                  0.64          79.474663                     0.64
-       999: Control                  0.00           1.120000                       NA
-      1000: Control                  0.00           2.610699                     0.00
+       996: Control                   0.0            0.00000                      0.0
+       997: Control                    NA                 NA                       NA
+       998: Control                    NA                 NA                       NA
+       999: Control                   0.0            0.00000                       NA
+      1000: Control                    NA                 NA                       NA
             secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_auc
-         1:                    NA                       NA                    NA
-         2:          112.04090469                     0.91             107.96475
-         3:                    NA                       NA                    NA
-         4:                    NA                       NA                    NA
-         5:          100.88025280                     0.85              97.63740
+         1:               73.9508                      0.7              72.90044
+         2:               73.9508                      0.7              72.90044
+         3:               73.9508                      0.7              72.90044
+         4:               73.9508                      0.7              72.90044
+         5:               73.9508                      0.7              72.90044
         ---                                                                     
-       996:           93.16949482                     0.72              87.13766
+       996:                0.0000                       NA                    NA
        997:                    NA                       NA                    NA
-       998:           78.49365126                     0.64              73.22993
+       998:                    NA                       NA                    NA
        999:                    NA                       NA                    NA
-      1000:            0.02252362                       NA                    NA
+      1000:                    NA                       NA                    NA
             trial_id
-         1:        9
-         2:        3
-         3:        8
-         4:       10
-         5:        2
+         1:        7
+         2:       10
+         3:        4
+         4:        4
+         5:        3
         ---         
-       996:        1
-       997:        9
-       998:       10
-       999:        1
-      1000:       10
+       996:        5
+       997:        7
+       998:        8
+       999:        5
+      1000:        7
       
       $example_trajectories
       $arm_level
@@ -330,18 +330,18 @@
       598: Control 190.00 0.500000
       
       $patient_level
-               arm id   x     y
-        1:  Active  1   0 0.000
-        2:  Active  1  21 0.170
-        3:  Active  1  35 0.232
-        4:  Active  1  49 0.303
-        5:  Active  1  63 0.397
-       ---                     
-      253: Control 20 131 0.659
-      254: Control 20 145 0.679
-      255: Control 20 159 0.700
-      256: Control 20 173 0.723
-      257: Control 20 187 0.770
+               arm id   x      y
+        1:  Active  1   0 0.0000
+        2:  Active  1  21 0.0000
+        3:  Active  1  35 0.0621
+        4:  Active  1  49 0.1334
+        5:  Active  1  63 0.2271
+       ---                      
+      248: Control 20 131 0.3887
+      249: Control 20 145 0.4094
+      250: Control 20 159 0.4300
+      251: Control 20 173 0.4530
+      252: Control 20 187 0.5000
       
       attr(,"class")
       [1] "hrqolr_trajectories" "list"               
@@ -355,184 +355,184 @@
       sims_two_batches_verbose
     Output
       $summary_stats
-                           outcome     arm  analysis     p25     p50     p75    mean
-       1:    primary__hrqol_at_eof  Active       all   0.687   0.699   0.719   0.711
-       2:    primary__hrqol_at_eof Control       all   0.552   0.562   0.571   0.555
-       3:       primary__hrqol_auc  Active       all  84.689  85.167  88.547  86.669
-       4:       primary__hrqol_auc Control       all  70.338  71.945  72.808  70.752
-       5: secondary1__hrqol_at_eof  Active       all   0.687   0.699   0.719   0.711
-       6: secondary1__hrqol_at_eof Control       all   0.552   0.562   0.571   0.555
-       7:    secondary1__hrqol_auc  Active       all  83.502  83.965  87.260  85.544
-       8:    secondary1__hrqol_auc Control       all  68.962  70.784  71.649  69.529
-       9: secondary2__hrqol_at_eof  Active       all   0.687   0.699   0.719   0.711
-      10: secondary2__hrqol_at_eof Control       all   0.552   0.562   0.571   0.555
-      11:    secondary2__hrqol_auc  Active       all  78.374  79.616  82.027  80.850
-      12:    secondary2__hrqol_auc Control       all  63.565  65.015  65.840  64.125
-      13:    primary__hrqol_at_eof  Active survivors   0.764   0.784   0.795   0.781
-      14:    primary__hrqol_at_eof Control survivors   0.608   0.629   0.636   0.622
-      15:       primary__hrqol_auc  Active survivors  92.566  95.183  96.586  95.074
-      16:       primary__hrqol_auc Control survivors  77.829  79.710  81.355  79.311
-      17: secondary1__hrqol_at_eof  Active survivors   0.840   0.849   0.868   0.851
-      18: secondary1__hrqol_at_eof Control survivors   0.641   0.668   0.685   0.664
-      19:    secondary1__hrqol_auc  Active survivors 100.684 103.120 104.564 102.363
-      20:    secondary1__hrqol_auc Control survivors  80.734  83.649  84.961  83.175
-      21: secondary2__hrqol_at_eof  Active survivors   0.874   0.882   0.892   0.883
-      22: secondary2__hrqol_at_eof Control survivors   0.699   0.705   0.708   0.703
-      23:    secondary2__hrqol_auc  Active survivors  98.363 100.340 102.091 100.375
-      24:    secondary2__hrqol_auc Control survivors  80.432  81.024  82.100  81.192
-                           outcome     arm  analysis     p25     p50     p75    mean
+                           outcome     arm  analysis    p25    p50    p75   mean
+       1:    primary__hrqol_at_eof  Active       all  0.553  0.581  0.612  0.580
+       2:    primary__hrqol_at_eof Control       all  0.400  0.410  0.438  0.413
+       3:       primary__hrqol_auc  Active       all 57.195 60.325 63.323 60.057
+       4:       primary__hrqol_auc Control       all 42.330 43.156 45.770 43.448
+       5: secondary1__hrqol_at_eof  Active       all  0.553  0.581  0.612  0.580
+       6: secondary1__hrqol_at_eof Control       all  0.400  0.410  0.438  0.413
+       7:    secondary1__hrqol_auc  Active       all 57.771 60.643 63.737 60.448
+       8:    secondary1__hrqol_auc Control       all 42.594 43.498 46.171 43.798
+       9: secondary2__hrqol_at_eof  Active       all  0.553  0.581  0.612  0.580
+      10: secondary2__hrqol_at_eof Control       all  0.400  0.410  0.438  0.413
+      11:    secondary2__hrqol_auc  Active       all 57.505 60.503 63.880 60.453
+      12:    secondary2__hrqol_auc Control       all 41.943 42.972 45.347 43.256
+      13:    primary__hrqol_at_eof  Active survivors  0.608  0.639  0.655  0.630
+      14:    primary__hrqol_at_eof Control survivors  0.429  0.446  0.458  0.440
+      15:       primary__hrqol_auc  Active survivors 62.843 66.305 67.903 65.264
+      16:       primary__hrqol_auc Control survivors 44.891 47.206 48.156 46.308
+      17: secondary1__hrqol_at_eof  Active survivors  0.653  0.661  0.679  0.663
+      18: secondary1__hrqol_at_eof Control survivors  0.466  0.476  0.478  0.468
+      19:    secondary1__hrqol_auc  Active survivors 67.936 69.134 70.914 69.134
+      20:    secondary1__hrqol_auc Control survivors 49.195 50.400 50.660 49.600
+      21: secondary2__hrqol_at_eof  Active survivors  0.684  0.692  0.700  0.692
+      22: secondary2__hrqol_at_eof Control survivors  0.488  0.500  0.500  0.495
+      23:    secondary2__hrqol_auc  Active survivors 71.437 72.095 73.059 72.148
+      24:    secondary2__hrqol_auc Control survivors 51.322 51.930 52.396 51.843
+                           outcome     arm  analysis    p25    p50    p75   mean
              sd    se
-       1: 0.035 0.011
-       2: 0.032 0.010
-       3: 3.750 1.186
-       4: 3.930 1.243
-       5: 0.035 0.011
-       6: 0.032 0.010
-       7: 3.761 1.189
-       8: 3.882 1.227
-       9: 0.035 0.011
-      10: 0.032 0.010
-      11: 3.655 1.156
-      12: 3.731 1.180
-      13: 0.030 0.010
-      14: 0.031 0.010
-      15: 2.849 0.901
-      16: 3.597 1.137
+       1: 0.042 0.013
+       2: 0.035 0.011
+       3: 4.485 1.418
+       4: 3.663 1.158
+       5: 0.042 0.013
+       6: 0.035 0.011
+       7: 4.491 1.420
+       8: 3.665 1.159
+       9: 0.042 0.013
+      10: 0.035 0.011
+      11: 4.586 1.450
+      12: 3.548 1.122
+      13: 0.041 0.013
+      14: 0.033 0.011
+      15: 4.297 1.359
+      16: 3.543 1.120
       17: 0.022 0.007
-      18: 0.029 0.009
-      19: 2.701 0.854
-      20: 3.354 1.061
-      21: 0.011 0.004
+      18: 0.021 0.007
+      19: 2.485 0.786
+      20: 2.248 0.711
+      21: 0.009 0.003
       22: 0.007 0.002
-      23: 2.179 0.689
-      24: 0.915 0.289
+      23: 1.022 0.323
+      24: 0.686 0.217
              sd    se
       
       $comparisons
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
        1:                 comparator                Active                Active
        2:                     target               Control               Control
-       3:              mean_estimate                -0.156                -0.158
-       4:          mean_ground_truth                -0.167                -0.167
-       5:                         sd                 0.036                 0.026
-       6:                         se                 0.011                 0.008
+       3:              mean_estimate                -0.167                 -0.19
+       4:          mean_ground_truth                 -0.16                 -0.16
+       5:                         sd                 0.063                 0.055
+       6:                         se                  0.02                 0.017
        7:                   analysis                   all             survivors
-       8:                       bias                 0.011                 0.009
-       9:                    bias_se                 0.011                 0.008
-      10:              relative_bias                -0.064                -0.053
-      11:           relative_bias_se                 0.069                  0.05
-      12:                        mse                 0.001                 0.001
-      13:                     mse_se                     0                     0
-      14:                   coverage                     1                     1
-      15:                coverage_se                     0                     0
+       8:                       bias                -0.007                 -0.03
+       9:                    bias_se                  0.02                 0.017
+      10:              relative_bias                 0.041                 0.186
+      11:           relative_bias_se                 0.125                 0.109
+      12:                        mse                 0.004                 0.004
+      13:                     mse_se                 0.001                 0.001
+      14:                   coverage                   0.9                   0.7
+      15:                coverage_se                 0.095                 0.145
       16:    bias_corrected_coverage                     1                     1
       17: bias_corrected_coverage_se                     0                     0
-      18:       rejection_proportion                   0.7                   0.9
-      19:    rejection_proportion_se                 0.145                 0.095
+      18:       rejection_proportion                   0.8                   0.9
+      19:    rejection_proportion_se                 0.126                 0.095
       20:                      n_sim                    10                    10
-      21:                        p25                -0.174                -0.165
-      22:                        p50                 -0.15                -0.159
-      23:                        p75                -0.132                -0.144
+      21:                        p25                -0.216                -0.226
+      22:                        p50                -0.168                -0.203
+      23:                        p75                 -0.15                -0.179
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
        1:             Active             Active                   Active
        2:            Control            Control                  Control
-       3:            -15.917            -15.764                   -0.156
-       4:             -16.63             -16.63                   -0.167
-       5:              4.193              2.895                    0.036
-       6:              1.326              0.915                    0.011
+       3:            -16.609            -18.957                   -0.167
+       4:            -13.765            -13.765                    -0.16
+       5:              6.734              5.903                    0.063
+       6:               2.13              1.867                     0.02
        7:                all          survivors                      all
-       8:              0.713              0.867                    0.011
-       9:              1.326              0.915                    0.011
-      10:             -0.043             -0.052                   -0.064
-      11:               0.08              0.055                    0.069
-      12:              16.33              8.293                    0.001
-      13:              6.108              3.832                        0
-      14:                  1                  1                        1
-      15:                  0                  0                        0
+       8:             -2.844             -5.192                   -0.007
+       9:               2.13              1.867                     0.02
+      10:              0.207              0.377                    0.041
+      11:              0.155              0.136                    0.125
+      12:             48.906             58.319                    0.004
+      13:             13.264             13.741                    0.001
+      14:                0.9                0.6                      0.9
+      15:              0.095              0.155                    0.095
       16:                  1                  1                        1
       17:                  0                  0                        0
-      18:                0.3                0.7                      0.7
-      19:              0.145              0.145                    0.145
+      18:                0.8                0.9                      0.8
+      19:              0.126              0.095                    0.126
       20:                 10                 10                       10
-      21:             -18.16            -16.032                   -0.174
-      22:             -14.19            -15.347                    -0.15
-      23:             -13.46            -14.424                   -0.132
+      21:            -21.422            -23.125                   -0.216
+      22:            -16.699             -20.18                   -0.168
+      23:            -15.016            -17.807                    -0.15
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
        1:                   Active                Active                Active
        2:                  Control               Control               Control
-       3:                   -0.187               -16.016               -19.188
-       4:                   -0.167                -16.84                -16.84
-       5:                    0.034                 4.125                 4.432
-       6:                    0.011                 1.304                 1.401
+       3:                   -0.195                -16.65               -19.534
+       4:                    -0.16               -14.321               -14.321
+       5:                    0.031                  6.78                 3.529
+       6:                     0.01                 2.144                 1.116
        7:                survivors                   all             survivors
-       8:                    -0.02                 0.824                -2.348
-       9:                    0.011                 1.304                 1.401
-      10:                     0.12                -0.049                 0.139
-      11:                    0.065                 0.077                 0.083
-      12:                    0.001                15.994                23.187
-      13:                        0                 5.535                 7.635
-      14:                        1                     1                     1
-      15:                        0                     0                     0
+       8:                   -0.035                -2.329                -5.212
+       9:                     0.01                 2.144                 1.116
+      10:                     0.22                 0.163                 0.364
+      11:                    0.062                  0.15                 0.078
+      12:                    0.002                46.789                 38.38
+      13:                    0.001                12.876                10.843
+      14:                      0.8                   0.9                   0.5
+      15:                    0.126                 0.095                 0.158
       16:                        1                     1                     1
       17:                        0                     0                     0
-      18:                        1                   0.3                     1
-      19:                        0                 0.145                     0
+      18:                        1                   0.8                     1
+      19:                        0                 0.126                     0
       20:                       10                    10                    10
-      21:                   -0.213               -18.327               -21.711
-      22:                   -0.193               -14.476               -20.204
-      23:                   -0.155                -13.61               -15.474
+      21:                   -0.218               -21.596               -22.108
+      22:                   -0.204               -16.735               -20.442
+      23:                   -0.176                -14.97               -17.458
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
        1:                   Active                   Active                Active
        2:                  Control                  Control               Control
-       3:                   -0.156                    -0.18               -16.725
-       4:                   -0.167                   -0.167               -18.481
-       5:                    0.036                    0.014                 3.899
-       6:                    0.011                    0.005                 1.233
+       3:                   -0.167                   -0.197               -17.197
+       4:                    -0.16                    -0.16               -17.631
+       5:                    0.063                    0.008                 6.738
+       6:                     0.02                    0.003                 2.131
        7:                      all                survivors                   all
-       8:                    0.011                   -0.013                 1.756
-       9:                    0.011                    0.005                 1.233
-      10:                   -0.064                    0.079                -0.095
-      11:                    0.069                    0.027                 0.067
-      12:                    0.001                        0                16.765
-      13:                        0                        0                 4.516
-      14:                        1                        1                     1
-      15:                        0                        0                     0
+       8:                   -0.007                   -0.037                 0.433
+       9:                     0.02                    0.003                 2.131
+      10:                    0.041                    0.231                -0.025
+      11:                    0.125                    0.016                 0.121
+      12:                    0.004                    0.001                41.043
+      13:                    0.001                        0                16.452
+      14:                      0.9                      0.5                   0.8
+      15:                    0.095                    0.158                 0.126
       16:                        1                        1                     1
       17:                        0                        0                     0
-      18:                      0.7                        1                   0.4
-      19:                    0.145                        0                 0.155
+      18:                      0.8                        1                   0.8
+      19:                    0.126                        0                 0.126
       20:                       10                       10                    10
-      21:                   -0.174                   -0.192               -18.115
-      22:                    -0.15                    -0.18               -15.187
-      23:                   -0.132                    -0.17               -14.063
+      21:                   -0.216                     -0.2               -22.498
+      22:                   -0.168                   -0.199               -17.335
+      23:                    -0.15                   -0.195                -15.61
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
           secondary2__hrqol_auc
        1:                Active
        2:               Control
-       3:               -19.182
-       4:               -18.481
-       5:                 2.508
-       6:                 0.793
+       3:               -20.305
+       4:               -17.631
+       5:                 0.844
+       6:                 0.267
        7:             survivors
-       8:                -0.702
-       9:                 0.793
-      10:                 0.038
-      11:                 0.043
-      12:                 6.155
-      13:                 2.439
-      14:                     1
-      15:                     0
+       8:                -2.674
+       9:                 0.267
+      10:                 0.152
+      11:                 0.015
+      12:                 7.794
+      13:                 1.641
+      14:                   0.5
+      15:                 0.158
       16:                     1
       17:                     0
       18:                     1
       19:                     0
       20:                    10
-      21:               -21.191
-      22:               -18.388
-      23:               -17.831
+      21:               -20.475
+      22:               -20.225
+      23:               -20.062
           secondary2__hrqol_auc
       
       $args
@@ -648,18 +648,18 @@
       598: Control 190.00 0.500000
       
       $patient_level
-               arm id   x     y
-        1:  Active  1   0 0.000
-        2:  Active  1  21 0.170
-        3:  Active  1  35 0.232
-        4:  Active  1  49 0.303
-        5:  Active  1  63 0.397
-       ---                     
-      253: Control 20 131 0.659
-      254: Control 20 145 0.679
-      255: Control 20 159 0.700
-      256: Control 20 173 0.723
-      257: Control 20 187 0.770
+               arm id   x      y
+        1:  Active  1   0 0.0000
+        2:  Active  1  21 0.0000
+        3:  Active  1  35 0.0621
+        4:  Active  1  49 0.1334
+        5:  Active  1  63 0.2271
+       ---                      
+      248: Control 20 131 0.3887
+      249: Control 20 145 0.4094
+      250: Control 20 159 0.4300
+      251: Control 20 173 0.4530
+      252: Control 20 187 0.5000
       
       attr(,"class")
       [1] "hrqolr_trajectories" "list"               
@@ -673,184 +673,184 @@
       sims_single_batch_without_examples
     Output
       $summary_stats
-                           outcome     arm  analysis     p25     p50     p75    mean
-       1:    primary__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-       2:    primary__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-       3:       primary__hrqol_auc  Active       all  84.267  89.076  89.440  87.086
-       4:       primary__hrqol_auc Control       all  70.139  72.803  74.618  71.962
-       5: secondary1__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-       6: secondary1__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-       7:    secondary1__hrqol_auc  Active       all  83.135  87.849  88.547  85.978
-       8:    secondary1__hrqol_auc Control       all  68.870  71.463  73.326  70.681
-       9: secondary2__hrqol_at_eof  Active       all   0.686   0.730   0.737   0.714
-      10: secondary2__hrqol_at_eof Control       all   0.546   0.575   0.586   0.567
-      11:    secondary2__hrqol_auc  Active       all  78.074  82.272  83.514  80.882
-      12:    secondary2__hrqol_auc Control       all  63.112  66.344  67.827  65.468
-      13:    primary__hrqol_at_eof  Active survivors   0.754   0.781   0.833   0.794
-      14:    primary__hrqol_at_eof Control survivors   0.602   0.620   0.637   0.617
-      15:       primary__hrqol_auc  Active survivors  92.634  95.596 101.581  96.845
-      16:       primary__hrqol_auc Control survivors  77.539  79.005  79.466  78.370
-      17: secondary1__hrqol_at_eof  Active survivors   0.832   0.846   0.864   0.854
-      18: secondary1__hrqol_at_eof Control survivors   0.650   0.666   0.673   0.662
-      19:    secondary1__hrqol_auc  Active survivors 100.052 102.104 104.605 102.867
-      20:    secondary1__hrqol_auc Control survivors  80.450  82.840  83.970  82.588
-      21: secondary2__hrqol_at_eof  Active survivors   0.885   0.890   0.895   0.892
-      22: secondary2__hrqol_at_eof Control survivors   0.684   0.698   0.704   0.693
-      23:    secondary2__hrqol_auc  Active survivors 100.479 101.038 101.874 101.072
-      24:    secondary2__hrqol_auc Control survivors  79.046  80.519  81.541  80.100
-                           outcome     arm  analysis     p25     p50     p75    mean
+                           outcome     arm  analysis    p25    p50    p75   mean
+       1:    primary__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+       2:    primary__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+       3:       primary__hrqol_auc  Active       all 55.147 58.705 61.908 57.836
+       4:       primary__hrqol_auc Control       all 39.609 41.298 45.578 42.267
+       5: secondary1__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+       6: secondary1__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+       7:    secondary1__hrqol_auc  Active       all 55.535 59.081 62.346 58.209
+       8:    secondary1__hrqol_auc Control       all 39.979 41.640 46.067 42.617
+       9: secondary2__hrqol_at_eof  Active       all  0.535  0.567  0.598  0.559
+      10: secondary2__hrqol_at_eof Control       all  0.380  0.395  0.438  0.404
+      11:    secondary2__hrqol_auc  Active       all 55.899 59.241 62.261 58.333
+      12:    secondary2__hrqol_auc Control       all 39.804 41.462 45.778 42.324
+      13:    primary__hrqol_at_eof  Active survivors  0.598  0.623  0.654  0.623
+      14:    primary__hrqol_at_eof Control survivors  0.427  0.445  0.457  0.444
+      15:       primary__hrqol_auc  Active survivors 61.603 64.566 67.862 64.505
+      16:       primary__hrqol_auc Control survivors 44.498 46.720 47.554 46.408
+      17: secondary1__hrqol_at_eof  Active survivors  0.655  0.667  0.683  0.668
+      18: secondary1__hrqol_at_eof Control survivors  0.456  0.471  0.477  0.468
+      19:    secondary1__hrqol_auc  Active survivors 68.192 69.692 71.633 69.581
+      20:    secondary1__hrqol_auc Control survivors 48.104 49.577 50.071 49.414
+      21: secondary2__hrqol_at_eof  Active survivors  0.700  0.700  0.700  0.698
+      22: secondary2__hrqol_at_eof Control survivors  0.500  0.500  0.500  0.500
+      23:    secondary2__hrqol_auc  Active survivors 72.883 73.098 73.191 72.927
+      24:    secondary2__hrqol_auc Control survivors 52.262 52.369 52.417 52.384
+                           outcome     arm  analysis    p25    p50    p75   mean
              sd    se
-       1: 0.041 0.013
-       2: 0.032 0.010
-       3: 5.407 1.710
-       4: 3.665 1.159
-       5: 0.041 0.013
-       6: 0.032 0.010
-       7: 5.327 1.685
-       8: 3.641 1.151
-       9: 0.041 0.013
-      10: 0.032 0.010
-      11: 4.939 1.562
-      12: 3.461 1.094
-      13: 0.043 0.013
-      14: 0.022 0.007
-      15: 5.707 1.805
-      16: 2.572 0.813
-      17: 0.029 0.009
-      18: 0.018 0.006
-      19: 4.095 1.295
-      20: 2.660 0.841
-      21: 0.013 0.004
-      22: 0.012 0.004
-      23: 2.024 0.640
-      24: 1.770 0.560
+       1: 0.044 0.014
+       2: 0.031 0.010
+       3: 4.696 1.485
+       4: 3.252 1.028
+       5: 0.044 0.014
+       6: 0.031 0.010
+       7: 4.699 1.486
+       8: 3.294 1.042
+       9: 0.044 0.014
+      10: 0.031 0.010
+      11: 4.526 1.431
+      12: 3.220 1.018
+      13: 0.040 0.013
+      14: 0.020 0.006
+      15: 4.410 1.394
+      16: 2.029 0.641
+      17: 0.026 0.008
+      18: 0.017 0.005
+      19: 2.771 0.876
+      20: 1.747 0.552
+      21: 0.005 0.002
+      22: 0.000 0.000
+      23: 0.587 0.186
+      24: 0.174 0.055
              sd    se
       
       $comparisons
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
        1:                 comparator                Active                Active
        2:                     target               Control               Control
-       3:              mean_estimate                -0.147                -0.176
-       4:          mean_ground_truth                -0.165                -0.165
-       5:                         sd                 0.056                 0.052
-       6:                         se                 0.018                 0.017
+       3:              mean_estimate                -0.155                -0.179
+       4:          mean_ground_truth                 -0.11                 -0.11
+       5:                         sd                 0.052                 0.039
+       6:                         se                 0.017                 0.012
        7:                   analysis                   all             survivors
-       8:                       bias                 0.018                -0.011
-       9:                    bias_se                 0.018                 0.017
-      10:              relative_bias                 -0.11                 0.069
-      11:           relative_bias_se                 0.107                   0.1
-      12:                        mse                 0.003                 0.003
-      13:                     mse_se                 0.001                 0.001
-      14:                   coverage                     1                     1
-      15:                coverage_se                     0                     0
+       8:                       bias                -0.045                -0.069
+       9:                    bias_se                 0.017                 0.012
+      10:              relative_bias                 0.405                 0.631
+      11:           relative_bias_se                 0.151                 0.111
+      12:                        mse                 0.004                 0.006
+      13:                     mse_se                 0.001                 0.002
+      14:                   coverage                   0.8                   0.6
+      15:                coverage_se                 0.126                 0.155
       16:    bias_corrected_coverage                     1                     1
       17: bias_corrected_coverage_se                     0                     0
-      18:       rejection_proportion                   0.7                     1
-      19:    rejection_proportion_se                 0.145                     0
+      18:       rejection_proportion                   0.9                     1
+      19:    rejection_proportion_se                 0.095                     0
       20:                      n_sim                    10                    10
-      21:                        p25                -0.179                -0.221
-      22:                        p50                -0.147                -0.178
-      23:                        p75                -0.123                -0.134
+      21:                        p25                -0.187                -0.206
+      22:                        p50                -0.162                -0.181
+      23:                        p75                -0.116                -0.158
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
        1:             Active             Active                   Active
        2:            Control            Control                  Control
-       3:            -15.124            -18.475                   -0.147
-       4:            -15.897            -15.897                   -0.165
-       5:              7.377              6.532                    0.056
-       6:              2.333              2.066                    0.018
+       3:            -15.569            -18.097                   -0.155
+       4:            -10.135            -10.135                    -0.11
+       5:              5.511              4.154                    0.052
+       6:              1.743              1.314                    0.017
        7:                all          survivors                      all
-       8:              0.772             -2.579                    0.018
-       9:              2.333              2.066                    0.018
-      10:             -0.049              0.162                    -0.11
-      11:              0.147               0.13                    0.107
-      12:              49.58             45.053                    0.003
-      13:             25.053             14.887                    0.001
-      14:                  1                  1                        1
-      15:                  0                  0                        0
+       8:             -5.434             -7.962                   -0.045
+       9:              1.743              1.314                    0.017
+      10:              0.536              0.786                    0.405
+      11:              0.172               0.13                    0.151
+      12:             56.868             78.931                    0.004
+      13:             18.678             20.684                    0.001
+      14:                0.8                0.6                      0.8
+      15:              0.126              0.155                    0.126
       16:                  1                  1                        1
       17:                  0                  0                        0
-      18:                0.5                0.6                      0.7
-      19:              0.158              0.155                    0.145
+      18:                0.8                  1                      0.9
+      19:              0.126                  0                    0.095
       20:                 10                 10                       10
-      21:            -19.485            -24.839                   -0.179
-      22:            -14.994            -18.794                   -0.147
-      23:            -13.042            -12.004                   -0.123
+      21:            -19.263            -21.648                   -0.187
+      22:            -16.055            -18.078                   -0.162
+      23:            -11.276            -15.548                   -0.116
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
        1:                   Active                Active                Active
        2:                  Control               Control               Control
-       3:                   -0.192               -15.298               -20.279
-       4:                   -0.165               -16.027               -16.027
-       5:                    0.022                 7.286                 3.301
-       6:                    0.007                 2.304                 1.044
+       3:                   -0.199               -15.592               -20.168
+       4:                    -0.11                -10.41                -10.41
+       5:                    0.038                 5.532                 3.897
+       6:                    0.012                 1.749                 1.232
        7:                survivors                   all             survivors
-       8:                   -0.027                 0.729                -4.253
-       9:                    0.007                 2.304                 1.044
-      10:                    0.162                -0.045                 0.265
-      11:                    0.043                 0.144                 0.065
-      12:                    0.001                48.309                27.889
-      13:                        0                 23.89                 9.907
-      14:                        1                     1                     1
-      15:                        0                     0                     0
+       8:                   -0.089                -5.182                -9.758
+       9:                    0.012                 1.749                 1.232
+      10:                    0.813                 0.498                 0.937
+      11:                    0.109                 0.168                 0.118
+      12:                    0.009                54.394               108.876
+      13:                    0.002                17.985                24.169
+      14:                      0.1                   0.8                   0.1
+      15:                    0.095                 0.126                 0.095
       16:                        1                     1                     1
       17:                        0                     0                     0
-      18:                        1                   0.5                     1
-      19:                        0                 0.158                     0
+      18:                        1                   0.8                     1
+      19:                        0                 0.126                     0
       20:                       10                    10                    10
-      21:                   -0.207               -19.717               -22.494
-      22:                   -0.184               -15.219                -19.81
-      23:                   -0.178                -12.96               -18.856
+      21:                   -0.236                -19.31               -23.456
+      22:                   -0.189               -16.074               -19.063
+      23:                   -0.179               -11.367               -18.152
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
        1:                   Active                   Active                Active
        2:                  Control                  Control               Control
-       3:                   -0.147                   -0.199               -15.414
-       4:                   -0.165                   -0.165               -18.976
-       5:                    0.056                    0.017                 6.587
-       6:                    0.018                    0.005                 2.083
+       3:                   -0.155                   -0.198               -16.009
+       4:                    -0.11                    -0.11               -12.193
+       5:                    0.052                    0.005                 5.434
+       6:                    0.017                    0.002                 1.719
        7:                      all                survivors                   all
-       8:                    0.018                   -0.034                 3.563
-       9:                    0.018                    0.005                 2.083
-      10:                    -0.11                    0.203                -0.188
-      11:                    0.107                    0.032                  0.11
-      12:                    0.003                    0.001                51.744
-      13:                    0.001                        0                26.329
-      14:                        1                      0.7                   0.9
-      15:                        0                    0.145                 0.095
+       8:                   -0.045                   -0.088                -3.816
+       9:                    0.017                    0.002                 1.719
+      10:                    0.405                    0.803                 0.313
+      11:                    0.151                    0.015                 0.141
+      12:                    0.004                    0.008                41.139
+      13:                    0.001                        0                13.602
+      14:                      0.8                        0                   0.8
+      15:                    0.126                        0                 0.126
       16:                        1                        1                     1
       17:                        0                        0                     0
-      18:                      0.7                        1                   0.5
-      19:                    0.145                        0                 0.158
+      18:                      0.9                        1                   0.9
+      19:                    0.095                        0                 0.095
       20:                       10                       10                    10
-      21:                   -0.179                   -0.208               -19.391
-      22:                   -0.147                   -0.196               -15.776
-      23:                   -0.123                   -0.188               -13.108
+      21:                   -0.187                     -0.2               -19.621
+      22:                   -0.162                     -0.2               -16.568
+      23:                   -0.116                     -0.2               -12.131
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
           secondary2__hrqol_auc
        1:                Active
        2:               Control
-       3:               -20.973
-       4:               -18.976
-       5:                 2.564
-       6:                 0.811
+       3:               -20.543
+       4:               -12.193
+       5:                  0.63
+       6:                 0.199
        7:             survivors
-       8:                -1.996
-       9:                 0.811
-      10:                 0.105
-      11:                 0.043
-      12:                 9.901
-      13:                 4.779
-      14:                     1
+       8:                 -8.35
+       9:                 0.199
+      10:                 0.685
+      11:                 0.016
+      12:                70.078
+      13:                 3.161
+      14:                     0
       15:                     0
       16:                     1
       17:                     0
       18:                     1
       19:                     0
       20:                    10
-      21:               -22.373
-      22:               -20.852
-      23:               -19.316
+      21:                -20.89
+      22:               -20.635
+      23:               -20.466
           secondary2__hrqol_auc
       
       $args
@@ -947,41 +947,41 @@
       
       $trial_results
                 arm primary__hrqol_at_eof primary__hrqol_auc secondary1__hrqol_at_eof
-         1:  Active                    NA                 NA                       NA
-         2:  Active                  0.91         113.723744                     0.91
-         3:  Active                    NA                 NA                       NA
-         4:  Active                    NA                 NA                       NA
-         5:  Active                  0.85         101.957065                     0.85
+         1:  Active                   0.7           73.69512                      0.7
+         2:  Active                   0.7           73.69512                      0.7
+         3:  Active                   0.7           73.69512                      0.7
+         4:  Active                   0.7           73.69512                      0.7
+         5:  Active                   0.7           73.69512                      0.7
         ---                                                                          
-       996: Control                  0.72          95.030462                     0.72
-       997: Control                  0.00           4.203257                       NA
-       998: Control                  0.64          79.474663                     0.64
-       999: Control                  0.00           1.120000                       NA
-      1000: Control                  0.00           2.610699                     0.00
+       996: Control                   0.0            0.00000                      0.0
+       997: Control                    NA                 NA                       NA
+       998: Control                    NA                 NA                       NA
+       999: Control                   0.0            0.00000                       NA
+      1000: Control                    NA                 NA                       NA
             secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_auc
-         1:                    NA                       NA                    NA
-         2:          112.04090469                     0.91             107.96475
-         3:                    NA                       NA                    NA
-         4:                    NA                       NA                    NA
-         5:          100.88025280                     0.85              97.63740
+         1:               73.9508                      0.7              72.90044
+         2:               73.9508                      0.7              72.90044
+         3:               73.9508                      0.7              72.90044
+         4:               73.9508                      0.7              72.90044
+         5:               73.9508                      0.7              72.90044
         ---                                                                     
-       996:           93.16949482                     0.72              87.13766
+       996:                0.0000                       NA                    NA
        997:                    NA                       NA                    NA
-       998:           78.49365126                     0.64              73.22993
+       998:                    NA                       NA                    NA
        999:                    NA                       NA                    NA
-      1000:            0.02252362                       NA                    NA
+      1000:                    NA                       NA                    NA
             trial_id
-         1:        9
-         2:        3
-         3:        8
-         4:       10
-         5:        2
+         1:        7
+         2:       10
+         3:        4
+         4:        4
+         5:        3
         ---         
-       996:        1
-       997:        9
-       998:       10
-       999:        1
-      1000:       10
+       996:        5
+       997:        7
+       998:        8
+       999:        5
+      1000:        7
       
       $example_trajectories
       $example_trajectories[[1]]
@@ -997,174 +997,174 @@
       sims_single_batch_no_mort_benefitters
     Output
       $summary_stats
-                           outcome     arm  analysis     p25     p50     p75    mean
-       1:    primary__hrqol_at_eof  Active       all   0.645   0.720   0.763   0.709
-       2:    primary__hrqol_at_eof Control       all   0.546   0.555   0.583   0.565
-       3:       primary__hrqol_auc  Active       all  78.642  88.078  94.198  86.845
-       4:       primary__hrqol_auc Control       all  69.405  70.895  74.192  71.722
-       5: secondary1__hrqol_at_eof  Active       all   0.645   0.720   0.763   0.709
-       6: secondary1__hrqol_at_eof Control       all   0.546   0.555   0.583   0.565
-       7:    secondary1__hrqol_auc  Active       all  77.758  86.960  92.918  85.729
-       8:    secondary1__hrqol_auc Control       all  68.238  69.590  72.781  70.454
-       9: secondary2__hrqol_at_eof  Active       all   0.645   0.720   0.763   0.709
-      10: secondary2__hrqol_at_eof Control       all   0.546   0.555   0.583   0.565
-      11:    secondary2__hrqol_auc  Active       all  72.744  81.933  87.453  80.564
-      12:    secondary2__hrqol_auc Control       all  63.078  63.929  67.257  65.079
-      13:    primary__hrqol_at_eof  Active survivors   0.768   0.791   0.831   0.794
-      14:    primary__hrqol_at_eof Control survivors   0.598   0.611   0.628   0.615
-      15:       primary__hrqol_auc  Active survivors  94.061  96.771 101.122  97.212
-      16:       primary__hrqol_auc Control survivors  76.862  78.141  79.595  78.129
-      17: secondary1__hrqol_at_eof  Active survivors   0.837   0.856   0.871   0.850
-      18: secondary1__hrqol_at_eof Control survivors   0.633   0.652   0.670   0.653
-      19:    secondary1__hrqol_auc  Active survivors 100.408 103.664 104.820 102.698
-      20:    secondary1__hrqol_auc Control survivors  79.101  81.253  83.464  81.447
-      21: secondary2__hrqol_at_eof  Active survivors   0.880   0.885   0.893   0.889
-      22: secondary2__hrqol_at_eof Control survivors   0.694   0.696   0.702   0.697
-      23:    secondary2__hrqol_auc  Active survivors  99.750 100.196 101.412 100.920
-      24:    secondary2__hrqol_auc Control survivors  79.838  80.140  81.082  80.379
-                           outcome     arm  analysis     p25     p50     p75    mean
+                           outcome     arm  analysis    p25    p50    p75   mean
+       1:    primary__hrqol_at_eof  Active       all  0.535  0.560  0.570  0.557
+       2:    primary__hrqol_at_eof Control       all  0.382  0.405  0.430  0.408
+       3:       primary__hrqol_auc  Active       all 55.353 57.853 59.432 57.732
+       4:       primary__hrqol_auc Control       all 40.266 42.536 45.180 42.813
+       5: secondary1__hrqol_at_eof  Active       all  0.535  0.560  0.570  0.557
+       6: secondary1__hrqol_at_eof Control       all  0.382  0.405  0.430  0.408
+       7:    secondary1__hrqol_auc  Active       all 55.723 58.396 59.773 58.123
+       8:    secondary1__hrqol_auc Control       all 40.540 42.869 45.522 43.161
+       9: secondary2__hrqol_at_eof  Active       all  0.535  0.560  0.570  0.557
+      10: secondary2__hrqol_at_eof Control       all  0.382  0.405  0.430  0.408
+      11:    secondary2__hrqol_auc  Active       all 56.039 58.232 59.670 58.132
+      12:    secondary2__hrqol_auc Control       all 40.125 42.543 45.310 42.829
+      13:    primary__hrqol_at_eof  Active survivors  0.623  0.636  0.658  0.634
+      14:    primary__hrqol_at_eof Control survivors  0.422  0.439  0.450  0.439
+      15:       primary__hrqol_auc  Active survivors 64.370 65.960 67.969 65.647
+      16:       primary__hrqol_auc Control survivors 44.281 46.023 47.352 46.036
+      17: secondary1__hrqol_at_eof  Active survivors  0.665  0.667  0.684  0.672
+      18: secondary1__hrqol_at_eof Control survivors  0.455  0.472  0.478  0.467
+      19:    secondary1__hrqol_auc  Active survivors 69.114 69.727 71.358 70.150
+      20:    secondary1__hrqol_auc Control survivors 48.131 49.911 50.573 49.417
+      21: secondary2__hrqol_at_eof  Active survivors  0.700  0.700  0.700  0.698
+      22: secondary2__hrqol_at_eof Control survivors  0.491  0.500  0.500  0.495
+      23:    secondary2__hrqol_auc  Active survivors 72.834 72.891 73.177 72.838
+      24:    secondary2__hrqol_auc Control survivors 51.284 52.395 52.638 51.990
+                           outcome     arm  analysis    p25    p50    p75   mean
              sd    se
-       1: 0.074 0.023
-       2: 0.032 0.010
-       3: 9.130 2.887
-       4: 4.148 1.312
-       5: 0.074 0.023
-       6: 0.032 0.010
-       7: 9.049 2.862
-       8: 4.042 1.278
-       9: 0.074 0.023
-      10: 0.032 0.010
-      11: 8.658 2.738
-      12: 3.861 1.221
-      13: 0.043 0.014
-      14: 0.021 0.007
-      15: 5.670 1.793
-      16: 2.789 0.882
-      17: 0.036 0.011
-      18: 0.027 0.009
-      19: 4.605 1.456
-      20: 4.096 1.295
-      21: 0.014 0.004
-      22: 0.020 0.006
-      23: 2.080 0.658
-      24: 2.747 0.869
+       1: 0.036 0.011
+       2: 0.034 0.011
+       3: 3.769 1.192
+       4: 3.428 1.084
+       5: 0.036 0.011
+       6: 0.034 0.011
+       7: 3.794 1.200
+       8: 3.500 1.107
+       9: 0.036 0.011
+      10: 0.034 0.011
+      11: 3.753 1.187
+      12: 3.507 1.109
+      13: 0.032 0.010
+      14: 0.022 0.007
+      15: 3.508 1.109
+      16: 2.165 0.685
+      17: 0.019 0.006
+      18: 0.021 0.007
+      19: 2.167 0.685
+      20: 2.210 0.699
+      21: 0.006 0.002
+      22: 0.008 0.003
+      23: 0.605 0.191
+      24: 0.915 0.289
              sd    se
       
       $comparisons
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
        1:                 comparator                Active                Active
        2:                     target               Control               Control
-       3:              mean_estimate                -0.145                -0.179
-       4:          mean_ground_truth                -0.052                -0.052
-       5:                         sd                 0.077                 0.039
-       6:                         se                 0.024                 0.012
+       3:              mean_estimate                -0.149                -0.195
+       4:          mean_ground_truth                 -0.11                 -0.11
+       5:                         sd                 0.049                 0.038
+       6:                         se                 0.015                 0.012
        7:                   analysis                   all             survivors
-       8:                       bias                -0.093                -0.127
-       9:                    bias_se                 0.024                 0.012
-      10:              relative_bias                 1.786                 2.443
-      11:           relative_bias_se                 0.469                 0.234
-      12:                        mse                 0.014                 0.017
-      13:                     mse_se                 0.004                 0.003
-      14:                   coverage                   0.6                   0.3
-      15:                coverage_se                 0.155                 0.145
+       8:                       bias                -0.039                -0.085
+       9:                    bias_se                 0.015                 0.012
+      10:              relative_bias                 0.356                 0.772
+      11:           relative_bias_se                 0.141                 0.108
+      12:                        mse                 0.004                 0.008
+      13:                     mse_se                 0.001                 0.002
+      14:                   coverage                   0.9                   0.3
+      15:                coverage_se                 0.095                 0.145
       16:    bias_corrected_coverage                     1                     1
       17: bias_corrected_coverage_se                     0                     0
-      18:       rejection_proportion                   0.6                   0.9
-      19:    rejection_proportion_se                 0.155                 0.095
+      18:       rejection_proportion                   0.9                     1
+      19:    rejection_proportion_se                 0.095                     0
       20:                      n_sim                    10                    10
-      21:                        p25                -0.191                  -0.2
-      22:                        p50                 -0.17                -0.183
-      23:                        p75                -0.075                -0.154
+      21:                        p25                -0.176                -0.216
+      22:                        p50                -0.157                -0.203
+      23:                        p75                -0.118                -0.182
                            statistic primary__hrqol_at_eof primary__hrqol_at_eof
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
        1:             Active             Active                   Active
        2:            Control            Control                  Control
-       3:            -15.123            -19.083                   -0.145
-       4:             -0.858             -0.858                   -0.052
-       5:             10.049               5.68                    0.077
-       6:              3.178              1.796                    0.024
+       3:             -14.92             -19.61                   -0.149
+       4:             -9.273             -9.273                    -0.11
+       5:              4.985              3.885                    0.049
+       6:              1.576              1.229                    0.015
        7:                all          survivors                      all
-       8:            -14.265            -18.225                   -0.093
-       9:              3.178              1.796                    0.024
-      10:             16.625              21.24                    1.786
-      11:              3.704              2.093                    0.469
-      12:            294.365            361.178                    0.014
-      13:              86.94             66.173                    0.004
-      14:                0.4                0.3                      0.6
-      15:              0.155              0.145                    0.155
+       8:             -5.647            -10.338                   -0.039
+       9:              1.576              1.229                    0.015
+      10:              0.609              1.115                    0.356
+      11:               0.17              0.132                    0.141
+      12:             54.252            120.449                    0.004
+      13:             18.311             22.001                    0.001
+      14:                0.9                0.2                      0.9
+      15:              0.095              0.126                    0.095
       16:                  1                  1                        1
       17:                  0                  0                        0
-      18:                0.6                0.7                      0.6
-      19:              0.155              0.145                    0.155
+      18:                0.9                  1                      0.9
+      19:              0.095                  0                    0.095
       20:                 10                 10                       10
-      21:            -21.967            -22.719                   -0.191
-      22:            -18.797            -18.631                    -0.17
-      23:             -5.495            -15.683                   -0.075
+      21:            -17.675            -22.058                   -0.176
+      22:            -15.447             -20.61                   -0.157
+      23:            -11.987            -18.625                   -0.118
           primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
        1:                   Active                Active                Active
        2:                  Control               Control               Control
-       3:                   -0.197               -15.276               -21.251
-       4:                   -0.052                -1.703                -1.703
-       5:                    0.057                 9.899                 7.667
-       6:                    0.018                  3.13                 2.425
+       3:                   -0.205               -14.962               -20.733
+       4:                    -0.11                -9.636                -9.636
+       5:                    0.031                 5.069                 3.339
+       6:                     0.01                 1.603                 1.056
        7:                survivors                   all             survivors
-       8:                   -0.145               -13.573               -19.548
-       9:                    0.018                  3.13                 2.425
-      10:                    2.797                 7.972                11.481
-      11:                    0.344                 1.839                 1.424
-      12:                    0.024               272.424               435.047
-      13:                    0.004                81.481                83.801
-      14:                      0.1                   0.4                   0.1
-      15:                    0.095                 0.155                 0.095
+       8:                   -0.095                -5.326               -11.098
+       9:                     0.01                 1.603                 1.056
+      10:                    0.867                 0.553                 1.152
+      11:                     0.09                 0.166                  0.11
+      12:                     0.01                51.491                133.19
+      13:                    0.002                17.662                22.804
+      14:                      0.1                   0.9                   0.1
+      15:                    0.095                 0.095                 0.095
       16:                        1                     1                     1
       17:                        0                     0                     0
-      18:                      0.9                   0.6                   0.9
-      19:                    0.095                 0.155                 0.095
+      18:                        1                   0.9                     1
+      19:                        0                 0.095                     0
       20:                       10                    10                    10
-      21:                   -0.233               -21.917               -24.833
-      22:                    -0.19               -18.779               -20.489
-      23:                   -0.186                -5.874               -19.387
+      21:                   -0.231               -17.724               -23.157
+      22:                   -0.205               -15.692               -20.643
+      23:                   -0.188               -11.904                -19.08
           secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
        1:                   Active                   Active                Active
        2:                  Control                  Control               Control
-       3:                   -0.145                   -0.192               -15.485
-       4:                   -0.052                   -0.052                 -5.43
-       5:                    0.077                    0.023                 9.253
-       6:                    0.024                    0.007                 2.926
+       3:                   -0.149                   -0.203               -15.303
+       4:                    -0.11                    -0.11               -11.961
+       5:                    0.049                    0.011                 5.128
+       6:                    0.015                    0.003                 1.622
        7:                      all                survivors                   all
-       8:                   -0.093                    -0.14               -10.055
-       9:                    0.024                    0.007                 2.926
-      10:                    1.786                    2.685                 1.852
-      11:                    0.469                     0.14                 0.539
-      12:                    0.014                     0.02               178.166
-      13:                    0.004                    0.002                55.068
-      14:                      0.6                        0                   0.7
-      15:                    0.155                        0                 0.145
+       8:                   -0.039                   -0.093                -3.342
+       9:                    0.015                    0.003                 1.622
+      10:                    0.356                    0.845                 0.279
+      11:                    0.141                    0.031                 0.136
+      12:                    0.004                    0.009                34.838
+      13:                    0.001                    0.001                13.213
+      14:                      0.9                        0                   0.9
+      15:                    0.095                        0                 0.095
       16:                        1                        1                     1
       17:                        0                        0                     0
-      18:                      0.6                        1                   0.6
-      19:                    0.155                        0                 0.155
+      18:                      0.9                        1                   0.9
+      19:                    0.095                        0                 0.095
       20:                       10                       10                    10
-      21:                   -0.191                   -0.201               -21.489
-      22:                    -0.17                    -0.19               -18.918
-      23:                   -0.075                   -0.186                -6.845
+      21:                   -0.176                   -0.209               -18.152
+      22:                   -0.157                     -0.2                -16.18
+      23:                   -0.118                     -0.2               -11.756
           secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
           secondary2__hrqol_auc
        1:                Active
        2:               Control
-       3:               -20.541
-       4:                 -5.43
-       5:                 3.235
-       6:                 1.023
+       3:               -20.849
+       4:               -11.961
+       5:                 1.181
+       6:                 0.373
        7:             survivors
-       8:               -15.111
-       9:                 1.023
-      10:                 2.783
-      11:                 0.188
-      12:               237.776
-      13:                29.425
+       8:                -8.888
+       9:                 0.373
+      10:                 0.743
+      11:                 0.031
+      12:                80.246
+      13:                 6.776
       14:                     0
       15:                     0
       16:                     1
@@ -1172,9 +1172,9 @@
       18:                     1
       19:                     0
       20:                    10
-      21:                -22.55
-      22:               -20.058
-      23:               -19.448
+      21:               -21.572
+      22:               -20.543
+      23:               -20.386
           secondary2__hrqol_auc
       
       $args
@@ -1271,41 +1271,41 @@
       
       $trial_results
                 arm primary__hrqol_at_eof primary__hrqol_auc secondary1__hrqol_at_eof
-         1:  Active                  0.87         104.975117                     0.87
-         2:  Active                  0.87         104.975117                     0.87
-         3:  Active                  0.92         114.175117                     0.92
-         4:  Active                  0.92         114.175117                     0.92
-         5:  Active                  0.92         114.175117                     0.92
+         1:  Active                   0.7           74.27863                      0.7
+         2:  Active                   0.7           74.27863                      0.7
+         3:  Active                   0.7           74.27863                      0.7
+         4:  Active                   0.7           74.27863                      0.7
+         5:  Active                   0.7           74.27863                      0.7
         ---                                                                          
-       996: Control                  0.67          73.799788                     0.67
-       997: Control                  0.68          87.550462                     0.68
-       998: Control                  0.00           1.857978                     0.00
-       999: Control                  0.60          66.475788                     0.60
-      1000: Control                  0.73          88.648178                     0.73
+       996: Control                   0.5           43.05267                      0.5
+       997: Control                   0.5           47.66116                      0.5
+       998: Control                    NA                 NA                       NA
+       999: Control                   0.0            0.00000                       NA
+      1000: Control                   0.5           41.07652                      0.5
             secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_auc
-         1:           103.8708008                     0.87              96.87044
-         2:           103.8708008                     0.87              96.87044
-         3:           112.6708008                     0.92             103.92044
-         4:           112.6708008                     0.92             103.92044
-         5:           112.6708008                     0.92             103.92044
+         1:              74.84221                      0.7              76.30699
+         2:              74.84221                      0.7              76.30699
+         3:              74.84221                      0.7              76.30699
+         4:              74.84221                      0.7              76.30699
+         5:              74.84221                      0.7              76.30699
         ---                                                                     
-       996:            74.4578453                     0.67              79.67113
-       997:            86.1094948                     0.68              81.25766
-       998:             0.0395544                       NA                    NA
-       999:            66.0010475                     0.60              65.02457
-      1000:            86.5856833                     0.73              81.67838
+       996:              54.25893                      0.5              43.06694
+       997:              49.40627                      0.5              54.43062
+       998:                    NA                       NA                    NA
+       999:                    NA                       NA                    NA
+      1000:              43.71805                      0.5              50.63342
             trial_id
          1:        8
-         2:        2
-         3:        1
-         4:        8
-         5:        1
+         2:        1
+         3:        4
+         4:        7
+         5:        2
         ---         
-       996:        1
-       997:        4
-       998:        9
-       999:        9
-      1000:        7
+       996:        8
+       997:        6
+       998:        1
+       999:        5
+      1000:        5
       
       $example_trajectories
       $arm_level
@@ -1323,18 +1323,18 @@
       598: Control 190.00 0.500000
       
       $patient_level
-               arm id   x     y
-        1:  Active  1   0 0.000
-        2:  Active  1  21 0.260
-        3:  Active  1  35 0.322
-        4:  Active  1  49 0.393
-        5:  Active  1  63 0.487
-       ---                     
-      237: Control 20 131 0.589
-      238: Control 20 145 0.609
-      239: Control 20 159 0.630
-      240: Control 20 173 0.653
-      241: Control 20 187 0.700
+               arm id   x      y
+        1:  Active  1   0 0.0000
+        2:  Active  1  21 0.0000
+        3:  Active  1  35 0.0621
+        4:  Active  1  49 0.1334
+        5:  Active  1  63 0.2271
+       ---                      
+      236: Control 20 131 0.3887
+      237: Control 20 145 0.4094
+      238: Control 20 159 0.4300
+      239: Control 20 173 0.4530
+      240: Control 20 187 0.5000
       
       attr(,"class")
       [1] "hrqolr_trajectories" "list"               
