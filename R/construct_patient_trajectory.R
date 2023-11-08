@@ -3,8 +3,8 @@
 #' @inheritParams construct_arm_level_trajectory
 #' @inheritParams construct_mortality_trajectory
 #' @inheritParams simulate_trials
-#' @param first_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
-#' @param is_mortality_benefitter logical, is patient a mortality benefitters? Defaults to FALSE.
+#' @param first_hrqol_patient single numeric value, the HRQoL value at ICU discharge of this patient
+#' @param is_mortality_benefitter single logical value, is patient a mortality benefitters? Defaults to `FALSE`.
 #'
 #' @keywords internal
 #' @inherit construct_final_trajectories return
@@ -29,7 +29,7 @@ construct_patient_trajectory <- function(
 ) {
 
 	mc <- match.call()
-	hash <- rlang::hash(c(
+	hash <- rlang::hash(c( #### AG: Don't we need to assert availability of rlang (currently in suggests)?
 		deparse(mc[1]),
 		lapply(mc[-1], eval, parent.frame())
 	))
@@ -84,5 +84,5 @@ construct_patient_trajectory <- function(
 		.hrqolr_cache_user$set(hash, res)
 	}
 
-	return(res)
+	res
 }
