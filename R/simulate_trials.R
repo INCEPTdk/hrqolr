@@ -127,8 +127,13 @@ simulate_trials.default <- function(
 		...
 ) {
 
+	# Housekeeping
+	stopifnot(n_patients_ground_truth > 0)
+
+	# Setup ====
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
 	start_time <- Sys.time()
+	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Handling seeds ====
 	try({ # will fail e.g. if called from parallel::parLapply
@@ -142,8 +147,6 @@ simulate_trials.default <- function(
 	RNGkind("Mersenne-Twister")
 	set.seed(seed)
 
-	# Setup ====
-	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Splitting trials into batches that respect the max_batch_size argument
 	max_batch_size <- max_batch_size %||% sum(n_trials * n_patients)
@@ -227,7 +230,7 @@ simulate_trials.default <- function(
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
 				tmp <- sapply(
 					nafill(gt_res[, ..outcome_cols], "const", 0),
-					function(col) .Call("C_Mean", col, PACKAGE = "hrqolr")
+					fast_mean
 				)
 
 				ground_truth[[arm]] <- data.table(
@@ -239,7 +242,9 @@ simulate_trials.default <- function(
 				gc()
 			}
 
-			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
+			if (isTRUE(verbose)) {
+				log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
+			}
 
 			res <- estimation_helper(
 				n_patients = n_patients_by_batch[[batch_idx]][arm],
@@ -277,8 +282,8 @@ simulate_trials.default <- function(
 			outcome_cols,
 			function(col) {
 				batch_res[, .(
-					all = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"),
-					survivors = .Call("C_Mean", get(col)[!is.na(get(col))], PACKAGE = "hrqolr")
+					all = fast_mean(replace_na(get(col), 0)),
+					survivors = fast_mean(get(col)[!is.na(get(col))])
 				), by = c("trial_id", "arm")]
 			},
 			simplify = FALSE
