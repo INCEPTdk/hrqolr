@@ -6,7 +6,7 @@ SEXP C_Bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B)
 
 	GetRNGstate(); // read in .Random.seed
 
-	int n = length(vals);
+	size_t n = length(vals);
 	double *pvals;
 	int *pgrps;
 	pvals = REAL(vals);
