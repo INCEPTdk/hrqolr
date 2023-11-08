@@ -3,16 +3,22 @@
 
 SEXP C_Auc(SEXP x, SEXP y)
 {
-	int n = length(x);
+	size_t n = length(x);
+
 	double *px, *py;
 	px = REAL(x);
 	py = REAL(y);
 
-	double auc = 0.0;
+	SEXP auc = PROTECT(allocVector(REALSXP, 1));
+	double *_auc;
+	_auc = REAL(auc);
+	_auc[0] = 0.0;
 
 	for (int i = 1; i < n; i++) {
-		auc += (px[i] - px[i-1]) * (py[i] + py[i-1]) * 0.5;
+		_auc[0] += (px[i] - px[i-1]) * (py[i] + py[i-1]) * 0.5;
 	}
 
-	return ScalarReal(auc);
+	UNPROTECT(1);
+
+	return auc;
 }

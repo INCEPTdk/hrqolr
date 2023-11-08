@@ -3,14 +3,23 @@
 
 SEXP C_Mean(SEXP x)
 {
-	int n = length(x);
+	size_t n = length(x);
+
 	double *px;
 	px = REAL(x);
 
-	double sum = 0.0;
+	SEXP res = PROTECT(allocVector(REALSXP, 1));
+	double *_res;
+	_res = REAL(res);
+	_res[0] = 0.0;
+
 	for (int i = 0; i < n; i++) {
-		sum += px[i];
+		_res[0] += px[i];
 	}
 
-	return ScalarReal(sum / n);
+	_res[0] /= n;
+
+	UNPROTECT(1);
+
+	return res;
 }
