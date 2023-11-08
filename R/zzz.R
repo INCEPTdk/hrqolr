@@ -11,7 +11,7 @@ NULL
 
 # Set up cache environment
 #
-# This way, the user need to opt in to use caching and can specify the cache settings. That more
+# This way, the user need to opt in to use caching and can specify the cache settings. That is more
 # tricky if cache is set up while loading the package. By default, the cache is 2 GB, which is
 # probably enough for most uses; at least, it was enough for simulating 100k trials with N = 4000.
 # If not, the user should increase it.
