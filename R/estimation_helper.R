@@ -41,7 +41,11 @@ estimation_helper <- function(
 	}
 
 	first_hrqol_patients <- round(
-		stats::rnorm(n_patients, first_hrqol_arm, inter_patient_noise_sd),
+		stats::rnorm(
+			n_patients,
+			first_hrqol_arm * acceleration_hrqol,
+			inter_patient_noise_sd
+		),
 		digits = n_digits
 	)
 

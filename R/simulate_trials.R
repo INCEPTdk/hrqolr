@@ -195,7 +195,7 @@ simulate_trials.default <- function(
 		# Estimation for arm in batch ====
 		for (arm in arms) {
 
-			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
+			inter_patient_noise_sd <- first_hrqol[arm] * acceleration_hrqol[arm] / 1.96
 
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
