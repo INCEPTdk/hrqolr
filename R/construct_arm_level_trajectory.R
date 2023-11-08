@@ -23,7 +23,7 @@ construct_arm_level_trajectory <- function(
 		sampling_frequency = 14L
 ) {
 
-	hash <- rlang::hash(c(
+	hash <- rlang::hash(c( #### AG: Don't we need to assert availability of rlang (currently in suggests)?
 		"construct_arm_level_trajectory",
 		t_icu_discharge,
 		acceleration_hrqol,
