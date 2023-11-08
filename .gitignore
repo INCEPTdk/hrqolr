@@ -5,6 +5,7 @@
 .DS_Store
 
 src/*.o
+src/*.so
 
 internal/
 legacy/
