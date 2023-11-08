@@ -55,26 +55,12 @@ NULL
 	# non-standard evaluation. See [https://stackoverflow.com/a/12429344].
 	if (getRversion() >= "2.15.1") {
 		utils::globalVariables(c(
-			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff", "n_patients_with_type",
-			"p_value", "id", "trial_id", "bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis",
-			"outcome", "value", "mean_ground_truth", "..outcome_cols"
+			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff",
+			"n_patients_with_type", "p_value", "id", "trial_id",
+			"bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis", "outcome",
+			"value", "mean_ground_truth", "..outcome_cols", "patient_id"
 		))
 	}
-
-	# Setting up cache (as per "Details" in ?memoise::memoise)
-	# .hrqolr_cache_pkg <- cachem::cache_mem(
-	# 	max_size = 5 * 1024^2, # 5 MB
-	# 	evict = "lru"
-	# )
-
-	# custom_memoise <- function(fun) {
-	# 	memoise::memoise(fun, cache = .hrqolr_cache_pkg)
-	# }
-
-	# These functions will always be cached
-	# construct_arm_level_trajectory <<- custom_memoise(construct_arm_level_trajectory)
-	# create_smooth_trajectory <<- custom_memoise(create_smooth_trajectory)
-	# generate_mortality_funs <<- custom_memoise(generate_mortality_funs)
 
 	cache_hrqolr()
 }
