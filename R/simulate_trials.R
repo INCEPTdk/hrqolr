@@ -224,7 +224,7 @@ simulate_trials.default <- function(
 					sampling_frequency = sampling_frequency[arm],
 					n_digits = n_digits,
 					valid_hrqol_range = valid_hrqol_range,
-					verbose = verbose
+					verbose = FALSE
 				)
 
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
@@ -264,15 +264,20 @@ simulate_trials.default <- function(
 				sampling_frequency = sampling_frequency[arm],
 				n_digits = n_digits,
 				valid_hrqol_range = valid_hrqol_range,
-				verbose = verbose
+				verbose = FALSE
 			)
 
 			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
+
 			batch_res[[arm]] <- res
 			rm(res)
 			gc()
+		}
+
+		if (isTRUE(verbose)) {
+			log_timediff(start_time_batch, "Aggregating results")
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
@@ -362,7 +367,10 @@ simulate_trials.default <- function(
 		id.vars = c("outcome", "arm", "trial_id"),
 		variable.name = "analysis"
 	)
-	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
+	summary_stats <- summary_stats[
+		, summarise_var(value),
+		by = c("outcome", "arm", "analysis")
+	]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
 	results$summary_stats <- NULL
@@ -376,7 +384,8 @@ simulate_trials.default <- function(
 	by_cols <- c("outcome", "analysis", "comparator", "target")
 	comparisons <- merge(
 		comparisons[
-			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha), by = by_cols
+			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha),
+			by = by_cols
 		],
 		comparisons[
 			, c(list(n_sim = .N), summarise_var(est)), by = by_cols
