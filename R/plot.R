@@ -52,14 +52,14 @@ plot.hrqolr_trajectories <- function(
 		)
 	)
 
-	base_p <- ggplot2::ggplot() +
+	p_base <- ggplot2::ggplot() +
 		ggplot2::labs(x = "Time (days)", y = "HRQoL") +
 		ggplot2::theme(legend.title = ggplot2::element_blank())
 
 	if (which == "arm") {
-		base_p + arm_layer
+		p_base + arm_layer
 	} else if (which == "patient") {
-		base_p + patient_layer
+		p_base + patient_layer
 	} else if (which == "summarise") {
 		ids_with_nas <- x$patient_level[is.na(y)]$id
 		ribbon_dt <- x$patient_level[
@@ -77,11 +77,11 @@ plot.hrqolr_trajectories <- function(
 			c(list(ggplot2::aes(x, ymin = lo, ymax = hi, fill = arm), ribbon_dt), ribbon_aes)
 		)
 
-		base_p +
+		p_base +
 			ribbon_layer +
 			arm_layer
 	} else {
-		base_p +
+		p_base +
 			patient_layer +
 			arm_layer
 	}
