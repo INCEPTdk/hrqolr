@@ -54,7 +54,7 @@ simulate_trial.hrqolr_scenario <- function(
 }
 
 
-#' Workhorse
+#' Internal default workhorse function for simulate_trial
 #'
 #' Internal function that shouldn't really be invoked by the user directly. The arguments given must
 #' be named vectors.
