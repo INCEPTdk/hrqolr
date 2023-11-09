@@ -336,6 +336,7 @@ simulate_trials.default <- function(
 		lobstr::obj_size(.hrqolr_cache_user),
 		error = function(e) NA
 	)
+	class(max_size_of_cache) <- c("hrqolr_bytes", class(max_size_of_cache))
 	clear_hrqolr_cache()
 	gc()
 
@@ -441,13 +442,7 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_cache_sizes = list(
-					user = max_size_of_cache,
-					package = tryCatch(
-						lobstr::obj_size(.hrqolr_cache_user),
-						error = function(e) NA
-					)
-				)
+				max_cache_sizes = max_size_of_cache,
 			)
 		),
 		class = c("hrqolr_results", "list")
