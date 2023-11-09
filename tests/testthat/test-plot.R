@@ -181,6 +181,7 @@ test_that("Arm and patient trajectories are plotted correctly", {
 	vdiffr::expect_doppelganger("arm_trajs_only__dashed_lines2", p)
 })
 
+<<<<<<< HEAD
 # test_that("Single trials plot correctly", {
 # 	scenario <- setup_scenario(
 # 		arms = c("Active", "Control"),
@@ -205,3 +206,31 @@ test_that("Arm and patient trajectories are plotted correctly", {
 # 	p <- plot(single_trial, ecdf = FALSE)
 # 	vdiffr::expect_doppelganger("single_trial_pdf", p)
 # })
+=======
+test_that("Single trials plot correctly", {
+	scenario <- setup_scenario(
+		arms = c("Active", "Control"),
+		n_patients = 1000,
+		index_hrqol = 0,
+		first_hrqol = 0.3,
+		final_hrqol = c(Active = 0.7, Control = 0.7),
+		acceleration_hrqol = c(Active = 1.2, Control = 1),
+		mortality = 0.0,
+		mortality_dampening = 0,
+		mortality_trajectory_shape = "linear",
+		prop_mortality_benefitters = 0.0,
+		sampling_frequency = 14,
+		verbose = FALSE
+	)
+
+	single_trial <- simulate_trial(scenario, seed = 42)
+
+	p <- plot(single_trial, ecdf = TRUE)
+	expect_snapshot(ggplot2::layer_data(p))
+	# vdiffr::expect_doppelganger("single_trial_cdf", p)
+
+	p <- plot(single_trial, ecdf = FALSE)
+	expect_snapshot(ggplot2::layer_data(p))
+	# vdiffr::expect_doppelganger("single_trial_pdf", p)
+})
+>>>>>>> fb298f2 (Use layer_date for testing single-trial plot instead of vdiffr)
