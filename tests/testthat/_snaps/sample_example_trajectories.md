@@ -4,32 +4,32 @@
       trajs
     Output
       $arm_level
-               arm      x        y
-        1:  Active   0.00 0.000000
-        2:  Active   5.00 0.000000
-        3:  Active   5.01 0.000674
-        4:  Active   5.02 0.001348
-        5:  Active   5.04 0.002024
-       ---                        
-      594: Control 186.60 0.493266
-      595: Control 186.76 0.494949
-      596: Control 186.88 0.496633
-      597: Control 186.96 0.498316
-      598: Control 187.00 0.500000
+               arm      x   y
+        1:  Active   0.00 0.0
+        2:  Active   5.00 0.2
+        3:  Active   5.01 0.2
+        4:  Active   5.02 0.2
+        5:  Active   5.04 0.2
+       ---                   
+      594: Control 186.60 0.5
+      595: Control 186.76 0.5
+      596: Control 186.88 0.5
+      597: Control 186.96 0.5
+      598: Control 187.00 0.5
       
       $patient_level
-                arm  id   x      y
-         1:  Active   1   0 0.0000
-         2:  Active   1  21 0.0000
-         3:  Active   1  35 0.0621
-         4:  Active   1  49 0.1334
-         5:  Active   1  63 0.2271
-        ---                       
-      1220: Control 100 136 0.3946
-      1221: Control 100 150 0.4138
-      1222: Control 100 164 0.4330
-      1223: Control 100 178 0.4548
-      1224: Control 100 192 0.5000
+                arm  id  x     y
+         1:  Active   1  0 0.000
+         2:  Active   1 21 0.260
+         3:  Active   1 35 0.344
+         4:  Active   1 49 0.431
+         5:  Active   1 63 0.537
+        ---                     
+      1208: Control  99  0 0.000
+      1209: Control  99  4 0.390
+      1210: Control  99 17 0.000
+      1211: Control 100  0 0.000
+      1212: Control 100 10    NA
       
       attr(,"class")
       [1] "hrqolr_trajectories" "list"               
