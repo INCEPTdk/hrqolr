@@ -282,7 +282,7 @@ assert_pkgs <- function(pkgs = NULL) {
 		)
 	}
 
-	TRUE
+	return(TRUE)
 }
 
 
