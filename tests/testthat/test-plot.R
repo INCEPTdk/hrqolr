@@ -1,8 +1,3 @@
-#' Below we repeatedly invoke clear_hrqolr_cache() to avoid strange "nothing
-#' to compact" message from cachem. Haven't been able to find anything else
-#' about this than the source code:
-# https://github.com/r-lib/cachem/blob/62051fe/R/cache-mem.R#L557-L560
-
 cache_hrqolr()
 
 test_that("Trajetory plots with linear mortality shape", {
