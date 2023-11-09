@@ -2,7 +2,7 @@
 
     Code
       log_timediff(start = start_, msg = "Message", now = end_)
-    Message <simpleMessage>
+    Message
       2023-10-25 11:00:00: Message (1 hours)
 
 # summarise_vars works
