@@ -182,6 +182,9 @@ test_that("Arm and patient trajectories are plotted correctly", {
 })
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b276ba3 (Deactive test of plot.hrqolr_trial)
 # test_that("Single trials plot correctly", {
 # 	scenario <- setup_scenario(
 # 		arms = c("Active", "Control"),
@@ -201,6 +204,7 @@ test_that("Arm and patient trajectories are plotted correctly", {
 # 	single_trial <- simulate_trial(scenario, seed = 42)
 #
 # 	p <- plot(single_trial, ecdf = TRUE)
+<<<<<<< HEAD
 # 	vdiffr::expect_doppelganger("single_trial_cdf", p)
 #
 # 	p <- plot(single_trial, ecdf = FALSE)
@@ -234,3 +238,12 @@ test_that("Single trials plot correctly", {
 	# vdiffr::expect_doppelganger("single_trial_pdf", p)
 })
 >>>>>>> fb298f2 (Use layer_date for testing single-trial plot instead of vdiffr)
+=======
+# 	expect_snapshot(ggplot2::layer_data(p))
+# 	# vdiffr::expect_doppelganger("single_trial_cdf", p)
+#
+# 	p <- plot(single_trial, ecdf = FALSE)
+# 	expect_snapshot(ggplot2::layer_data(p))
+# 	# vdiffr::expect_doppelganger("single_trial_pdf", p)
+# })
+>>>>>>> b276ba3 (Deactive test of plot.hrqolr_trial)
