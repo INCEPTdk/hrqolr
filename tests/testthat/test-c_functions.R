@@ -1,4 +1,4 @@
-test_that("C_Approx works", {
+test_that("C_approx works", {
 	x <- 1:10
 	y <- c(1, 3, 2, 5, 1, 2, 1, 4, 4, 5)
 	expect_identical(hrqolr_approx(x, y, xout = 4.5), 3)
@@ -12,7 +12,7 @@ test_that("C_Approx works", {
 	expect_true(is.na(hrqolr_approx(x, y, xout = 4.5)))
 })
 
-test_that("C_Mean works", {
+test_that("C_mean works", {
 	expect_equal(fast_mean(as.double(1:10)), 5.5)
 
 	expect_error(fast_mean(1:10)) # int input won't work
@@ -20,7 +20,7 @@ test_that("C_Mean works", {
 	expect_error(fast_mean(LETTERS))
 })
 
-test_that("C_Bootstrap_mean_diffs works", {
+test_that("C_bootstrap_mean_diffs works", {
 	x <- c(
 		0.8, -0.83, 0.49, 1.06, 0.99, 0.27, 2.66, 2.09, -0.53, -0.94,  0.27, 0.61,
 		-0.53, 1.77, 0.47, -0.68, -0.59, -1.01, -0.24, 0.15,  -2.55, 0.18, -1.51, 0,
