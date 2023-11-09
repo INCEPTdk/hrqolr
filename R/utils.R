@@ -174,7 +174,7 @@ sample_t_icu_discharge <- function(n) {
 
 #' Summarise a variable with common statistics
 #'
-#' Input e.g. a scalar to get the corresponding names ### AG: I don't understand what's meant here?
+#' Input e.g. a scalar to get the corresponding names
 #'
 #' @param x numeric vector
 #' @param probs probabilities for which to compute the quantiles
