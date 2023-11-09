@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
 <li>
 <a href="https://inceptdk.github.io/hrqolr/index.html">Website</a> - stand-alone website with full package documentation</li>
 <li>
-<a href="https://doi.org/10.1111/aas.14324" class="external-link">Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study</a> - article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use <code>hrqolr</code>
+<a href="https://doi.org/10.1111/aas.14324" class="external-link">Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study</a> - protocol article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use <code>hrqolr</code>
 </li>
 </ul>
 </div>
@@ -91,9 +91,9 @@
 <p>First, load the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://inceptdk.github.io/hrqolr/">hrqolr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading 'hrqolr' package v0.0.0.9006.</span></span>
+<span><span class="co">#&gt; Loading 'hrqolr' package v0.0.0.9009.</span></span>
 <span><span class="co">#&gt; For help, run 'help("hrqolr")' or check out https://inceptdk.github.io/hrqolr.</span></span></code></pre></div>
-<p>The preferred way to design a scenario is by using the <code>setup_scenario</code> function to validate the input and give it the right format. Set <code>verbose = FALSE</code> to silence the validation results.</p>
+<p>The preferred way to design a scenario is by using the <code><a href="reference/setup_scenario.html">setup_scenario()</a></code> function to validate the input and give it the right format. Set <code>verbose = FALSE</code> to silence the validation results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scenario</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/setup_scenario.html">setup_scenario</a></span><span class="op">(</span></span>
 <span>    arms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
@@ -139,7 +139,7 @@
 <code class="sourceCode R"><span><span class="va">example_trajs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sample_example_trajectories.html">sample_example_trajectories</a></span><span class="op">(</span><span class="va">scenario</span>, n_digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">example_trajs</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
-<p><code>sample_example_trajectories</code> returns a <code>ggplot</code>, allowing you to fine-tune its appearance for your needs. For example, breaking apart the trajectories in the arms apart with facets and hide the legend (remember to load <code>ggplot2</code> first). Here, we also set the arm-level trajectory in black to make it stand out better:</p>
+<p><code>sample_example_trajectories</code> returns a <code>ggplot</code> object, allowing you to fine-tune its appearance for your needs. For example, breaking apart the trajectories in the arms apart with facets and hide the legend (remember to load <code>ggplot2</code> first). Here, we also set the arm-level trajectory in black to make it stand out better:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> </span>
 <span></span>
@@ -147,64 +147,64 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">arm</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
-<p>You can also summarise the trajectories, e.g., with inter-quartile ranges. The ribbons become a bit wonky at end of follow-up due to increasingly few observations some of which might be low:</p>
+<p>You can also summarise the trajectories, e.g., with inter-quartile ranges. The ribbons become a bit wonky at end of follow-up due to increasingly fewer observations some of which might be low:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">example_trajs</span>, <span class="st">"summarise"</span>, ribbon_percentiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png"><!-- --></p>
 <p>The same scenario specification can, then, be used to simulate a desired number of trials. By default <code>hrqolr</code> will print progress updates to the console (silence these with <code>verbose = FALSE</code>):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span><span class="va">scenario</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:22: Estimating ground truth of arm 'A' (0 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:22: Building data.table with patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:22: Finding unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:22: Estimating for 670 unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:23: Assigning results to all (non-unique) patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:23: Starting arm 'A' (0.39 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:23: Building data.table with patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:23: Finding unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:23: Estimating for 3832 unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Assigning results to all (non-unique) patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Estimating ground truth of arm 'B' (1.43 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Building data.table with patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Finding unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Estimating for 701 unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Assigning results to all (non-unique) patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Starting arm 'B' (1.82 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Building data.table with patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Finding unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:24: Estimating for 3844 unique patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:25: Assigning results to all (non-unique) patients</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:25: Finished (3.08 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:25: Sampling example trajectories (3.28 secs)</span></span>
-<span><span class="co">#&gt; 2023-11-03 11:32:25: Wrapping up, returning output (3.3 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt; 2023-11-08 11:48:58: Estimating ground truth of arm 'A' (0 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:58: Building data.table with patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:58: Finding unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:58: Estimating for 687 unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:59: Assigning results to all (non-unique) patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:59: Starting arm 'A' (0.84 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:59: Building data.table with patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:59: Finding unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:48:59: Estimating for 3981 unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:01: Assigning results to all (non-unique) patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:01: Estimating ground truth of arm 'B' (3.1 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:01: Building data.table with patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:01: Finding unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:01: Estimating for 685 unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:02: Assigning results to all (non-unique) patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:02: Starting arm 'B' (3.9 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:02: Building data.table with patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:02: Finding unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:02: Estimating for 3849 unique patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:04: Assigning results to all (non-unique) patients</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:05: Finished (6.52 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:05: Sampling example trajectories (6.83 secs)</span></span>
+<span><span class="co">#&gt; 2023-11-08 11:49:05: Wrapping up, returning output (7.28 secs)</span></span></code></pre></div>
 <p>The returned object contains quite a lot of interesting information. For example, summary statistics by arm:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span><span class="op">$</span><span class="va">summary_stats</span></span>
 <span><span class="co">#&gt;                      outcome arm  analysis     p25     p50     p75    mean    sd    se</span></span>
-<span><span class="co">#&gt;  1:    primary__hrqol_at_eof   A       all   0.456   0.483   0.509   0.482 0.035 0.004</span></span>
-<span><span class="co">#&gt;  2:    primary__hrqol_at_eof   B       all   0.393   0.420   0.440   0.420 0.035 0.003</span></span>
-<span><span class="co">#&gt;  3:       primary__hrqol_auc   A       all  67.060  70.948  74.581  70.642 5.171 0.517</span></span>
-<span><span class="co">#&gt;  4:       primary__hrqol_auc   B       all  56.598  60.551  63.371  60.527 4.961 0.496</span></span>
-<span><span class="co">#&gt;  5: secondary1__hrqol_at_eof   A       all   0.456   0.483   0.509   0.482 0.035 0.004</span></span>
-<span><span class="co">#&gt;  6: secondary1__hrqol_at_eof   B       all   0.393   0.420   0.440   0.420 0.035 0.003</span></span>
-<span><span class="co">#&gt;  7:    secondary1__hrqol_auc   A       all  66.922  70.831  74.511  70.544 5.172 0.517</span></span>
-<span><span class="co">#&gt;  8:    secondary1__hrqol_auc   B       all  56.378  60.270  63.095  60.317 4.960 0.496</span></span>
-<span><span class="co">#&gt;  9: secondary2__hrqol_at_eof   A       all   0.456   0.483   0.509   0.482 0.035 0.004</span></span>
-<span><span class="co">#&gt; 10: secondary2__hrqol_at_eof   B       all   0.393   0.420   0.440   0.420 0.035 0.003</span></span>
-<span><span class="co">#&gt; 11:    secondary2__hrqol_auc   A       all  62.619  66.223  69.852  66.124 4.820 0.482</span></span>
-<span><span class="co">#&gt; 12:    secondary2__hrqol_auc   B       all  52.812  56.490  59.340  56.571 4.650 0.465</span></span>
-<span><span class="co">#&gt; 13:    primary__hrqol_at_eof   A survivors   0.555   0.588   0.611   0.585 0.037 0.004</span></span>
-<span><span class="co">#&gt; 14:    primary__hrqol_at_eof   B survivors   0.492   0.515   0.542   0.518 0.034 0.003</span></span>
-<span><span class="co">#&gt; 15:       primary__hrqol_auc   A survivors  81.050  85.877  89.661  85.828 5.520 0.552</span></span>
-<span><span class="co">#&gt; 16:       primary__hrqol_auc   B survivors  71.008  73.993  78.385  74.534 4.911 0.491</span></span>
-<span><span class="co">#&gt; 17: secondary1__hrqol_at_eof   A survivors   0.669   0.688   0.705   0.686 0.028 0.003</span></span>
-<span><span class="co">#&gt; 18: secondary1__hrqol_at_eof   B survivors   0.590   0.608   0.630   0.610 0.028 0.003</span></span>
-<span><span class="co">#&gt; 19:    secondary1__hrqol_auc   A survivors  97.755 100.685 103.333 100.480 4.113 0.411</span></span>
-<span><span class="co">#&gt; 20:    secondary1__hrqol_auc   B survivors  84.576  87.205  90.289  87.550 3.929 0.393</span></span>
-<span><span class="co">#&gt; 21: secondary2__hrqol_at_eof   A survivors   0.781   0.789   0.794   0.787 0.009 0.001</span></span>
-<span><span class="co">#&gt; 22: secondary2__hrqol_at_eof   B survivors   0.689   0.697   0.701   0.694 0.009 0.001</span></span>
-<span><span class="co">#&gt; 23:    secondary2__hrqol_auc   A survivors 107.086 108.101 109.081 108.039 1.362 0.136</span></span>
-<span><span class="co">#&gt; 24:    secondary2__hrqol_auc   B survivors  92.572  93.707  94.316  93.449 1.271 0.127</span></span>
+<span><span class="co">#&gt;  1:    primary__hrqol_at_eof   A       all   0.454   0.482   0.507   0.481 0.036 0.004</span></span>
+<span><span class="co">#&gt;  2:    primary__hrqol_at_eof   B       all   0.391   0.416   0.441   0.416 0.036 0.004</span></span>
+<span><span class="co">#&gt;  3:       primary__hrqol_auc   A       all  66.990  70.572  74.152  70.549 5.405 0.541</span></span>
+<span><span class="co">#&gt;  4:       primary__hrqol_auc   B       all  56.491  60.167  63.798  60.043 5.143 0.514</span></span>
+<span><span class="co">#&gt;  5: secondary1__hrqol_at_eof   A       all   0.457   0.482   0.507   0.481 0.036 0.004</span></span>
+<span><span class="co">#&gt;  6: secondary1__hrqol_at_eof   B       all   0.391   0.418   0.441   0.416 0.036 0.004</span></span>
+<span><span class="co">#&gt;  7:    secondary1__hrqol_auc   A       all  66.819  70.416  74.053  70.409 5.399 0.540</span></span>
+<span><span class="co">#&gt;  8:    secondary1__hrqol_auc   B       all  56.369  59.933  63.538  59.854 5.163 0.516</span></span>
+<span><span class="co">#&gt;  9: secondary2__hrqol_at_eof   A       all   0.457   0.482   0.507   0.481 0.036 0.004</span></span>
+<span><span class="co">#&gt; 10: secondary2__hrqol_at_eof   B       all   0.391   0.418   0.441   0.416 0.036 0.004</span></span>
+<span><span class="co">#&gt; 11:    secondary2__hrqol_auc   A       all  62.475  65.984  69.612  65.988 4.991 0.499</span></span>
+<span><span class="co">#&gt; 12:    secondary2__hrqol_auc   B       all  52.653  56.408  59.554  56.119 4.857 0.486</span></span>
+<span><span class="co">#&gt; 13:    primary__hrqol_at_eof   A survivors   0.560   0.593   0.612   0.588 0.034 0.003</span></span>
+<span><span class="co">#&gt; 14:    primary__hrqol_at_eof   B survivors   0.482   0.510   0.537   0.510 0.036 0.004</span></span>
+<span><span class="co">#&gt; 15:       primary__hrqol_auc   A survivors  82.389  86.856  89.735  86.308 5.054 0.505</span></span>
+<span><span class="co">#&gt; 16:       primary__hrqol_auc   B survivors  69.626  73.588  77.250  73.602 5.265 0.527</span></span>
+<span><span class="co">#&gt; 17: secondary1__hrqol_at_eof   A survivors   0.668   0.701   0.716   0.694 0.030 0.003</span></span>
+<span><span class="co">#&gt; 18: secondary1__hrqol_at_eof   B survivors   0.588   0.610   0.625   0.609 0.025 0.003</span></span>
+<span><span class="co">#&gt; 19:    secondary1__hrqol_auc   A survivors  98.201 102.612 104.352 101.581 4.472 0.447</span></span>
+<span><span class="co">#&gt; 20:    secondary1__hrqol_auc   B survivors  84.657  87.550  90.132  87.488 3.761 0.376</span></span>
+<span><span class="co">#&gt; 21: secondary2__hrqol_at_eof   A survivors   0.787   0.794   0.802   0.794 0.010 0.001</span></span>
+<span><span class="co">#&gt; 22: secondary2__hrqol_at_eof   B survivors   0.689   0.694   0.700   0.694 0.009 0.001</span></span>
+<span><span class="co">#&gt; 23:    secondary2__hrqol_auc   A survivors 107.845 109.012 109.967 108.899 1.391 0.139</span></span>
+<span><span class="co">#&gt; 24:    secondary2__hrqol_auc   B survivors  92.712  93.588  94.441  93.559 1.324 0.132</span></span>
 <span><span class="co">#&gt;                      outcome arm  analysis     p25     p50     p75    mean    sd    se</span></span></code></pre></div>
 <p>–and head-to-head comparisons between the arms:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -212,27 +212,27 @@
 <span><span class="co">#&gt;                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc</span></span>
 <span><span class="co">#&gt;  1:                 comparator                     A                     A                  A                  A                        A                        A                     A                     A                        A                        A                     A                     A</span></span>
 <span><span class="co">#&gt;  2:                     target                     B                     B                  B                  B                        B                        B                     B                     B                        B                        B                     B                     B</span></span>
-<span><span class="co">#&gt;  3:              mean_estimate                -0.062                -0.068            -10.114            -11.294                   -0.061                   -0.076               -10.227                -12.93                   -0.061                   -0.093                -9.553                -14.59</span></span>
-<span><span class="co">#&gt;  4:          mean_ground_truth                -0.095                -0.095            -15.077            -15.077                   -0.095                   -0.095               -15.159               -15.159                   -0.095                   -0.095               -14.001               -14.001</span></span>
-<span><span class="co">#&gt;  5:                         sd                 0.049                 0.049              7.063              7.139                    0.049                    0.039                 7.086                 5.698                    0.049                    0.014                 6.685                 1.931</span></span>
-<span><span class="co">#&gt;  6:                         se                 0.005                 0.005              0.706              0.714                    0.005                    0.004                 0.709                  0.57                    0.005                    0.001                 0.668                 0.193</span></span>
+<span><span class="co">#&gt;  3:              mean_estimate                -0.065                -0.078            -10.506            -12.705                   -0.065                   -0.085               -10.556               -14.093                   -0.065                   -0.099                -9.869                -15.34</span></span>
+<span><span class="co">#&gt;  4:          mean_ground_truth                -0.085                -0.085            -13.541            -13.541                   -0.085                   -0.085               -13.568               -13.568                   -0.085                   -0.085               -12.608               -12.608</span></span>
+<span><span class="co">#&gt;  5:                         sd                 0.053                 0.048              7.694              7.006                    0.053                    0.037                 7.704                  5.57                    0.053                    0.014                 7.205                 1.857</span></span>
+<span><span class="co">#&gt;  6:                         se                 0.005                 0.005              0.769              0.701                    0.005                    0.004                  0.77                 0.557                    0.005                    0.001                 0.721                 0.186</span></span>
 <span><span class="co">#&gt;  7:                   analysis                   all             survivors                all          survivors                      all                survivors                   all             survivors                      all                survivors                   all             survivors</span></span>
-<span><span class="co">#&gt;  8:                       bias                 0.033                 0.027              4.963              3.784                    0.033                    0.019                 4.932                 2.229                    0.033                    0.002                 4.449                -0.589</span></span>
-<span><span class="co">#&gt;  9:                    bias_se                 0.005                 0.005              0.706              0.714                    0.005                    0.004                 0.709                  0.57                    0.005                    0.001                 0.668                 0.193</span></span>
-<span><span class="co">#&gt; 10:              relative_bias                -0.352                -0.285             -0.329             -0.251                   -0.353                   -0.198                -0.325                -0.147                   -0.353                   -0.022                -0.318                 0.042</span></span>
-<span><span class="co">#&gt; 11:           relative_bias_se                 0.052                 0.052              0.047              0.047                    0.052                    0.041                 0.047                 0.038                    0.052                    0.014                 0.048                 0.014</span></span>
-<span><span class="co">#&gt; 12:                        mse                 0.004                 0.003             74.018              64.77                    0.004                    0.002                74.043                37.117                    0.004                        0                64.028                 4.037</span></span>
-<span><span class="co">#&gt; 13:                     mse_se                     0                     0              9.616              9.032                        0                        0                 9.633                 4.745                        0                        0                 8.354                 0.637</span></span>
-<span><span class="co">#&gt; 14:                   coverage                   0.9                  0.89               0.91               0.88                      0.9                     0.97                  0.91                  0.97                      0.9                     0.98                  0.92                  0.95</span></span>
-<span><span class="co">#&gt; 15:                coverage_se                  0.03                 0.031              0.029              0.032                     0.03                    0.017                 0.029                 0.017                     0.03                    0.014                 0.027                 0.022</span></span>
+<span><span class="co">#&gt;  8:                       bias                  0.02                 0.006              3.035              0.835                     0.02                   -0.001                 3.012                -0.525                     0.02                   -0.015                 2.739                -2.731</span></span>
+<span><span class="co">#&gt;  9:                    bias_se                 0.005                 0.005              0.769              0.701                    0.005                    0.004                  0.77                 0.557                    0.005                    0.001                 0.721                 0.186</span></span>
+<span><span class="co">#&gt; 10:              relative_bias                -0.235                -0.076             -0.224             -0.062                   -0.237                    0.008                -0.222                 0.039                   -0.237                    0.176                -0.217                 0.217</span></span>
+<span><span class="co">#&gt; 11:           relative_bias_se                 0.063                 0.057              0.057              0.052                    0.063                    0.044                 0.057                 0.041                    0.063                    0.016                 0.057                 0.015</span></span>
+<span><span class="co">#&gt; 12:                        mse                 0.003                 0.002              67.81             49.286                    0.003                    0.001                67.826                30.987                    0.003                        0                58.899                10.873</span></span>
+<span><span class="co">#&gt; 13:                     mse_se                     0                     0              8.055              7.257                        0                        0                 8.071                 4.117                        0                        0                 7.094                 1.118</span></span>
+<span><span class="co">#&gt; 14:                   coverage                  0.94                  0.95               0.93               0.96                     0.94                     0.98                  0.93                  0.98                     0.94                     0.78                  0.94                  0.74</span></span>
+<span><span class="co">#&gt; 15:                coverage_se                 0.024                 0.022              0.026               0.02                    0.024                    0.014                 0.026                 0.014                    0.024                    0.041                 0.024                 0.044</span></span>
 <span><span class="co">#&gt; 16:    bias_corrected_coverage                     1                     1                  1                  1                        1                        1                     1                     1                        1                        1                     1                     1</span></span>
 <span><span class="co">#&gt; 17: bias_corrected_coverage_se                     0                     0                  0                  0                        0                        0                     0                     0                        0                        0                     0                     0</span></span>
-<span><span class="co">#&gt; 18:       rejection_proportion                   0.2                   0.2               0.23               0.28                      0.2                     0.36                  0.24                   0.5                      0.2                        1                  0.26                     1</span></span>
-<span><span class="co">#&gt; 19:    rejection_proportion_se                  0.04                  0.04              0.042              0.045                     0.04                    0.048                 0.043                  0.05                     0.04                        0                 0.044                     0</span></span>
+<span><span class="co">#&gt; 18:       rejection_proportion                  0.25                   0.3               0.29               0.39                     0.24                     0.51                  0.31                  0.62                     0.24                        1                  0.31                     1</span></span>
+<span><span class="co">#&gt; 19:    rejection_proportion_se                 0.043                 0.046              0.045              0.049                    0.043                     0.05                 0.046                 0.049                    0.043                        0                 0.046                     0</span></span>
 <span><span class="co">#&gt; 20:                      n_sim                   100                   100                100                100                      100                      100                   100                   100                      100                      100                   100                   100</span></span>
-<span><span class="co">#&gt; 21:                        p25                -0.094                -0.094            -14.751            -15.242                   -0.094                   -0.102               -14.468               -16.327                   -0.094                     -0.1               -14.037               -15.766</span></span>
-<span><span class="co">#&gt; 22:                        p50                 -0.06                -0.068             -9.843            -11.938                    -0.06                   -0.072                -9.925               -12.243                    -0.06                   -0.092                -9.153               -14.619</span></span>
-<span><span class="co">#&gt; 23:                        p75                 -0.03                -0.043             -6.083             -7.879                    -0.03                   -0.049                -6.106                -8.818                    -0.03                   -0.082                -5.286               -13.175</span></span>
+<span><span class="co">#&gt; 21:                        p25                -0.104                 -0.11            -15.589            -17.582                   -0.103                    -0.11               -15.734               -17.572                   -0.103                   -0.108               -15.016               -16.477</span></span>
+<span><span class="co">#&gt; 22:                        p50                -0.066                 -0.08            -10.694            -12.974                   -0.066                   -0.088                -10.65               -14.506                   -0.066                     -0.1                -9.931               -15.379</span></span>
+<span><span class="co">#&gt; 23:                        p75                 -0.03                -0.048             -5.391             -8.263                    -0.03                   -0.063                -5.511               -11.065                    -0.03                    -0.09                -4.983               -14.079</span></span>
 <span><span class="co">#&gt;                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -242,7 +242,7 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes") </span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"INCEPTdk/hrqolr"</span><span class="op">)</span></span></code></pre></div>
-<p>You can also install the <strong>development version</strong> from directly from GitHub. Doing this requires the <em>remotes</em>-package installed. The development version may contain additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.</p>
+<p>You can also install the <strong>development version</strong> from directly from GitHub. Doing this requires the <code>remotes</code> package installed. The development version may contain additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"INCEPTdk/hrqolr@dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -272,6 +272,7 @@
 <p>If using <code>hrqolr</code>, please consider citing it:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"hrqolr"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To cite package 'hrqolr' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Kaas-Hansen BS, Granholm A (2023). hrqolr: an R package for</span></span>

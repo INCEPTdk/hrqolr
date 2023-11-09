@@ -13,9 +13,6 @@
     <loc>https://inceptdk.github.io/hrqolr/index.html</loc>
   </url>
   <url>
-    <loc>https://inceptdk.github.io/hrqolr/reference/OR.html</loc>
-  </url>
-  <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/assert_pkgs.html</loc>
   </url>
   <url>
@@ -76,9 +73,6 @@
     <loc>https://inceptdk.github.io/hrqolr/reference/generate_mortality_funs.html</loc>
   </url>
   <url>
-    <loc>https://inceptdk.github.io/hrqolr/reference/grapes-fi-grapes.html</loc>
-  </url>
-  <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/hrqolr_approx.html</loc>
   </url>
   <url>
@@ -103,7 +97,13 @@
     <loc>https://inceptdk.github.io/hrqolr/reference/print.html</loc>
   </url>
   <url>
+    <loc>https://inceptdk.github.io/hrqolr/reference/replace_infinite.html</loc>
+  </url>
+  <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/replace_na.html</loc>
+  </url>
+  <url>
+    <loc>https://inceptdk.github.io/hrqolr/reference/replace_null.html</loc>
   </url>
   <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/rescale.html</loc>
@@ -116,6 +116,12 @@
   </url>
   <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/setup_scenario.html</loc>
+  </url>
+  <url>
+    <loc>https://inceptdk.github.io/hrqolr/reference/simulate_trial.default.html</loc>
+  </url>
+  <url>
+    <loc>https://inceptdk.github.io/hrqolr/reference/simulate_trial.html</loc>
   </url>
   <url>
     <loc>https://inceptdk.github.io/hrqolr/reference/simulate_trials.default.html</loc>

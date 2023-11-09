@@ -12,7 +12,7 @@ function."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
     
     <a class="navbar-brand me-2" href="../index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,20 +74,20 @@ patient was still alive at end of follow-up)</p></dd>
 
 
 <dt>index_hrqol</dt>
-<dd><p>scalar, HRQoL at index (= time of enrolment)</p></dd>
+<dd><p>single numeric value, HRQoL at index (= time of enrolment)</p></dd>
 
 
 <dt>first_hrqol</dt>
-<dd><p>scalar, HRQoL at ICU discharge</p></dd>
+<dd><p>single numeric value, HRQoL at ICU discharge</p></dd>
 
 
 <dt>resolution</dt>
-<dd><p>int, the number of grid points on the HRQoL trajectory between ICU discharge
+<dd><p>single integer, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death</p></dd>
 
 
 <dt>n_halflives_to_zero</dt>
-<dd><p>scalar, the number of half-lives after which one considers HRQoL to
+<dd><p>single numeric value, the number of half-lives after which one considers HRQoL to
 equal <code>0</code>.</p></dd>
 
 </dl></div>
@@ -95,7 +95,7 @@ equal <code>0</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Two-column matrix: x is time, y is the HRQoL.</p>
+<p>Two-column matrix: <code>x</code> is time, <code>y</code> is the HRQoL.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

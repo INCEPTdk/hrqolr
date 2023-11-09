@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,11 +70,11 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>n_patients</dt>
-<dd><p>int, the number of patients for whom to estimate outcomes</p></dd>
+<dd><p>single integer, the number of patients for whom to estimate outcomes</p></dd>
 
 
 <dt>arm</dt>
-<dd><p>character scalar</p></dd>
+<dd><p>character vector of length 1</p></dd>
 
 
 <dt>first_hrqol_arm</dt>
@@ -95,11 +95,11 @@ trajectory</p></dd>
 
 
 <dt>sampling_frequency</dt>
-<dd><p>int (scalar or named vector), span between HRQoL sampling from patients</p></dd>
+<dd><p>integer (single value or named vector), span between HRQoL sampling from patients</p></dd>
 
 
 <dt>n_digits</dt>
-<dd><p>int, the number of decimal places of in the first HRQoL values of patients.
+<dd><p>single integer, the number of decimal places of in the first HRQoL values of patients.
 More digits will yield greater precision but also cause longer run-times.</p></dd>
 
 
@@ -109,14 +109,14 @@ values. The default (<code>c(-0.757, 1.0)</code>) corresponds to the Danish EQ-5
 
 
 <dt>verbose</dt>
-<dd><p>logical, should the function give progress timestamped updates? Default: <code>TRUE</code></p></dd>
+<dd><p>single logical, should the function give progress timestamped updates? Default: <code>TRUE</code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Data.table with outcome results for all patients. NB! There are no trial_id indicator as
+<p>data.table with outcome results for all patients. NB! There is no <code>trial_id</code> indicator as
 this is not required in all uses of this helper function.</p>
     </div>
 

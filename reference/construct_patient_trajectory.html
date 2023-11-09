@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@ patient was still alive at end of follow-up)</p></dd>
 
 
 <dt>first_hrqol_patient</dt>
-<dd><p>scalar, the HRQoL value at ICU discharge of this patient</p></dd>
+<dd><p>single numeric value, the HRQoL value at ICU discharge of this patient</p></dd>
 
 
 <dt>acceleration_hrqol</dt>
@@ -92,11 +92,11 @@ trajectory</p></dd>
 
 
 <dt>is_mortality_benefitter</dt>
-<dd><p>logical, is patient a mortality benefitters? Defaults to FALSE.</p></dd>
+<dd><p>single logical value, is patient a mortality benefitters? Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>sampling_frequency</dt>
-<dd><p>int (scalar or named vector), span between HRQoL sampling from patients</p></dd>
+<dd><p>integer (single value or named vector), span between HRQoL sampling from patients</p></dd>
 
 </dl></div>
     <div class="section level2">
