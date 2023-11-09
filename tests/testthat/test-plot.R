@@ -200,8 +200,8 @@ test_that("Single trials plot correctly", {
 	single_trial <- simulate_trial(scenario, seed = 42)
 
 	p <- plot(single_trial, ecdf = TRUE)
-	vdiffr::expect_doppelganger("single_trial_ecdf", p)
+	vdiffr::expect_doppelganger("single_trial_cdf", p)
 
 	p <- plot(single_trial, ecdf = FALSE)
-	vdiffr::expect_doppelganger("single_trial_epdf", p)
+	vdiffr::expect_doppelganger("single_trial_pdf", p)
 })
