@@ -47,7 +47,7 @@ Invisibly returns \code{x}.
 Prints contents of the first input \code{x} in a human-friendly way, see
 \strong{Details} for more information.
 
-Logic from pryr:::print.pryr_bytes but simplified and included here to minimise dependencies.
+Logic from \code{pryr:::print.pryr_bytes} but simplified and included here to minimise dependencies.
 }
 \details{
 The behaviour depends on the class of \code{x}:

@@ -16,7 +16,7 @@ warning0(...)
     condition object.}
 }
 \description{
-Used internally. Calls \code{\link[=stop0]{stop0()}} or \code{\link[=warning]{warning()}} but enforces \code{call. = FALSE},
+Used internally. Calls \code{\link[=stop]{stop()}} or \code{\link[=warning]{warning()}} but enforces \code{call. = FALSE},
 to suppress the call from the error/warning.
 }
 \keyword{internal}

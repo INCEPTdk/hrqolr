@@ -28,6 +28,6 @@ vapply_lgl(X, FUN, ...)
 \item{...}{optional arguments to \code{FUN}.}
 }
 \description{
-Used internally. Helpers for simplifying code invoking vapply().
+Used internally. Helpers for simplifying code invoking \code{vapply()}.
 }
 \keyword{internal}

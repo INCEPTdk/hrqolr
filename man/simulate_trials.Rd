@@ -28,36 +28,36 @@ simulate_trials(scenario, ...)
 
 \item{...}{passed on to methods}
 
-\item{n_trials}{int scalar or vector. If vector, simulations will be run in batches of size given}
+\item{n_trials}{integer vector. If length > 1, simulations will be run in batches of size given}
 
-\item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
+\item{n_patients_ground_truth}{single integer, how many patients (per arm) to use when estimating the ground
 truth}
 
-\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
+\item{n_example_trajectories_per_arm}{single integer, the number of example trajectories to include in the
 returned object}
 
 \item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
 \code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
 below.}
 
-\item{include_trial_results}{logical, indicates whether trial-level results are kept. Default is
+\item{include_trial_results}{single logical, indicates whether trial-level results are kept. Default is
 \code{FALSE} because the resulting object may be very large if many trials are simulated.}
 
-\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+\item{verbose}{single logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 
-\item{n_digits}{int, the number of decimal places of in the first HRQoL values of patients.
+\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
 More digits will yield greater precision but also cause longer run-times.}
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 
-\item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
+\item{alpha}{single numerical value in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
 arms.}
 
-\item{max_batch_size}{int, the maximum number of patients to process in each batch. The default
-is to use run one batch (i.e. no upper limit)}
+\item{max_batch_size}{single integer, the maximum number of patients to process in each batch. The default
+is to use run one batch (i.e. no upper limit).}
 
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+\item{seed}{single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
 deterministic value based on the arguments given (ensuring reproducibility by default).}
 }
 \value{

@@ -11,7 +11,7 @@ fast_mean(x)
 logical vectors must be wrapped in \code{as.double()}}
 }
 \value{
-Scalar with the mean.
+single numeric vector with the mean.
 }
 \description{
 R's built-it \code{mean} function has a lot of overhead which is redundant for the

@@ -9,10 +9,10 @@ create_smooth_trajectory(x, y, alpha = 0.5, epsilon = 1e-04)
 \arguments{
 \item{x, y}{numeric vectors with points to be connected with smooth curve}
 
-\item{alpha}{scalar in \verb{[0, 1]}, controls the tightness of the curve. \code{alpha = 0.5} (the default)
+\item{alpha}{single numerical value in \verb{[0, 1]}, controls the tightness of the curve. \code{alpha = 0.5} (the default)
 yields a centripetal Catmull-Rom curve}
 
-\item{epsilon}{small scalar, used to create phantom points. The default value should suffice for
+\item{epsilon}{single numerical value, used to create phantom points. The default value should suffice for
 most use cases (see also link below).}
 }
 \value{

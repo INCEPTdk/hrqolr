@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_trials.R
 \name{simulate_trials.default}
 \alias{simulate_trials.default}
-\title{Workhorse}
+\title{Default internal workhorse function for simulating trials}
 \usage{
 \method{simulate_trials}{default}(
   arms,
@@ -33,33 +33,33 @@
 \arguments{
 \item{arms}{character vector with the names of the arms}
 
-\item{n_patients}{named int (scalar or named vector), number of patients}
+\item{n_patients}{named integer (single value or named vector), number of patients}
 
-\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
+\item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 
-\item{index_hrqol}{numeric (scalar or named vector), the HRQoL at index (= enrolment)}
+\item{index_hrqol}{numeric (single value or named vector), the HRQoL at index (= enrolment)}
 
-\item{first_hrqol}{numeric (scalar or named vector), the HRQoL at ICU discharge in each arm}
+\item{first_hrqol}{numeric (single value or named vector), the HRQoL at ICU discharge in each arm}
 
-\item{final_hrqol}{numeric (scalar or named vector), the HRQoL at end of follow-up in each arm}
+\item{final_hrqol}{numeric (single value or named vector), the HRQoL at end of follow-up in each arm}
 
-\item{acceleration_hrqol}{numeric (scalar or named vector), relative acceleration of HRQoL
+\item{acceleration_hrqol}{numeric (single value or named vector), relative acceleration of HRQoL
 improvement in each arm}
 
-\item{mortality}{numeric (scalar or named vector) in [0, 1], the mortality in at end of
+\item{mortality}{numeric (single value or named vector) in \verb{[0, 1]}, the mortality in at end of
 follow-up, in each arm}
 
-\item{mortality_dampening}{numeric (scalar or named vector), dampening effect on HRQoL at ICU
+\item{mortality_dampening}{numeric (single value or named vector), dampening effect on HRQoL at ICU
 discharge in patients who die before end of follow-up}
 
-\item{mortality_trajectory_shape}{character (scalar or named vector), valid values are
+\item{mortality_trajectory_shape}{character (single value or named vector), valid values are
 \code{"exp_decay"} (default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"} and can differ
 across arms.}
 
-\item{prop_mortality_benefitters}{numeric (scalar or named vector) \verb{[0, 1]}, the proportion of
-patients in each arm who are so-called mortality benefitters.}
+\item{prop_mortality_benefitters}{numeric (single value or named vector) \verb{[0, 1]}, the proportion of
+patients in each arm who are so-called mortality benefitters}
 
-\item{verbose}{logical, should the function provide detailed output on validation results?
+\item{verbose}{single logical, should the function provide detailed output on validation results?
 Default: \code{TRUE}}
 
 \item{...}{not used}

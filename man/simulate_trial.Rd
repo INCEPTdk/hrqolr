@@ -23,23 +23,23 @@ simulate_trial(scenario, ...)
 
 \item{...}{passed on to methods}
 
-\item{n_patients_ground_truth}{int, how many patients (per arm) to use when estimating the ground
+\item{n_patients_ground_truth}{single integer, how many patients (per arm) to use when estimating the ground
 truth}
 
 \item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
 \code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
 below.}
 
-\item{n_digits}{int, the number of decimal places of in the first HRQoL values of patients.
+\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
 More digits will yield greater precision but also cause longer run-times.}
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 
-\item{alpha}{scalar in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
+\item{alpha}{single numerical value in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
 arms.}
 
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+\item{seed}{single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
 deterministic value based on the arguments given (ensuring reproducibility by default).}
 }
 \value{

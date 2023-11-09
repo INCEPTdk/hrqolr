@@ -9,9 +9,9 @@ est_remaining_time(start_time, i, n, now = Sys.time())
 \arguments{
 \item{start_time}{object of time \code{"POSIXct"} (e.g. output from \code{Sys.time()})}
 
-\item{i}{int, current iteration}
+\item{i}{single integer, current iteration}
 
-\item{n}{int, total number iteration to go through}
+\item{n}{single integer, total number iteration to go through}
 }
 \value{
 Character string with estimate

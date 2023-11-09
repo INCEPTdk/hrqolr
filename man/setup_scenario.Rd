@@ -2,7 +2,7 @@
 % Please edit documentation in R/setup_scenario.R
 \name{setup_scenario}
 \alias{setup_scenario}
-\title{Helper for setting up valid scenarios}
+\title{Helper function for setting up valid scenarios}
 \usage{
 setup_scenario(
   arms = NULL,
@@ -22,33 +22,33 @@ setup_scenario(
 \arguments{
 \item{arms}{character vector with the names of the arms}
 
-\item{n_patients}{named int (scalar or named vector), number of patients}
+\item{n_patients}{named integer (single value or named vector), number of patients}
 
-\item{index_hrqol}{numeric (scalar or named vector), the HRQoL at index (= enrolment)}
+\item{index_hrqol}{numeric (single value or named vector), the HRQoL at index (= enrolment)}
 
-\item{first_hrqol}{numeric (scalar or named vector), the HRQoL at ICU discharge in each arm}
+\item{first_hrqol}{numeric (single value or named vector), the HRQoL at ICU discharge in each arm}
 
-\item{final_hrqol}{numeric (scalar or named vector), the HRQoL at end of follow-up in each arm}
+\item{final_hrqol}{numeric (single value or named vector), the HRQoL at end of follow-up in each arm}
 
-\item{acceleration_hrqol}{numeric (scalar or named vector), relative acceleration of HRQoL
+\item{acceleration_hrqol}{numeric (single value or named vector), relative acceleration of HRQoL
 improvement in each arm}
 
-\item{mortality}{numeric (scalar or named vector) in [0, 1], the mortality in at end of
+\item{mortality}{numeric (single value or named vector) in \verb{[0, 1]}, the mortality in at end of
 follow-up, in each arm}
 
-\item{mortality_dampening}{numeric (scalar or named vector), dampening effect on HRQoL at ICU
+\item{mortality_dampening}{numeric (single value or named vector), dampening effect on HRQoL at ICU
 discharge in patients who die before end of follow-up}
 
-\item{mortality_trajectory_shape}{character (scalar or named vector), valid values are
+\item{mortality_trajectory_shape}{character (single value or named vector), valid values are
 \code{"exp_decay"} (default), \code{"linear"}, \code{"constant"}, \code{"reflected_exp_decay"} and can differ
 across arms.}
 
-\item{prop_mortality_benefitters}{numeric (scalar or named vector) \verb{[0, 1]}, the proportion of
-patients in each arm who are so-called mortality benefitters.}
+\item{prop_mortality_benefitters}{numeric (single value or named vector) \verb{[0, 1]}, the proportion of
+patients in each arm who are so-called mortality benefitters}
 
-\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
+\item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 
-\item{verbose}{logical, should the function provide detailed output on validation results?
+\item{verbose}{single logical, should the function provide detailed output on validation results?
 Default: \code{TRUE}}
 }
 \value{
@@ -56,8 +56,8 @@ An object of class 'hrqolr_scenario' with validated inputs.
 }
 \description{
 Inputs are validated to ensure they produce the expected results when given as the input in
-\link{simulate_trials}. Therefore, any arguments to this function can also be just a single value
+\code{\link[=simulate_trials]{simulate_trials()}}. Therefore, any arguments to this function can also be just a single value
 (except the \code{arms} argument), and this function will expand such single-valued arguments to be
-compatible with \code{simulate_trials}. If arguments are named vectors, they must have exactly one
+compatible with \code{\link[=simulate_trials]{simulate_trials()}}. If arguments are named vectors, they must have exactly one
 value per arm, and the names must match those given in the \code{arms}.
 }

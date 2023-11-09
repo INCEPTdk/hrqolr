@@ -7,11 +7,11 @@
 compute_eof(t_icu_discharge, approx_end = 180, sampling_frequency = 14)
 }
 \arguments{
-\item{t_icu_discharge}{int, day of ICU discharge}
+\item{t_icu_discharge}{single integer, day of ICU discharge}
 
-\item{approx_end}{int, the approximate end day (follow-up will not be shorter than this)}
+\item{approx_end}{single integer, the approximate end day (follow-up will not be shorter than this)}
 
-\item{sampling_frequency}{int, period between samplings of HRQoL}
+\item{sampling_frequency}{single integer, period between samplings of HRQoL}
 }
 \description{
 Cached. Based entirely on day of ICU discharge and sampling frequency
