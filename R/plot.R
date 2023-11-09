@@ -110,7 +110,8 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
 	dt <- melt.data.table(x, id.vars = id_cols, measure.vars = outcome_cols)
 
 	p_base <- ggplot2::ggplot(dt, ggplot2::aes(x = value, colour = arm)) +
-		ggplot2::facet_wrap(~ variable, scales = "free")
+		ggplot2::facet_wrap(~ variable, scales = "free") +
+		ggplot2::theme(legend.title = ggplot2::element_blank())
 
 	if (isTRUE(ecdf)) {
 		p_base +
