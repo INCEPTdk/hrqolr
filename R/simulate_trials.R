@@ -19,12 +19,13 @@ simulate_trials <- function(scenario, ...) {
 }
 
 
+# TODO: Add reference to paper with Danish EQ-5D-5L reference values
 #' Helper for when scenario given as first argument
 #'
 #' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
 #'
 #' @param n_trials integer vector. If length > 1, simulations will be run in batches of size given
-#' @param n_patients_ground_truth singleinteger, how many patients (per arm) to use when estimating the ground
+#' @param n_patients_ground_truth single integer, how many patients (per arm) to use when estimating the ground
 #'   truth
 #' @param n_example_trajectories_per_arm single integer, the number of example trajectories to include in the
 #'   returned object
@@ -38,7 +39,7 @@ simulate_trials <- function(scenario, ...) {
 #' @param n_digits single integer, the number of decimal places of in the first HRQoL values of patients.
 #'   More digits will yield greater precision but also cause longer run-times.
 #' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
-#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values. ### AG: Suggest inserting af reference to the Danish paper
+#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values. 
 #' @param alpha single numerical value in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
 #' @param include_trial_results single logical, indicates whether trial-level results are kept. Default is
