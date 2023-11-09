@@ -31,14 +31,14 @@ Depends:
 Imports:
 	cachem (>= 1.0.8),
 	data.table (>= 1.14.2),
-	Hmisc (>= 5.1.1)
+	Hmisc (>= 5.1.1),
+	rlang (>= 1.1.1)
 Suggests:
 	covr,
 	crayon,
 	ggplot2,
 	knitr,
 	lobstr,
-	rlang,
 	rmarkdown,
 	scales,
 	testthat (>= 3.0.0),
