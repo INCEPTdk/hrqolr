@@ -3,8 +3,8 @@
 #' @inheritParams construct_arm_level_trajectory
 #' @inheritParams construct_mortality_trajectory
 #' @inheritParams simulate_trials
-#' @param first_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
-#' @param is_mortality_benefitter logical, is patient a mortality benefitters? Defaults to FALSE.
+#' @param first_hrqol_patient single numeric value, the HRQoL value at ICU discharge of this patient
+#' @param is_mortality_benefitter single logical value, is patient a mortality benefitters? Defaults to `FALSE`.
 #'
 #' @keywords internal
 #' @inherit construct_final_trajectories return

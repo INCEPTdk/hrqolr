@@ -124,7 +124,7 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 
 #' Print method for bytes
 #'
-#' Logic from pryr:::print.pryr_bytes but simplified and included here to minimise dependencies.
+#' Logic from `pryr:::print.pryr_bytes` but simplified and included here to minimise dependencies.
 #'
 #' @export
 #' @rdname print

@@ -1,3 +1,5 @@
+# TODO: Add reference link to CLASSIC trial paper, perhaps write out abbreviation
+
 #' Generate density, probability, quantile and random generation functions for (scaled) empirical
 #' mortality distribution
 #'

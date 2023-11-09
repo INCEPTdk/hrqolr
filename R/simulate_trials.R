@@ -19,32 +19,33 @@ simulate_trials <- function(scenario, ...) {
 }
 
 
+# TODO: Add reference to paper with Danish EQ-5D-5L reference values
 #' Helper for when scenario given as first argument
 #'
 #' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
 #'
-#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#' @param n_trials integer vector. If length > 1, simulations will be run in batches of size given
+#' @param n_patients_ground_truth single integer, how many patients (per arm) to use when estimating the ground
 #'   truth
-#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
+#' @param n_example_trajectories_per_arm single integer, the number of example trajectories to include in the
 #'   returned object
 #'
 #' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
 #'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
 #'   below.
-#' @param verbose logical, should the function give progress timestamped updates? Default: `TRUE`
-#' @param seed int, optional seed for reproducible pseudo-random number generation. Defaults to a
+#' @param verbose single logical, should the function give progress timestamped updates? Default: `TRUE`
+#' @param seed single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
 #'   deterministic value based on the arguments given (ensuring reproducibility by default).
-#' @param n_digits int, the number of decimal places of in the first HRQoL values of patients.
+#' @param n_digits single integer, the number of decimal places of in the first HRQoL values of patients.
 #'   More digits will yield greater precision but also cause longer run-times.
 #' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
-#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
-#' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
+#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values. 
+#' @param alpha single numerical value in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
-#' @param include_trial_results logical, indicates whether trial-level results are kept. Default is
+#' @param include_trial_results single logical, indicates whether trial-level results are kept. Default is
 #'   `FALSE` because the resulting object may be very large if many trials are simulated.
-#' @param max_batch_size int, the maximum number of patients to process in each batch. The default
-#'   is to use run one batch (i.e. no upper limit)
+#' @param max_batch_size single integer, the maximum number of patients to process in each batch. The default
+#'   is to use run one batch (i.e. no upper limit).
 #'
 #' @details
 #' * `test_fun`: \[pending\]
@@ -87,7 +88,7 @@ simulate_trials.hrqolr_scenario <- function(
 }
 
 
-#' Workhorse
+#' Default internal workhorse function for simulating trials
 #'
 #' Internal function that shouldn't really be invoked by the user directly. The arguments given must
 #' be named vectors.

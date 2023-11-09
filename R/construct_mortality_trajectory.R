@@ -7,14 +7,14 @@
 #' @inheritParams simulate_trials
 #' @param t_death numeric scalar, time of death. NA represent administrative censoring (i.e., the
 #'   patient was still alive at end of follow-up)
-#' @param index_hrqol scalar, HRQoL at index (= time of enrolment)
-#' @param first_hrqol scalar, HRQoL at ICU discharge
-#' @param resolution int, the number of grid points on the HRQoL trajectory between ICU discharge
+#' @param index_hrqol single numeric value, HRQoL at index (= time of enrolment)
+#' @param first_hrqol single numeric value, HRQoL at ICU discharge
+#' @param resolution single integer, the number of grid points on the HRQoL trajectory between ICU discharge
 #'   and time of death
-##' @param n_halflives_to_zero scalar, the number of half-lives after which one considers HRQoL to
+##' @param n_halflives_to_zero single numeric value, the number of half-lives after which one considers HRQoL to
 ##'  equal `0`.
 #'
-#' @return Two-column matrix: x is time, y is the HRQoL.
+#' @return Two-column matrix: `x` is time, `y` is the HRQoL.
 #' @keywords internal
 #'
 construct_mortality_trajectory <- function(

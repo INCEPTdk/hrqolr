@@ -200,10 +200,8 @@ test_that("Arm and patient trajectories are plotted correctly", {
 # 	single_trial <- simulate_trial(scenario, seed = 42)
 #
 # 	p <- plot(single_trial, ecdf = TRUE)
-# 	expect_snapshot(ggplot2::layer_data(p))
-# 	# vdiffr::expect_doppelganger("single_trial_cdf", p)
+# 	vdiffr::expect_doppelganger("single_trial_cdf", p)
 #
 # 	p <- plot(single_trial, ecdf = FALSE)
-# 	expect_snapshot(ggplot2::layer_data(p))
-# 	# vdiffr::expect_doppelganger("single_trial_pdf", p)
+# 	vdiffr::expect_doppelganger("single_trial_pdf", p)
 # })

@@ -7,7 +7,7 @@
 #'
 #' @rdname cache_hrqolr
 #'
-#' @return NULL, these functions are called for their side effects: caching (or clearing caches) of
+#' @return `NULL`, these functions are called for their side effects: caching (or clearing caches) of
 #'   select `hrqolr` functions.
 #' @export
 #' @importFrom utils assignInMyNamespace

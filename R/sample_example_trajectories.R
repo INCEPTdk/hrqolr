@@ -46,7 +46,7 @@ sample_example_trajectories.hrqolr_scenario <- function(
 }
 
 
-#' Workhorse
+#' Default workhorse function for sampling example trajectories
 #'
 #' Internal function that shouldn't really be invoked by the user directly. The arguments given must
 #' be named vectors.

@@ -1,6 +1,6 @@
 #' Interpolate multiple values
 #'
-#' Stripped-down version of [stats::approx]. The underlying C code is exactly the same but included
+#' Stripped-down version of [stats::approx()]. The underlying C code is exactly the same but included in
 #' `hrqolr` as it's unexported from the `stats` package.
 #'
 #' @inheritParams stats::approx
