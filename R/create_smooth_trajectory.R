@@ -19,7 +19,7 @@
 #' @export
 #'
 create_smooth_trajectory <- function(x, y, alpha = 0.5, epsilon = 1e-4) {
-	hash <- rlang::hash(c("create_smooth_trajectory", x, y, alpha, epsilon))  #### AG: Don't we need to assert availability of rlang (currently in suggests)?
+	hash <- rlang::hash(c("create_smooth_trajectory", x, y, alpha, epsilon))
 	out <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(out)) {
