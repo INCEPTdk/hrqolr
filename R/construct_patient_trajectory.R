@@ -29,7 +29,7 @@ construct_patient_trajectory <- function(
 ) {
 
 	mc <- match.call()
-	hash <- rlang::hash(c( #### AG: Don't we need to assert availability of rlang (currently in suggests)?
+	hash <- rlang::hash(c(
 		deparse(mc[1]),
 		lapply(mc[-1], eval, parent.frame())
 	))
@@ -84,5 +84,5 @@ construct_patient_trajectory <- function(
 		.hrqolr_cache_user$set(hash, res)
 	}
 
-	res
+	return(res)
 }
