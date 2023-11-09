@@ -27,7 +27,7 @@ compute_estimates <- function(
 ) {
 
 	mc <- match.call()
-	hash <- rlang::hash(c( ### AG: Don't we need to check if package available here? rlang is in suggests
+	hash <- rlang::hash(c(
 		deparse(mc[1]),
 		lapply(mc[-1], eval, parent.frame())
 	))
