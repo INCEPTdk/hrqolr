@@ -1,7 +1,8 @@
 #include <R.h>
 #include <Rinternals.h>
+#include "hrqolr.h"
 
-SEXP C_Mean(SEXP x)
+SEXP mean(SEXP x)
 {
 	size_t n = length(x);
 

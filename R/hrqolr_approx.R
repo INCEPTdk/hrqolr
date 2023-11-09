@@ -11,5 +11,5 @@
 hrqolr_approx <- function(x, y, xout, yleft = -Inf, yright = Inf, method = 1, f = 0) {
 	x <- as.double(x)
 	y <- as.double(y)
-	.Call("C_Approx", x, y, xout, method, yleft, yright, f, PACKAGE = "hrqolr")
+	.Call(C_approx, x, y, xout, method, yleft, yright, f)
 }

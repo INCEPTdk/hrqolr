@@ -20,7 +20,7 @@ rescale <- function(x) {
 #' @return single numeric vector with the mean.
 #'
 fast_mean <- function(x) {
-	.Call("C_Mean", x, PACKAGE = "hrqolr")
+	.Call(C_mean, x)
 }
 
 
@@ -86,7 +86,7 @@ na_matrix <- function(index_hrqol, t) {
 #' @keywords internal
 #'
 create_xout <- function(start, end, by) {
-	.Call("C_Create_xout", start, end, by, PACKAGE = "hrqolr")
+	.Call(C_create_xout, start, end, by)
 }
 
 
@@ -204,7 +204,7 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 #' @keywords internal
 #'
 auc <- function(x, y) {
-	.Call("C_Auc", x, y, PACKAGE = "hrqolr")
+	.Call(C_auc, x, y)
 }
 
 

@@ -1,7 +1,8 @@
 #include <R.h>
 #include <Rinternals.h>
+#include "hrqolr.h"
 
-SEXP C_Bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B)
+SEXP bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B)
 {
 
 	GetRNGstate(); // read in .Random.seed
