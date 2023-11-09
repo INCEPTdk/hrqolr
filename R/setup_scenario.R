@@ -65,7 +65,7 @@ setup_scenario <- function(
 		index_hrqol = list(fun = verify_num),
 		first_hrqol = list(fun = verify_num),
 		final_hrqol = list(fun = verify_num),
-		acceleration_hrqol = list(fun = verify_num, min_value = 0),
+		acceleration_hrqol = list(fun = verify_num, min_value = 0, open = "left"),
 		mortality = list(fun = verify_num, min_value = 0, max_value = 1),
 		mortality_dampening = list(fun = verify_num, min_value = 0, max_value = 1),
 		mortality_trajectory_shape = list(

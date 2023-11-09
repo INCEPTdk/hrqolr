@@ -47,14 +47,20 @@ construct_arm_level_trajectory <- function(
 	)
 	hrqol <- c(0.1, 0.3, 0.68, 0.75)
 	traj <- create_smooth_trajectory(t, hrqol) # post-ICU discharge trajectory
-	for (i in seq(2, length(traj$y))) {
+	n <- nrow(traj)
+
+	for (i in seq(2, n)) {
 		traj$y[i] <- max(traj$y[i-1], traj$y[i]) # enforce monotonicity
 	}
 
 	# Transform trajectory
 	dy <- rescale(diff(traj$y))
 	y_tmp <- cumsum(c(0.0, dy * (final_hrqol_arm - first_hrqol_arm))) + first_hrqol_arm
-	y_tmp <- y_tmp * seq(acceleration_hrqol, 1, length = length(y_tmp))
+
+	dy <- diff(y_tmp) # need to accelerate the slopes after scaling
+	acceleration_seq <- seq(acceleration_hrqol, 1, length = length(y_tmp) - 1)
+	y_tmp <- c(y_tmp[1], y_tmp[-n] + acceleration_seq * dy)
+
 	traj$y <- pmin(y_tmp, final_hrqol_arm) # avoid overshooting the final HRQoL
 
 	out <- rbind(c(x = 0, y = index_hrqol_arm[[1]]), as.matrix(traj))
