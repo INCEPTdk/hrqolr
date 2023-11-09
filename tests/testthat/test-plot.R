@@ -199,9 +199,7 @@ test_that("Single trials plot correctly", {
 
 	single_trial <- simulate_trial(scenario, seed = 42)
 
-	p <- plot(single_trial, ecdf = TRUE) +
-		ggplot2::theme(axis.text.x = ggplot2::element_text())
-			# weird hack needed to use default ggplot2 theme in test
+	p <- plot(single_trial, ecdf = TRUE)
 	vdiffr::expect_doppelganger("single_trial_ecdf", p)
 
 	p <- plot(single_trial, ecdf = FALSE)
