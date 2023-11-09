@@ -70,5 +70,5 @@ compute_estimates <- function(
 		.hrqolr_cache_user$set(hash, res)
 	}
 
-	res
+	return(res)
 }
