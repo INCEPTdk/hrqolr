@@ -1,5 +1,6 @@
 #include <R.h>
 #include <Rinternals.h>
+#include "hrqolr.h"
 
 SEXP C_Auc(SEXP x, SEXP y)
 {

@@ -1,7 +1,8 @@
 #include <R.h>
 #include <Rinternals.h>
+#include "hrqolr.h"
 
-SEXP C_Create_xout(SEXP start, SEXP end, SEXP by)
+SEXP create_xout(SEXP start, SEXP end, SEXP by)
 {
 	int _start = asInteger(start);
 	int _end = asInteger(end);
