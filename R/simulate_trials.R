@@ -379,7 +379,7 @@ simulate_trials.default <- function(
 
 	# Comparisons across trials ====
 	comparisons <- merge(results$mean_diffs, ground_truth)
-	results$comparisons <- NULL
+	results$mean_diffs <- NULL
 	gc()
 
 	by_cols <- c("outcome", "analysis", "comparator", "target")

@@ -15,11 +15,11 @@ compute_performance_metrics <- function(theta_hat, theta, p_value, ci_lo, ci_hi,
 
 	n <- length(theta_hat)
 	n_prefix <- 1 / (n * (n - 1))
+
 	bias <- fast_mean(theta_hat - theta)
 	relative_bias <- fast_mean((theta_hat - theta) / theta)
 	mse <- fast_mean((theta_hat - theta)^2)
-	# browser()
-	# stop("something's up with coverage, rejection_prop and be_coverage here")
+	# fast_mean only fast for doubles (logicals are integers in R)
 	coverage <- sum(ci_lo <= theta & theta <= ci_hi) / n
 	rejection_prop <- sum(p_value <= alpha) / n
 	be_coverage <- sum(ci_lo <= theta_hat & theta_hat <= ci_hi) / n
