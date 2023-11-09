@@ -35,7 +35,7 @@ information will be written. To log to the console, use \code{stderr()} or
 when a cache pruning occurs. Currently, \code{"lru"} and \code{"fifo"} are supported.}
 }
 \value{
-NULL, these functions are called for their side effects: caching (or clearing caches) of
+\code{NULL}, these functions are called for their side effects: caching (or clearing caches) of
 select \code{hrqolr} functions.
 
 Nothing, used for its side effect

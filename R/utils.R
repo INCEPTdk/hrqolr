@@ -17,17 +17,17 @@ rescale <- function(x) {
 #'   logical vectors must be wrapped in `as.double()`
 #'
 #' @keywords internal
-#' @return Scalar with the mean.
+#' @return single numeric vector with the mean.
 #'
 fast_mean <- function(x) {
-	.Call("C_Mean", x, PACKAGE = "hrqolr")
+	.Call(C_mean, x)
 }
 
 
 #' Compute deterministic day of hospital discharge based on day of ICU discharge
 #'
-#' @param t_icu_discharge int, day of ICU discharge
-#' @param a,b numeric scalars, coefficients
+#' @param t_icu_discharge single integer, day of ICU discharge
+#' @param a,b numeric vectors of length 1, coefficients
 #' @keywords internal
 #'
 compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
@@ -40,7 +40,7 @@ compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
 #'
 #' @param a,b arbitrary vectors
 #' @keywords internal
-#' @name OR
+#' @name replace_null
 #'
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -51,18 +51,19 @@ compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
 #'
 #' @param a,b arbitrary vectors
 #' @keywords internal
+#' @name replace_infinite
 #'
 `%fi%` <- function(a, b) {
 	if (is.infinite(a)) b else a
 }
 
 
-#' Create "empty" observation tibble
+#' Create "empty" observation matrix
 #'
 #' Useful for patients for whom no data are every observed.
 #'
-#' @param index_hrqol scalar, HRQoL at time of enrolment (= index)
-#' @param t scalar
+#' @param index_hrqol single numeric value, HRQoL at time of enrolment (= index)
+#' @param t single numeric value
 #' @keywords internal
 #'
 na_matrix <- function(index_hrqol, t) {
@@ -81,11 +82,11 @@ na_matrix <- function(index_hrqol, t) {
 #' happily spits out a vector with some 2^29 elements. This lack of check is
 #' intentional to keep this (internal) function fast.
 #'
-#' @param start,end,by int scalars
+#' @param start,end,by integers of length 1
 #' @keywords internal
 #'
 create_xout <- function(start, end, by) {
-	.Call("C_Create_xout", start, end, by, PACKAGE = "hrqolr")
+	.Call(C_create_xout, start, end, by)
 }
 
 
@@ -112,8 +113,8 @@ log_timediff <- function(start_time, msg = NULL, style = NULL, now = Sys.time())
 #' Uses a counter and the total iterations to estimate how much time remains
 #'
 #' @param start_time object of time `"POSIXct"` (e.g. output from `Sys.time()`)
-#' @param i int, current iteration
-#' @param n int, total number iteration to go through
+#' @param i single integer, current iteration
+#' @param n single integer, total number iteration to go through
 #'
 #' @return Character string with estimate
 #' @keywords internal
@@ -132,9 +133,9 @@ est_remaining_time <- function(start_time, i, n, now = Sys.time()) {
 #'
 #' Cached. Based entirely on day of ICU discharge and sampling frequency
 #'
-#' @param t_icu_discharge int, day of ICU discharge
-#' @param approx_end int, the approximate end day (follow-up will not be shorter than this)
-#' @param sampling_frequency int, period between samplings of HRQoL
+#' @param t_icu_discharge single integer, day of ICU discharge
+#' @param approx_end single integer, the approximate end day (follow-up will not be shorter than this)
+#' @param sampling_frequency single integer, period between samplings of HRQoL
 #'
 compute_eof <- function(t_icu_discharge, approx_end = 180, sampling_frequency = 14) {
 	ceiling((approx_end - t_icu_discharge) / sampling_frequency) * sampling_frequency + t_icu_discharge
@@ -161,7 +162,7 @@ replace_na <- function(x, replacement) {
 #'
 #' Helper function.
 #'
-#' @param n int, number of times to ICU discharge to sample.
+#' @param n single integer, number of times to ICU discharge to sample.
 #'
 #' @return numeric vector of length `n` with sampled times.
 #' @keywords internal
@@ -177,7 +178,7 @@ sample_t_icu_discharge <- function(n) {
 #'
 #' @param x numeric vector
 #' @param probs probabilities for which to compute the quantiles
-#' @param na_rm logical, should NA's be removed (default: `TRUE`)
+#' @param na_rm logical, should `NA`'s be removed (default: `TRUE`)
 #'
 #' @keywords internal
 #'
@@ -203,13 +204,13 @@ summarise_var <- function(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE) {
 #' @keywords internal
 #'
 auc <- function(x, y) {
-	.Call("C_Auc", x, y, PACKAGE = "hrqolr")
+	.Call(C_auc, x, y)
 }
 
 
 #' stop() and warning() with call. = FALSE
 #'
-#' Used internally. Calls [stop0()] or [warning()] but enforces `call. = FALSE`,
+#' Used internally. Calls [stop()] or [warning()] but enforces `call. = FALSE`,
 #' to suppress the call from the error/warning.
 #'
 #' @inheritParams base::stop
@@ -229,7 +230,7 @@ warning0 <- function(...) warning(..., call. = FALSE)
 
 #' vapply helpers
 #'
-#' Used internally. Helpers for simplifying code invoking vapply().
+#' Used internally. Helpers for simplifying code invoking `vapply()`.
 #'
 #' @inheritParams base::vapply
 #'

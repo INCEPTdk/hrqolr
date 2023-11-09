@@ -1,6 +1,9 @@
 // This file is the same as that of the stats package, except:
 // - The R_approxtest function was removed
-// - Approx has been renamed to C_Approx
+// - Approx has been renamed to approx
+// - Branching of linear vs. constant interpolation is deactivated
+
+#include "hrqolr.h"
 
 // =====================================================================
 
@@ -117,7 +120,7 @@ R_approxfun(double *x, double *y, int nxy, double *xout, double *yout,
 
 #include <Rinternals.h>
 #include "statsR.h"
-SEXP C_Approx(SEXP x, SEXP y, SEXP v, SEXP method,
+SEXP approx(SEXP x, SEXP y, SEXP v, SEXP method,
 	    SEXP yleft, SEXP yright, SEXP sf)
 {
     SEXP xout = PROTECT(coerceVector(v, REALSXP));

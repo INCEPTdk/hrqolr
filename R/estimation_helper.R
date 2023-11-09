@@ -2,12 +2,12 @@
 #'
 #' @inheritParams simulate_trials
 #' @inheritParams construct_arm_level_trajectory
-#' @param n_patients int, the number of patients for whom to estimate outcomes
-#' @param arm character scalar
+#' @param n_patients single integer, the number of patients for whom to estimate outcomes
+#' @param arm character vector of length 1
 #' @param mortality_rng function, a function that produces times of death (only one parameter which should be the number of values to sample)
 #'
 #' @keywords internal
-#' @return Data.table with outcome results for all patients. NB! There are no trial_id indicator as
+#' @return data.table with outcome results for all patients. NB! There is no `trial_id` indicator as
 #'   this is not required in all uses of this helper function.
 #'
 estimation_helper <- function(
@@ -41,7 +41,11 @@ estimation_helper <- function(
 	}
 
 	first_hrqol_patients <- round(
-		stats::rnorm(n_patients, first_hrqol_arm, inter_patient_noise_sd),
+		stats::rnorm(
+			n_patients,
+			first_hrqol_arm * acceleration_hrqol,
+			inter_patient_noise_sd
+		),
 		digits = n_digits
 	)
 

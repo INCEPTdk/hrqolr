@@ -13,7 +13,6 @@
 NULL
 
 
-
 #' Plot method for example trajectories
 #'
 #' @param which character, one of `"both"` (arm and patient trajectories, the default), `"arm"`
@@ -52,14 +51,14 @@ plot.hrqolr_trajectories <- function(
 		)
 	)
 
-	base_p <- ggplot2::ggplot() +
+	p_base <- ggplot2::ggplot() +
 		ggplot2::labs(x = "Time (days)", y = "HRQoL") +
 		ggplot2::theme(legend.title = ggplot2::element_blank())
 
 	if (which == "arm") {
-		base_p + arm_layer
+		p_base + arm_layer
 	} else if (which == "patient") {
-		base_p + patient_layer
+		p_base + patient_layer
 	} else if (which == "summarise") {
 		ids_with_nas <- x$patient_level[is.na(y)]$id
 		ribbon_dt <- x$patient_level[
@@ -77,12 +76,54 @@ plot.hrqolr_trajectories <- function(
 			c(list(ggplot2::aes(x, ymin = lo, ymax = hi, fill = arm), ribbon_dt), ribbon_aes)
 		)
 
-		base_p +
+		p_base +
 			ribbon_layer +
 			arm_layer
 	} else {
-		base_p +
+		p_base +
 			patient_layer +
 			arm_layer
 	}
+}
+
+
+#' Plot results from single trial
+#'
+#' @param analysis character, `"all"` (include non-survivors and set their HRQoL to 0) or `"survivors"`.
+#' @param ecdf logical, whether to plot the empiricial cumulative distribution (default) or not
+#'
+#' @import data.table
+#' @export
+#' @describeIn plot Single trial
+#'
+plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
+	assert_pkgs("ggplot2")
+	x <- copy(x$patient_results) # don't corrupt input object
+
+	id_cols <- c("patient_id", "arm")
+	outcome_cols <- names(x)[!names(x) %in% id_cols]
+
+	if (analysis == "all") {
+		setnafill(x, "const", 0, cols = outcome_cols)
+	}
+
+	dt <- melt.data.table(x, id.vars = id_cols, measure.vars = outcome_cols)
+
+	p_base <- ggplot2::ggplot(dt, ggplot2::aes(x = value, colour = arm)) +
+		ggplot2::facet_wrap(~ variable, scales = "free") +
+		ggplot2::theme(legend.title = ggplot2::element_blank())
+
+	if (isTRUE(ecdf)) {
+		p_base +
+			ggplot2::stat_ecdf(na.rm = TRUE, pad = FALSE) +
+			ggplot2::scale_y_continuous(labels = scales::percent)
+	} else {
+		p_base +
+			ggplot2::stat_density(geom = "line", position = "identity", na.rm = TRUE, trim = TRUE) +
+			ggplot2::theme(
+				axis.text.y = ggplot2::element_blank(),
+				axis.ticks.y = ggplot2::element_blank()
+			)
+	}
+
 }

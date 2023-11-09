@@ -46,7 +46,7 @@ sample_example_trajectories.hrqolr_scenario <- function(
 }
 
 
-#' Workhorse
+#' Default workhorse function for sampling example trajectories
 #'
 #' Internal function that shouldn't really be invoked by the user directly. The arguments given must
 #' be named vectors.
@@ -116,10 +116,14 @@ sample_example_trajectories.default <- function(
 			rep(FALSE, n_example_trajectories_per_arm)
 		}
 
-		inter_patient_noise_sd <- first_hrqol[arm] / 1.96
+		inter_patient_noise_sd <- first_hrqol[arm] * acceleration_hrqol[arm] / 1.96
 
 		first_hrqol_patients <- round(
-			stats::rnorm(n_example_trajectories_per_arm, first_hrqol[arm], inter_patient_noise_sd),
+			stats::rnorm(
+				n_example_trajectories_per_arm,
+				first_hrqol[arm] * acceleration_hrqol[arm],
+				inter_patient_noise_sd
+			),
 			digits = n_digits
 		)
 

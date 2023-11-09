@@ -83,11 +83,13 @@ print.hrqolr_scenario <- function(x, ...) {
 #' Print method for hrqolr comparison results
 #'
 #' @rdname print
+#' @import data.table
 #' @export
 #'
 print.hrqolr_comparisons <- function(x, decimals = 3, ...) {
-	x_tmp <- x
+	x_tmp <- copy(x)
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
+	setcolorder(x_tmp, c("outcome", "comparator", "target", "analysis"))
 
 	x_tmp <- x_tmp[
 		,
@@ -95,7 +97,7 @@ print.hrqolr_comparisons <- function(x, decimals = 3, ...) {
 		.SDcols = names(x_tmp)
 	]
 
-	print(data.table::transpose(x_tmp, keep.names = "statistic", make.names = "outcome"))
+	print(transpose(x_tmp, keep.names = "statistic", make.names = "outcome"))
 
 	invisible(x)
 }
@@ -122,7 +124,7 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 
 #' Print method for bytes
 #'
-#' Logic from pryr:::print.pryr_bytes but simplified and included here to minimise dependencies.
+#' Logic from `pryr:::print.pryr_bytes` but simplified and included here to minimise dependencies.
 #'
 #' @export
 #' @rdname print

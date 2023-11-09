@@ -7,7 +7,7 @@
 create_xout(start, end, by)
 }
 \arguments{
-\item{start, end, by}{int scalars}
+\item{start, end, by}{integers of length 1}
 }
 \description{
 Importantly, there are no checks so if, e.g., \code{end = NA}, the functions

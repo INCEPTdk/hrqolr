@@ -11,7 +11,7 @@ summarise_var(x, probs = c(0.25, 0.5, 0.75), na_rm = TRUE)
 
 \item{probs}{probabilities for which to compute the quantiles}
 
-\item{na_rm}{logical, should NA's be removed (default: \code{TRUE})}
+\item{na_rm}{logical, should \code{NA}'s be removed (default: \code{TRUE})}
 }
 \description{
 Input e.g. a scalar to get the corresponding names

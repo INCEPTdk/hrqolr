@@ -7,7 +7,7 @@
 sample_t_icu_discharge(n)
 }
 \arguments{
-\item{n}{int, number of times to ICU discharge to sample.}
+\item{n}{single integer, number of times to ICU discharge to sample.}
 }
 \value{
 numeric vector of length \code{n} with sampled times.

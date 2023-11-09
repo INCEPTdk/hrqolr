@@ -7,7 +7,7 @@ test_that("simulate_trials S3 method works", {
 		index_hrqol = 0,
 		first_hrqol = 0.2,
 		final_hrqol = c(Active = 0.7, Control = 0.5),
-		acceleration_hrqol = 0,
+		acceleration_hrqol = 1,
 		mortality = 0.2,
 		mortality_dampening = 0,
 		mortality_trajectory_shape = "exp_decay",
@@ -18,9 +18,9 @@ test_that("simulate_trials S3 method works", {
 
 	sims_single_batch <- suppressMessages(simulate_trials(
 		scenario1,
-		n_trials = 10,
+		n_trials = 100,
 		n_patients_ground_truth = 10,
-		n_example_trajectories_per_arm = 10,
+		n_example_trajectories_per_arm = 1000,
 		verbose = TRUE,
 		test_fun = welch_t_test,
 		include_trial_results = TRUE,
@@ -32,9 +32,9 @@ test_that("simulate_trials S3 method works", {
 
 	sims_two_batches_verbose <- suppressMessages(simulate_trials(
 		scenario1,
-		n_trials = 10,
+		n_trials = 500,
 		max_batch_size = 500,
-		n_patients_ground_truth = 10,
+		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 10,
 		verbose = TRUE,
 		test_fun = welch_t_test,
@@ -46,8 +46,8 @@ test_that("simulate_trials S3 method works", {
 
 	sims_single_batch_without_examples <- suppressMessages(simulate_trials(
 		scenario1,
-		n_trials = 10,
-		n_patients_ground_truth = 10,
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 0,
 		verbose = TRUE,
 		test_fun = welch_t_test,
@@ -64,7 +64,7 @@ test_that("simulate_trials S3 method works", {
 		index_hrqol = 0,
 		first_hrqol = 0.2,
 		final_hrqol = c(Active = 0.7, Control = 0.5),
-		acceleration_hrqol = 0,
+		acceleration_hrqol = 1,
 		mortality = 0.2,
 		mortality_dampening = 0,
 		mortality_trajectory_shape = "exp_decay",
@@ -75,8 +75,8 @@ test_that("simulate_trials S3 method works", {
 
 	sims_single_batch_no_mort_benefitters <- suppressMessages(simulate_trials(
 		scenario2,
-		n_trials = 10,
-		n_patients_ground_truth = 10,
+		n_trials = 100,
+		n_patients_ground_truth = 1000,
 		n_example_trajectories_per_arm = 10,
 		verbose = TRUE,
 		test_fun = welch_t_test,

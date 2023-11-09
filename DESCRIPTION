@@ -1,7 +1,7 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9008
-Date: 2023-11-04
+Version: 0.0.0.9010
+Date: 2023-11-09
 Authors@R: 
 	c(person("Benjamin Skov", "Kaas-Hansen",
 	         email = "epiben@hey.com",
@@ -31,15 +31,16 @@ Depends:
 Imports:
 	cachem (>= 1.0.8),
 	data.table (>= 1.14.2),
-	Hmisc (>= 5.1.1)
+	Hmisc (>= 5.1.1),
+	rlang (>= 1.1.1)
 Suggests:
 	covr,
 	crayon,
 	ggplot2,
 	knitr,
 	lobstr,
-	rlang,
 	rmarkdown,
+	scales,
 	testthat (>= 3.0.0),
 	vdiffr
 NeedsCompilation: yes

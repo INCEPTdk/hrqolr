@@ -23,7 +23,7 @@ trajectory}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
+\item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 }
 \value{
 A matrix with two columns: x is time and y the corresponding HRQoL values.

@@ -38,7 +38,7 @@ hrqolr_approx(x, y, xout, yleft = -Inf, yright = Inf, method = 1, f = 0)
 Interpolated values
 }
 \description{
-Stripped-down version of \link[stats:approxfun]{stats::approx}. The underlying C code is exactly the same but included
+Stripped-down version of \code{\link[stats:approxfun]{stats::approx()}}. The underlying C code is exactly the same but included in
 \code{hrqolr} as it's unexported from the \code{stats} package.
 }
 \keyword{internal}

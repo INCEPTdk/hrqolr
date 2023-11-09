@@ -1,8 +1,8 @@
 #' Bootstrap confidence intervals and p values
 #'
 #' @inheritParams welch_t_test
-#' @param reference_arm scalar, name of the reference arm in `grps`
-#' @param n_samples scalar, number of bootstrap samples
+#' @param reference_arm character vector of length 1, name of the reference arm in `grps`
+#' @param n_samples single integer, number of bootstrap samples
 #'
 #' @export
 #' @return A four-element vector with point estimate, p value and confidence internal
@@ -27,11 +27,10 @@ bootstrap_estimates <- function (
 	vals <- as.double(vals)
 
 	boot_samples <- .Call(
-		"C_Bootstrap_mean_diffs",
+		C_bootstrap_mean_diffs,
 		vals,
 		grps == reference_arm, # must be integer input
-		n_samples,
-		PACKAGE = "hrqolr"
+		n_samples
 	)
 
 	boot_samples <- boot_samples[!is.na(boot_samples)]

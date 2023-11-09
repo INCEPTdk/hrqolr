@@ -20,18 +20,18 @@ patient was still alive at end of follow-up)}
 
 \item{t_icu_discharge}{scalar, time of ICU discharge}
 
-\item{index_hrqol}{scalar, HRQoL at index (= time of enrolment)}
+\item{index_hrqol}{single numeric value, HRQoL at index (= time of enrolment)}
 
-\item{first_hrqol}{scalar, HRQoL at ICU discharge}
+\item{first_hrqol}{single numeric value, HRQoL at ICU discharge}
 
-\item{resolution}{int, the number of grid points on the HRQoL trajectory between ICU discharge
+\item{resolution}{single integer, the number of grid points on the HRQoL trajectory between ICU discharge
 and time of death}
 
-\item{n_halflives_to_zero}{scalar, the number of half-lives after which one considers HRQoL to
+\item{n_halflives_to_zero}{single numeric value, the number of half-lives after which one considers HRQoL to
 equal \code{0}.}
 }
 \value{
-Two-column matrix: x is time, y is the HRQoL.
+Two-column matrix: \code{x} is time, \code{y} is the HRQoL.
 }
 \description{
 If a patient dies in the follow-up period, they will follow the HRQoL trajectory produced by this

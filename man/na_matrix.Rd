@@ -2,14 +2,14 @@
 % Please edit documentation in R/utils.R
 \name{na_matrix}
 \alias{na_matrix}
-\title{Create "empty" observation tibble}
+\title{Create "empty" observation matrix}
 \usage{
 na_matrix(index_hrqol, t)
 }
 \arguments{
-\item{index_hrqol}{scalar, HRQoL at time of enrolment (= index)}
+\item{index_hrqol}{single numeric value, HRQoL at time of enrolment (= index)}
 
-\item{t}{scalar}
+\item{t}{single numeric value}
 }
 \description{
 Useful for patients for whom no data are every observed.

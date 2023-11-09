@@ -1,8 +1,3 @@
-#' Below we repeatedly invoke clear_hrqolr_cache() to avoid strange "nothing
-#' to compact" message from cachem. Haven't been able to find anything else
-#' about this than the source code:
-# https://github.com/r-lib/cachem/blob/62051fe/R/cache-mem.R#L557-L560
-
 cache_hrqolr()
 
 test_that("Trajetory plots with linear mortality shape", {
@@ -185,3 +180,28 @@ test_that("Arm and patient trajectories are plotted correctly", {
 	p <- plot(trajectories, which = "arm", arm_aes = c(linetype = 2))
 	vdiffr::expect_doppelganger("arm_trajs_only__dashed_lines2", p)
 })
+
+# test_that("Single trials plot correctly", {
+# 	scenario <- setup_scenario(
+# 		arms = c("Active", "Control"),
+# 		n_patients = 1000,
+# 		index_hrqol = 0,
+# 		first_hrqol = 0.3,
+# 		final_hrqol = c(Active = 0.7, Control = 0.7),
+# 		acceleration_hrqol = c(Active = 1.2, Control = 1),
+# 		mortality = 0.0,
+# 		mortality_dampening = 0,
+# 		mortality_trajectory_shape = "linear",
+# 		prop_mortality_benefitters = 0.0,
+# 		sampling_frequency = 14,
+# 		verbose = FALSE
+# 	)
+#
+# 	single_trial <- simulate_trial(scenario, seed = 42)
+#
+# 	p <- plot(single_trial, ecdf = TRUE)
+# 	vdiffr::expect_doppelganger("single_trial_cdf", p)
+#
+# 	p <- plot(single_trial, ecdf = FALSE)
+# 	vdiffr::expect_doppelganger("single_trial_pdf", p)
+# })

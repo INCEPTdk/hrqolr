@@ -5,7 +5,7 @@ test_that("Example trajectories are sampled correctly", {
 		index_hrqol = 0,
 		first_hrqol = 0.2,
 		final_hrqol = c(Active = 0.7, Control = 0.5),
-		acceleration_hrqol = 0,
+		acceleration_hrqol = 1,
 		mortality = 0.2,
 		mortality_dampening = 0,
 		mortality_trajectory_shape = "exp_decay",

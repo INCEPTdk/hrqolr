@@ -19,32 +19,33 @@ simulate_trials <- function(scenario, ...) {
 }
 
 
+# TODO: Add reference to paper with Danish EQ-5D-5L reference values
 #' Helper for when scenario given as first argument
 #'
 #' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
 #'
-#' @param n_trials int scalar or vector. If vector, simulations will be run in batches of size given
-#' @param n_patients_ground_truth int, how many patients (per arm) to use when estimating the ground
+#' @param n_trials integer vector. If length > 1, simulations will be run in batches of size given
+#' @param n_patients_ground_truth single integer, how many patients (per arm) to use when estimating the ground
 #'   truth
-#' @param n_example_trajectories_per_arm int, the number of example trajectories to include in the
+#' @param n_example_trajectories_per_arm single integer, the number of example trajectories to include in the
 #'   returned object
 #'
 #' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
 #'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
 #'   below.
-#' @param verbose logical, should the function give progress timestamped updates? Default: `TRUE`
-#' @param seed int, optional seed for reproducible pseudo-random number generation. Defaults to a
+#' @param verbose single logical, should the function give progress timestamped updates? Default: `TRUE`
+#' @param seed single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
 #'   deterministic value based on the arguments given (ensuring reproducibility by default).
-#' @param n_digits int, the number of decimal places of in the first HRQoL values of patients.
+#' @param n_digits single integer, the number of decimal places of in the first HRQoL values of patients.
 #'   More digits will yield greater precision but also cause longer run-times.
 #' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
-#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values.
-#' @param alpha scalar in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
+#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values. 
+#' @param alpha single numerical value in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
 #'   arms.
-#' @param include_trial_results logical, indicates whether trial-level results are kept. Default is
+#' @param include_trial_results single logical, indicates whether trial-level results are kept. Default is
 #'   `FALSE` because the resulting object may be very large if many trials are simulated.
-#' @param max_batch_size int, the maximum number of patients to process in each batch. The default
-#'   is to use run one batch (i.e. no upper limit)
+#' @param max_batch_size single integer, the maximum number of patients to process in each batch. The default
+#'   is to use run one batch (i.e. no upper limit).
 #'
 #' @details
 #' * `test_fun`: \[pending\]
@@ -87,7 +88,7 @@ simulate_trials.hrqolr_scenario <- function(
 }
 
 
-#' Workhorse
+#' Default internal workhorse function for simulating trials
 #'
 #' Internal function that shouldn't really be invoked by the user directly. The arguments given must
 #' be named vectors.
@@ -127,8 +128,13 @@ simulate_trials.default <- function(
 		...
 ) {
 
+	# Housekeeping
+	stopifnot(n_patients_ground_truth > 0)
+
+	# Setup ====
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
 	start_time <- Sys.time()
+	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Handling seeds ====
 	try({ # will fail e.g. if called from parallel::parLapply
@@ -142,8 +148,6 @@ simulate_trials.default <- function(
 	RNGkind("Mersenne-Twister")
 	set.seed(seed)
 
-	# Setup ====
-	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
 	# Splitting trials into batches that respect the max_batch_size argument
 	max_batch_size <- max_batch_size %||% sum(n_trials * n_patients)
@@ -195,7 +199,7 @@ simulate_trials.default <- function(
 		# Estimation for arm in batch ====
 		for (arm in arms) {
 
-			inter_patient_noise_sd <- first_hrqol[arm] / 1.96
+			inter_patient_noise_sd <- first_hrqol[arm] * acceleration_hrqol[arm] / 1.96
 
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
@@ -221,13 +225,13 @@ simulate_trials.default <- function(
 					sampling_frequency = sampling_frequency[arm],
 					n_digits = n_digits,
 					valid_hrqol_range = valid_hrqol_range,
-					verbose = verbose
+					verbose = FALSE
 				)
 
 				outcome_cols <- names(gt_res)[!names(gt_res) %in% c("trial_id", "arm")]
 				tmp <- sapply(
 					nafill(gt_res[, ..outcome_cols], "const", 0),
-					function(col) .Call("C_Mean", col, PACKAGE = "hrqolr")
+					fast_mean
 				)
 
 				ground_truth[[arm]] <- data.table(
@@ -239,7 +243,9 @@ simulate_trials.default <- function(
 				gc()
 			}
 
-			if (isTRUE(verbose)) log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
+			if (isTRUE(verbose)) {
+				log_timediff(start_time_batch, sprintf("Starting arm '%s'", arm))
+			}
 
 			res <- estimation_helper(
 				n_patients = n_patients_by_batch[[batch_idx]][arm],
@@ -259,15 +265,20 @@ simulate_trials.default <- function(
 				sampling_frequency = sampling_frequency[arm],
 				n_digits = n_digits,
 				valid_hrqol_range = valid_hrqol_range,
-				verbose = verbose
+				verbose = FALSE
 			)
 
 			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
+
 			batch_res[[arm]] <- res
 			rm(res)
 			gc()
+		}
+
+		if (isTRUE(verbose)) {
+			log_timediff(start_time_batch, "Aggregating results")
 		}
 
 		batch_res <- rbindlist(batch_res, idcol = "arm")
@@ -277,8 +288,8 @@ simulate_trials.default <- function(
 			outcome_cols,
 			function(col) {
 				batch_res[, .(
-					all = .Call("C_Mean", replace_na(get(col), 0), PACKAGE = "hrqolr"),
-					survivors = .Call("C_Mean", get(col)[!is.na(get(col))], PACKAGE = "hrqolr")
+					all = fast_mean(replace_na(get(col), 0)),
+					survivors = fast_mean(get(col)[!is.na(get(col))])
 				), by = c("trial_id", "arm")]
 			},
 			simplify = FALSE
@@ -326,6 +337,7 @@ simulate_trials.default <- function(
 		lobstr::obj_size(.hrqolr_cache_user),
 		error = function(e) NA
 	)
+	class(max_size_of_cache) <- c("hrqolr_bytes", class(max_size_of_cache))
 	clear_hrqolr_cache()
 	gc()
 
@@ -357,7 +369,10 @@ simulate_trials.default <- function(
 		id.vars = c("outcome", "arm", "trial_id"),
 		variable.name = "analysis"
 	)
-	summary_stats <- summary_stats[, summarise_var(value), by = c("outcome", "arm", "analysis")]
+	summary_stats <- summary_stats[
+		, summarise_var(value),
+		by = c("outcome", "arm", "analysis")
+	]
 	class(summary_stats) <- c("hrqolr_summary_stats", class(summary_stats))
 
 	results$summary_stats <- NULL
@@ -365,13 +380,14 @@ simulate_trials.default <- function(
 
 	# Comparisons across trials ====
 	comparisons <- merge(results$mean_diffs, ground_truth)
-	results$comparisons <- NULL
+	results$mean_diffs <- NULL
 	gc()
 
 	by_cols <- c("outcome", "analysis", "comparator", "target")
 	comparisons <- merge(
 		comparisons[
-			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha), by = by_cols
+			, compute_performance_metrics(est, mean_ground_truth, p_value, ci_lo, ci_hi, alpha),
+			by = by_cols
 		],
 		comparisons[
 			, c(list(n_sim = .N), summarise_var(est)), by = by_cols
@@ -427,13 +443,7 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_cache_sizes = list(
-					user = max_size_of_cache,
-					package = tryCatch(
-						lobstr::obj_size(.hrqolr_cache_user),
-						error = function(e) NA
-					)
-				)
+				max_cache_sizes = max_size_of_cache
 			)
 		),
 		class = c("hrqolr_results", "list")

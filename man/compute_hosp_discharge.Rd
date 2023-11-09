@@ -7,9 +7,9 @@
 compute_hosp_discharge(t_icu_discharge, a = 0.518, b = 9.31)
 }
 \arguments{
-\item{t_icu_discharge}{int, day of ICU discharge}
+\item{t_icu_discharge}{single integer, day of ICU discharge}
 
-\item{a, b}{numeric scalars, coefficients}
+\item{a, b}{numeric vectors of length 1, coefficients}
 }
 \description{
 Compute deterministic day of hospital discharge based on day of ICU discharge

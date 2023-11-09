@@ -1,38 +1,40 @@
 #include <R.h>
 #include <Rinternals.h>
+#include "hrqolr.h"
 
-SEXP C_Create_xout(SEXP start, SEXP end, SEXP by)
+SEXP create_xout(SEXP start, SEXP end, SEXP by)
 {
 	int _start = asInteger(start);
 	int _end = asInteger(end);
 	int _by = asInteger(by);
 	int n = 2 + (_end - _start) / _by;
 
-	SEXP out = PROTECT(allocVector(INTSXP, n));
-	int *pout;
-	pout = INTEGER(out);
-
-	pout[0] = 0;
-	for (int i = 1; i < n; i++) {
-		pout[i] = _start + (i - 1) * _by;
-	}
-
 	if ((_start + (n - 2) * _by) == _end) {
-		// Nothing to append
+		// _end == last value in res => nothing to append
+		SEXP res = PROTECT(allocVector(INTSXP, n));
+		int *_res;
+		_res = INTEGER(res);
+
+		_res[0] = 0;
+		for (int i = 1; i < n; i++) {
+			_res[i] = _start + (i - 1) * _by;
+		}
+
 		UNPROTECT(1);
-
-		return out;
+		return res;
 	} else {
-		// Append the actual end value (it's different from end of the sequence)
-		SEXP out2 = PROTECT(allocVector(INTSXP, n + 1));
-		int *pout2;
-		pout2 = INTEGER(out2);
+		// _end != last value in out => append actual _end value
+		SEXP res = PROTECT(allocVector(INTSXP, n + 1));
+		int *_res;
+		_res = INTEGER(res);
 
-		memcpy(pout2, pout, sizeof(int) * n);
-		pout2[n] = _end;
+		_res[0] = 0;
+		for (int i = 1; i < n; i++) {
+			_res[i] = _start + (i - 1) * _by;
+		}
+		_res[n] = _end;
 
-		UNPROTECT(2);
-
-		return out2;
+		UNPROTECT(1);
+		return res;
 	}
 }

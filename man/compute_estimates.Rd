@@ -24,9 +24,9 @@ compute_estimates(
 \item{t_death}{numeric scalar, time of death. NA represent administrative censoring (i.e., the
 patient was still alive at end of follow-up)}
 
-\item{first_hrqol_patient}{scalar, the HRQoL value at ICU discharge of this patient}
+\item{first_hrqol_patient}{single numeric value, the HRQoL value at ICU discharge of this patient}
 
-\item{is_mortality_benefitter}{logical, is patient a mortality benefitters? Defaults to FALSE.}
+\item{is_mortality_benefitter}{single logical value, is patient a mortality benefitters? Defaults to \code{FALSE}.}
 
 \item{acceleration_hrqol}{scalar in \verb{[0, Inf)}, acceleration of HRQoL improvement compared to baseline
 trajectory}
@@ -35,7 +35,7 @@ trajectory}
 
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
-\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
+\item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 }
 \value{
 A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area

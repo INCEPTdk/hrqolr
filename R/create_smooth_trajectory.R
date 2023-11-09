@@ -4,9 +4,9 @@
 #' `y`.
 #'
 #' @param x,y numeric vectors with points to be connected with smooth curve
-#' @param alpha scalar in `[0, 1]`, controls the tightness of the curve. `alpha = 0.5` (the default)
+#' @param alpha single numerical value in `[0, 1]`, controls the tightness of the curve. `alpha = 0.5` (the default)
 #'   yields a centripetal Catmull-Rom curve
-#' @param epsilon small scalar, used to create phantom points. The default value should suffice for
+#' @param epsilon single numerical value, used to create phantom points. The default value should suffice for
 #'   most use cases (see also link below).
 #'
 #' @details This function is based on the nice run-down of smooth curves at

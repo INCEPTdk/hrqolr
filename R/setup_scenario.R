@@ -1,31 +1,31 @@
-#' Helper for setting up valid scenarios
+#' Helper function for setting up valid scenarios
 #'
 #' Inputs are validated to ensure they produce the expected results when given as the input in
-#' [simulate_trials]. Therefore, any arguments to this function can also be just a single value
+#' [simulate_trials()]. Therefore, any arguments to this function can also be just a single value
 #' (except the `arms` argument), and this function will expand such single-valued arguments to be
-#' compatible with `simulate_trials`. If arguments are named vectors, they must have exactly one
+#' compatible with [simulate_trials()]. If arguments are named vectors, they must have exactly one
 #' value per arm, and the names must match those given in the `arms`.
 #'
 #' @param arms character vector with the names of the arms
-#' @param n_patients named int (scalar or named vector), number of patients
-#' @param sampling_frequency int (scalar or named vector), span between HRQoL sampling from patients
+#' @param n_patients named integer (single value or named vector), number of patients
+#' @param sampling_frequency integer (single value or named vector), span between HRQoL sampling from patients
 #'
-#' @param index_hrqol numeric (scalar or named vector), the HRQoL at index (= enrolment)
-#' @param first_hrqol numeric (scalar or named vector), the HRQoL at ICU discharge in each arm
-#' @param final_hrqol numeric (scalar or named vector), the HRQoL at end of follow-up in each arm
-#' @param acceleration_hrqol numeric (scalar or named vector), relative acceleration of HRQoL
+#' @param index_hrqol numeric (single value or named vector), the HRQoL at index (= enrolment)
+#' @param first_hrqol numeric (single value or named vector), the HRQoL at ICU discharge in each arm
+#' @param final_hrqol numeric (single value or named vector), the HRQoL at end of follow-up in each arm
+#' @param acceleration_hrqol numeric (single value or named vector), relative acceleration of HRQoL
 #'   improvement in each arm
 #'
-#' @param mortality numeric (scalar or named vector) in \[0, 1\], the mortality in at end of
+#' @param mortality numeric (single value or named vector) in `[0, 1]`, the mortality in at end of
 #'   follow-up, in each arm
-#' @param mortality_dampening numeric (scalar or named vector), dampening effect on HRQoL at ICU
+#' @param mortality_dampening numeric (single value or named vector), dampening effect on HRQoL at ICU
 #'   discharge in patients who die before end of follow-up
-#' @param mortality_trajectory_shape character (scalar or named vector), valid values are
+#' @param mortality_trajectory_shape character (single value or named vector), valid values are
 #'   `"exp_decay"` (default), `"linear"`, `"constant"`, `"reflected_exp_decay"` and can differ
 #'   across arms.
-#' @param prop_mortality_benefitters numeric (scalar or named vector) `[0, 1]`, the proportion of
-#'   patients in each arm who are so-called mortality benefitters.
-#' @param verbose logical, should the function provide detailed output on validation results?
+#' @param prop_mortality_benefitters numeric (single value or named vector) `[0, 1]`, the proportion of
+#'   patients in each arm who are so-called mortality benefitters
+#' @param verbose single logical, should the function provide detailed output on validation results?
 #'   Default: `TRUE`
 #'
 #' @return An object of class 'hrqolr_scenario' with validated inputs.
@@ -65,7 +65,7 @@ setup_scenario <- function(
 		index_hrqol = list(fun = verify_num),
 		first_hrqol = list(fun = verify_num),
 		final_hrqol = list(fun = verify_num),
-		acceleration_hrqol = list(fun = verify_num, min_value = 0),
+		acceleration_hrqol = list(fun = verify_num, min_value = 0, open = "left"),
 		mortality = list(fun = verify_num, min_value = 0, max_value = 1),
 		mortality_dampening = list(fun = verify_num, min_value = 0, max_value = 1),
 		mortality_trajectory_shape = list(

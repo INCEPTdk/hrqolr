@@ -1,3 +1,5 @@
+# TODO: Add reference link to CLASSIC trial paper, perhaps write out abbreviation
+
 #' Generate density, probability, quantile and random generation functions for (scaled) empirical
 #' mortality distribution
 #'
@@ -41,7 +43,7 @@ generate_mortality_funs <- function(
     out[p == 0] <- 0.0
     out
 
-    # Linear interpolation actually aka yields too many early sampled t_days values. This can be
+    # Linear interpolation actually yields too many early sampled t_days values. This can be
     # remedied by sampling like the following, but it's a lot slower:
     # runif(1, tail(cdf[cdf$y <= p, ]$x, 1), head(cdf[cdf$y >= p, ]$x, 1))
 

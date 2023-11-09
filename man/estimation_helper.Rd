@@ -23,9 +23,9 @@ estimation_helper(
 )
 }
 \arguments{
-\item{n_patients}{int, the number of patients for whom to estimate outcomes}
+\item{n_patients}{single integer, the number of patients for whom to estimate outcomes}
 
-\item{arm}{character scalar}
+\item{arm}{character vector of length 1}
 
 \item{first_hrqol_arm}{scalar, HRQoL at ICU discharge (at arm level)}
 
@@ -36,18 +36,18 @@ trajectory}
 
 \item{mortality_rng}{function, a function that produces times of death (only one parameter which should be the number of values to sample)}
 
-\item{sampling_frequency}{int (scalar or named vector), span between HRQoL sampling from patients}
+\item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 
-\item{n_digits}{int, the number of decimal places of in the first HRQoL values of patients.
+\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
 More digits will yield greater precision but also cause longer run-times.}
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
 values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
 
-\item{verbose}{logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+\item{verbose}{single logical, should the function give progress timestamped updates? Default: \code{TRUE}}
 }
 \value{
-Data.table with outcome results for all patients. NB! There are no trial_id indicator as
+data.table with outcome results for all patients. NB! There is no \code{trial_id} indicator as
 this is not required in all uses of this helper function.
 }
 \description{

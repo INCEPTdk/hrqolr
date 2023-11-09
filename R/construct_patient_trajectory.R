@@ -3,8 +3,8 @@
 #' @inheritParams construct_arm_level_trajectory
 #' @inheritParams construct_mortality_trajectory
 #' @inheritParams simulate_trials
-#' @param first_hrqol_patient scalar, the HRQoL value at ICU discharge of this patient
-#' @param is_mortality_benefitter logical, is patient a mortality benefitters? Defaults to FALSE.
+#' @param first_hrqol_patient single numeric value, the HRQoL value at ICU discharge of this patient
+#' @param is_mortality_benefitter single logical value, is patient a mortality benefitters? Defaults to `FALSE`.
 #'
 #' @keywords internal
 #' @inherit construct_final_trajectories return
@@ -51,7 +51,8 @@ construct_patient_trajectory <- function(
 		)
 
 		# Enforce between-patient noise throughout trajectory
-		y_new <- pmin(1, traj[-1, "y"] + (first_hrqol_patient - first_hrqol_arm * acceleration_hrqol))
+		noise_offset <- (first_hrqol_patient - first_hrqol_arm * acceleration_hrqol)
+		y_new <- pmin(1, traj[-1, "y"] + noise_offset)
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)

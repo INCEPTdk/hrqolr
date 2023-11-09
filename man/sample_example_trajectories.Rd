@@ -40,13 +40,13 @@ sample_example_trajectories(scenario, ...)
 
 \item{...}{passed on to methods}
 
-\item{n_example_trajectories_per_arm}{int, the number of example trajectories to include in the
+\item{n_example_trajectories_per_arm}{single integer, the number of example trajectories to include in the
 returned object}
 
-\item{n_digits}{int, the number of decimal places of in the first HRQoL values of patients.
+\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
 More digits will yield greater precision but also cause longer run-times.}
 
-\item{seed}{int, optional seed for reproducible pseudo-random number generation. Defaults to a
+\item{seed}{single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
 deterministic value based on the arguments given (ensuring reproducibility by default).}
 
 \item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL

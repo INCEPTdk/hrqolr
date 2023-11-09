@@ -36,7 +36,7 @@ which is primarily supported by a grant from Sygeforsikringen "danmark"
 * [Website](https://inceptdk.github.io/hrqolr/index.html) - stand-alone website with full
 package documentation
 * [Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study](https://doi.org/10.1111/aas.14324) -
-article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use `hrqolr`
+protocol article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use `hrqolr`
 
 ## Getting started
 
@@ -50,7 +50,7 @@ library(hrqolr)
 options(width = 999)
 ```
 
-The preferred way to design a scenario is by using the `setup_scenario` function to validate the 
+The preferred way to design a scenario is by using the `setup_scenario()` function to validate the 
 input and give it the right format. Set `verbose = FALSE` to silence the validation results.
 ```{r}
 scenario <- setup_scenario(
@@ -80,7 +80,7 @@ example_trajs <- sample_example_trajectories(scenario, n_digits = 3)
 plot(example_trajs)
 ```
 
-`sample_example_trajectories` returns a `ggplot`, allowing you to fine-tune its appearance for your
+`sample_example_trajectories` returns a `ggplot` object, allowing you to fine-tune its appearance for your
 needs. For example, breaking apart the trajectories in the arms apart with facets and hide the 
 legend (remember to load `ggplot2` first). Here, we also set the arm-level trajectory in black to 
 make it stand out better:
@@ -93,7 +93,7 @@ plot(example_trajs, arm_aes = list(colour = "black")) +
 ```
 
 You can also summarise the trajectories, e.g., with inter-quartile ranges. The ribbons become a bit 
-wonky at end of follow-up due to increasingly few observations some of which might be low:
+wonky at end of follow-up due to increasingly fewer observations some of which might be low:
 ```{r}
 plot(example_trajs, "summarise", ribbon_percentiles = c(0.25, 0.75))
 ```
@@ -125,7 +125,7 @@ remotes::install_github("INCEPTdk/hrqolr")
 ```
 
 You can also install the **development version** from directly from GitHub. Doing this
-requires the *remotes*-package installed. The development version may contain
+requires the `remotes` package installed. The development version may contain
 additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.
 
 ```{r eval = FALSE}
