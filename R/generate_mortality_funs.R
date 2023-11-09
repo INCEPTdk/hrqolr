@@ -1,8 +1,10 @@
+# TODO: Add reference link to CLASSIC trial paper, perhaps write out abbreviation
+
 #' Generate density, probability, quantile and random generation functions for (scaled) empirical
 #' mortality distribution
 #'
 #' The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
-#' to achieve a desired mortality at end of follow-up ### AG: INSERT REFERENCE LINK to CLASSIC trial and consider writing out the abbreviation
+#' to achieve a desired mortality at end of follow-up
 #'
 #' @param cum_mortality scalar in `[0, 1]`, the cumulative mortality at end of follow-up (= time of
 #'   censoring)
@@ -16,7 +18,7 @@ generate_mortality_funs <- function(
     censoring_value = NA
 ) {
 
-	hash <- rlang::hash(c("generate_mortality_funs", cum_mortality, censoring_value))  #### AG: Don't we need to assert availability of rlang (currently in suggests)?
+	hash <- rlang::hash(c("generate_mortality_funs", cum_mortality, censoring_value))
 	out <- .hrqolr_cache_user$get(hash)
 
 	if (!cachem::is.key_missing(out)) {
