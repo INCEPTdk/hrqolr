@@ -442,7 +442,7 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_cache_sizes = max_size_of_cache,
+				max_cache_sizes = max_size_of_cache
 			)
 		),
 		class = c("hrqolr_results", "list")
