@@ -11,6 +11,7 @@ static const R_CallMethodDef callEntries[] = {
 	{"bootstrap_mean_diffs", (DL_FUNC) &bootstrap_mean_diffs, 3},
 	{"create_xout", (DL_FUNC) &create_xout, 3},
 	{"mean", (DL_FUNC) &mean, 1},
+	{"welch_t_test", (DL_FUNC) &welch_t_test, 3},
 	{NULL, NULL, 0}
 };
 

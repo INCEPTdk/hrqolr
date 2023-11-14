@@ -35,3 +35,14 @@ test_that("C_bootstrap_mean_diffs works", {
 	)
 })
 
+test_that("C_welch_t_test works", {
+	x <- as.double(1:10)
+	y <- as.double(6:15)
+	alpha <- 0.05
+	welch_hrqolr <- .Call(C_welch_t_test, x, y, alpha)
+	welch_stats <- with(
+		stats::t.test(x, y, var.equal = FALSE, conf.level = 1 - alpha),
+		as.numeric(c(est = mean(x) - mean(y), p.value, conf.int)) # t.test doesn't return point estimate
+	)
+	expect_equal(welch_hrqolr, welch_stats)
+})

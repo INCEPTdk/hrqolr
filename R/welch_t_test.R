@@ -28,27 +28,8 @@ welch_t_test <- function (vals, grps, arms = unique(grps), na_replacement = NULL
 	x <- vals[grps == arms[2]]
 	y <- vals[grps == arms[1]]
 
-	nx <- length(x)
-	mx <- fast_mean(x)
-	stderrx <- sqrt(stats::var(x) / nx)
-
-	ny <- length(y)
-	my <- fast_mean(y)
-	stderry <- sqrt(stats::var(y) / ny)
-
-	stderr <- sqrt(stderrx^2 + stderry^2)
-
-	df <- stderr^4 / (stderrx^4 / (nx - 1) + stderry^4 / (ny - 1))
-	t_stat <- (mx - my) / stderr
-	p_value <- 2 * stats::pt(-abs(t_stat), df)
-	conf_int <- stderr * (t_stat + c(-1, 1) * stats::qt(1 - alpha * 0.5, df))
-
-	list(
-		comparator = arms[1],
-		target = arms[2],
-		est = mx - my,
-		p_value = p_value,
-		ci_lo = conf_int[1],
-		ci_hi = conf_int[2]
+	setNames(
+		c(as.list(arms), .Call(C_welch_t_test, x, y, alpha)),
+		c("comparator", "target", "est", "p_value", "ci_lo", "ci_hi")
 	)
 }

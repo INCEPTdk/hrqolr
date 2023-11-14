@@ -14,8 +14,8 @@ SEXP bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B)
 	pgrps = INTEGER(grps);
 
 	SEXP boot_estimates = PROTECT(allocVector(REALSXP, asInteger(B)));
-	double *pboot_estimates;
-	pboot_estimates = REAL(boot_estimates);
+	double *_boot_estimates;
+	_boot_estimates = REAL(boot_estimates);
 
 	double sums[2] = {0.0, 0.0}; // summed values in actv and ctrl, resp.
 	int ns[2] = {0, 0}; // no. of values in actv and ctrl, resp.
@@ -33,11 +33,12 @@ SEXP bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B)
 			ns[pgrps[idx]] += 1;
 		}
 
-		pboot_estimates[b] = sums[0]/ns[0] - sums[1]/ns[1];
+		_boot_estimates[b] = sums[0]/ns[0] - sums[1]/ns[1];
 	}
 
-	UNPROTECT(1);
 	PutRNGstate(); // write out .Random.seed
+
+	UNPROTECT(1);
 
 	return boot_estimates;
 }
