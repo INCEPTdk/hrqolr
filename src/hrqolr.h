@@ -9,5 +9,6 @@ SEXP auc(SEXP x, SEXP y);
 SEXP bootstrap_mean_diffs(SEXP vals, SEXP grps, SEXP B);
 SEXP create_xout(SEXP start, SEXP end, SEXP by);
 SEXP mean(SEXP x);
+SEXP welch_t_test(SEXP x, SEXP y, SEXP alpha);
 
 #endif
