@@ -8,7 +8,7 @@
 a \%||\% b
 }
 \arguments{
-\item{a, b}{arbitrary vectors}
+\item{a, b}{arbitrary single-valued vectors}
 }
 \description{
 Infix function for easy replacement of NULL with a default value.

@@ -38,7 +38,7 @@ compute_hosp_discharge <- function(t_icu_discharge, a, b) {
 #'
 #' Infix function for easy replacement of NULL with a default value.
 #'
-#' @param a,b arbitrary vectors
+#' @param a,b arbitrary single-valued vectors
 #' @keywords internal
 #' @name replace_null
 #'
@@ -49,7 +49,7 @@ compute_hosp_discharge <- function(t_icu_discharge, a, b) {
 #'
 #' Infix function for easy replacement of -Inf/Inf with a default value.
 #'
-#' @param a,b arbitrary vectors
+#' @param a,b arbitrary single-valued vectors
 #' @keywords internal
 #' @name replace_infinite
 #'

@@ -1,8 +1,7 @@
-#' Stuff to make Rcpp work (to put the right instructions in the NAMESPACE file)
+#' Stuff to make C work (to put the right instructions in the NAMESPACE file)
 #'
 #' @noRd
 #' @useDynLib hrqolr, .registration=TRUE, .fixes="C_"
-# THIS IS NEEDED FOR Rcpp CODE TO WORK: @importFrom Rcpp evalCpp
 NULL
 
 
