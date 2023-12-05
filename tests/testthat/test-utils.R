@@ -50,10 +50,13 @@ test_that("Misc. utils", {
 
 	# compute_hosp_discharge ====
 	expect_equal(
-		compute_hosp_discharge(1:10),
+		compute_hosp_discharge(1:10, a = 0.518, b = 9.310),
 		c(10, 14, 17, 20, 22, 24, 26, 28, 30, 31)
 	)
-	expect_equal(compute_hosp_discharge(c(NA, 1, 5)), c(NA, 10, 22))
+	expect_equal(
+		compute_hosp_discharge(c(NA, 1, 5), a = 0.518, b = 9.310),
+		c(NA, 10, 22)
+	)
 
 	# sample_t_icu_discharge ====
 	set.seed(42)

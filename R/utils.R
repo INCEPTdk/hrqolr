@@ -30,7 +30,7 @@ fast_mean <- function(x) {
 #' @param a,b numeric vectors of length 1, coefficients
 #' @keywords internal
 #'
-compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
+compute_hosp_discharge <- function(t_icu_discharge, a, b) {
 	ceiling(t_icu_discharge^a * b)
 }
 
