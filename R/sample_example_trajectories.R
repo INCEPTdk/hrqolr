@@ -76,6 +76,7 @@ sample_example_trajectories.default <- function(
 		...
 ) {
 
+	# Restore RNG state after this function has been run
 	try({ # will fail e.g. if called from parallel::parLapply
 		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
 		on.exit(
@@ -84,6 +85,11 @@ sample_example_trajectories.default <- function(
 			after = FALSE
 		)
 	}, silent = TRUE)
+
+	old_rngkind <- RNGkind(kind = NULL, normal.kind = NULL, sample.kind = NULL)
+	on.exit(do.call(RNGkind, as.list(old_rngkind)), add = TRUE, after = FALSE)
+
+	RNGkind("Mersenne-Twister")
 	set.seed(seed)
 
 	out <- list(
