@@ -136,8 +136,8 @@ simulate_trials.default <- function(
 	start_time <- Sys.time()
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	# Handling seeds ====
-	try({ # will fail e.g. if called from parallel::parLapply
+	# Restore RNG state after this function has been run
+	try({ # wrapped in try() just in case
 		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
 		on.exit(
 			assign(".Random.seed", value = old_seed, envir = globalenv(), inherits = FALSE),
@@ -145,7 +145,13 @@ simulate_trials.default <- function(
 			after = FALSE
 		)
 	}, silent = TRUE)
-	RNGkind("Mersenne-Twister")
+
+	old_rngkind <- RNGkind(
+		kind = "Mersenne-Twister",
+		normal.kind = "default",
+		sample.kind = "default"
+	)
+	on.exit(do.call(RNGkind, as.list(old_rngkind)), add = TRUE, after = FALSE)
 	set.seed(seed)
 
 
