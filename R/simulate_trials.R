@@ -163,7 +163,7 @@ simulate_trials.default <- function(
 
 	trial_ids_by_batch <- split(
 		seq_len(n_trials),
-		rep(seq_len(n_batches), each = n_trials_per_batch)[1:n_trials]
+		rep(seq_len(n_batches), each = n_trials_per_batch)[seq_len(n_trials)]
 	)
 
 	n_patients_by_batch <- lapply(
@@ -197,7 +197,8 @@ simulate_trials.default <- function(
 					n_batches,
 					est_remaining_time(start_time, batch_idx, n_batches)
 				),
-				"cyan")
+				"cyan"
+			)
 		}
 
 		batch_res <- setNames(vector("list", length(arms)), arms)
@@ -210,7 +211,10 @@ simulate_trials.default <- function(
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) {
-					log_timediff(start_time_batch, sprintf("Estimating ground truth of arm '%s'", arm))
+					log_timediff(
+						start_time_batch,
+						sprintf("Estimating ground truth of arm '%s'", arm)
+					)
 				}
 
 				gt_res <- estimation_helper(
@@ -316,7 +320,7 @@ simulate_trials.default <- function(
 				return(tmp)
 			},
 			col = rep(outcome_cols, each = 2),
-			label = c("all", "survivors"), # repeated to match col parameter (the longest)
+			label = c("all", "survivors"), # cycled to match col parameter (the longest)
 			na_replacement = list(0, NULL), # idem
 			SIMPLIFY = FALSE
 		)
@@ -356,10 +360,13 @@ simulate_trials.default <- function(
 	ground_truth <- rbindlist(lapply(
 		utils::combn(arms, m = 2, simplify = FALSE),
 		function(arms) {
-			tmp <- dcast(
-				melt(ground_truth[arms], id.vars = c("arm", "outcome"), variable.name = "analysis"),
-				outcome + analysis ~ arm
+			tmp <- melt(
+				ground_truth[arms],
+				id.vars = c("arm", "outcome"),
+				variable.name = "analysis"
 			)
+			tmp <- dcast(tmp, outcome + analysis ~ arm)
+
 			tmp[, .(
 				outcome,
 				comparator = arms[1],
@@ -400,7 +407,11 @@ simulate_trials.default <- function(
 		]
 	)
 
-	comparisons <- merge(comparisons, ground_truth, by = c("outcome", "comparator", "target")) # add column with ground truth mean diff
+	comparisons <- merge(
+		comparisons,
+		ground_truth,
+		by = c("outcome", "comparator", "target")
+	) # add column with ground truth mean diff
 	setnames(comparisons, "mean", "mean_estimate")
 	setcolorder(
 		comparisons,
