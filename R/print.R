@@ -37,13 +37,15 @@ print.hrqolr_trajectories <- function(x, prop_decimals = 3, ...) {
 print.hrqolr_scenario_validation_results <- function(x, ...) {
 	pad_length_names <- max(sapply(names(x), nchar))
 	pad_length_colours <- max(sapply(x, function(.) nchar(.["result"])))
-	res_colours <- c("valid as is" = "green", modified = "yellow", invalid = "red")
+	colours <- c("valid as is" = "green", "expanded to" = "yellow", invalid = "red")
 
+	cat("Scenario-parameter validation:\n")
 	for (arg_name in names(x)) {
 		res <- x[[arg_name]]["result"]
+		cat("- ")
 		cat(
 			pad(arg_name, pad_length_names),
-			crayon_style(pad(res, pad_length_colours), res_colours[res]),
+			crayon_style(pad(res, pad_length_colours), colours[res]),
 			x[[arg_name]]["comment"],
 			"\n",
 			sep = "   "
@@ -69,6 +71,7 @@ print.hrqolr_scenario <- function(x, ...) {
 	)
 
 	for (param in names(x)) {
+		cat("- ")
 		cat(crayon_style(pad(param, col_widths[1]), "blue"))
 		for (arm in names(x[[param]])) {
 			cat(pad(x[[param]][[arm]], col_widths[arm], side = "left"))
@@ -89,7 +92,9 @@ print.hrqolr_scenario <- function(x, ...) {
 print.hrqolr_comparisons <- function(x, decimals = 3, ...) {
 	x_tmp <- copy(x)
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
-	setcolorder(x_tmp, c("outcome", "comparator", "target", "analysis"))
+	cols_in_order <- c("outcome", "comparator", "target", "analysis")
+	setcolorder(x_tmp, intersect(names(x), cols_in_order))
+		# in case e.g. analysis columns has already been removed
 
 	x_tmp <- x_tmp[
 		,
@@ -97,7 +102,7 @@ print.hrqolr_comparisons <- function(x, decimals = 3, ...) {
 		.SDcols = names(x_tmp)
 	]
 
-	print(transpose(x_tmp, keep.names = "statistic", make.names = "outcome"))
+	print(transpose(x_tmp, keep.names = "statistic", make.names = "outcome"), ...)
 
 	invisible(x)
 }
@@ -112,11 +117,14 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 	x_tmp <- x
 	class(x_tmp) <- class(x_tmp)[-1] # strip hrqolr_comparisons class
 
-	print(x_tmp[
+	print(
+		x_tmp[
 		,
 		lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
 		.SDcols = names(x_tmp)
-	])
+		],
+		...
+	)
 
 	invisible(x)
 }
@@ -130,7 +138,7 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 #' @rdname print
 #'
 print.hrqolr_bytes <- function (x, digits = 3, ...) {
-	power <- min(floor(log(abs(x), 1000)), 4)
+	power <- min(floor(log(abs(x), 1000)), 4) %fi% 0
 	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
 
 	formatted <- format(
