@@ -29,6 +29,98 @@ print.hrqolr_trajectories <- function(x, prop_decimals = 3, ...) {
 }
 
 
+#' Print method for simulation results
+#'
+#' @param prefix_outcome character, name of the primary outcome(s). Will print
+#'   comparisons for all values given.
+#' @param decimals single integer, number of decimals in summary statistics and
+#'   comparisons
+#'
+#' @rdname print
+#' @export
+#'
+print.hrqolr_results <- function(x, decimals = 3, prefix_outcome = "primary", ...) {
+	cat("# Scenario specification\n")
+	print(x$args$scenario)
+
+	cat("\n# Simulation metadata\n")
+	args_to_print <- c(
+		"No. simulated trials" = "n_trials",
+		"Max. no. patients per batch" = "max_batch_size",
+		"No. ground-truth samples" = "n_patients_ground_truth",
+		"Valid range of HRQoL" = "valid_hrqol_range",
+		"Significance level (alpha)" = "alpha",
+		"Test function" = "test_fun",
+		"Seed" = "seed"
+	)
+
+	args <- x$args[args_to_print]
+	for (a in args_to_print[1:4]) {
+		args[[a]] <- format(args[[a]], big.mark = ",", scientific = FALSE)
+	}
+	args$valid_hrqol_range <- paste0(
+		"[", paste(args$valid_hrqol_range, collapse = ", "), "]"
+	)
+	args$test_fun <- attr(args$test_fun, "fun_name") %||% "Unknown name"
+
+	sim_metadata <- c(
+		setNames(args, names(args_to_print)),
+		with(x$resource_use, list(
+			"Elapsed time" = sprintf("%.1f %s", elapsed_time, attr(elapsed_time, "units")),
+			"Peak memory use" = capture.output(peak_memory_use)
+		))
+	)
+	pad_length <- max(sapply(names(sim_metadata), nchar))
+	for (name in names(sim_metadata)) {
+		val <- sim_metadata[[name]]
+		cat("- ")
+		cat(crayon_style(pad(name, pad_length), "blue"), val, "\n", sep = "   ")
+	}
+
+	cat("\n# Comparisons between arms (all patients) and select performance metrics\n")
+	comparisons <- copy(x$comparisons)
+	class(comparisons) <- class(comparisons)[-1] # strip hrqolr_comparisons class
+
+	prefix_pattern <- sprintf("^%s", paste(prefix_outcome, collapse = "|"))
+	comparisons <- comparisons[
+		analysis == "all" & grepl(prefix_pattern, outcome),
+		lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
+		.SDcols = names(comparisons)
+	]
+
+	new_col_names <- c(
+		"outcome" = "Outcome",
+		"comparator" = "Comparator arm",
+		"target" = "Target arm",
+		"mean_estimate" = "Mean difference",
+		"se" = "Std. error of mean diff.",
+		"relative_bias" = "Relative bias",
+		"rejection_proportion" = "Rejection proportion",
+		"coverage" = "Coverage"
+	)
+	comparisons <- transpose(
+		comparisons[, mget(names(new_col_names))],
+		keep.names = "statistic",
+		make.names = "outcome"
+	)
+	comparisons[, statistic := new_col_names[statistic]]
+	setnames(comparisons, "statistic", "")
+	print(comparisons, row.names = FALSE)
+
+	cat("\n# Summary statistics\n")
+
+	cat("## All participants\n")
+	summary_stats_all <- x$summary_stats[analysis == "all"]
+	print(summary_stats_all[, analysis := NULL], row.names = FALSE)
+
+	cat("\n## Survivors\n")
+	summary_stats_survivors <- x$summary_stats[analysis == "survivors"]
+	print(summary_stats_survivors[, analysis := NULL], row.names = FALSE)
+
+	invisible(x)
+}
+
+
 #' Print method for results from validation of scenario specification
 #'
 #' @rdname print
@@ -119,9 +211,9 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 
 	print(
 		x_tmp[
-		,
-		lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
-		.SDcols = names(x_tmp)
+			,
+			lapply(.SD, function(col) tryCatch(round(col, decimals), error = function(e) col)),
+			.SDcols = names(x_tmp)
 		],
 		...
 	)

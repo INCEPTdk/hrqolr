@@ -57,7 +57,7 @@ NULL
 			".", "actv", "arm", "ci_hi", "ci_lo", "ctrl", "est", "mean_diff",
 			"n_patients_with_type", "p_value", "id", "trial_id",
 			"bootstrap_mean_diffs", "x", "y", "hi", "lo", "analysis", "outcome",
-			"value", "mean_ground_truth", "..outcome_cols", "patient_id"
+			"value", "mean_ground_truth", "..outcome_cols", "patient_id", "statistic"
 		))
 	}
 
