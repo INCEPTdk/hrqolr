@@ -435,7 +435,7 @@ simulate_trials.default <- function(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())
 	)
-	args$seed <- seed
+	args$seed <- seed %||% list(NULL)
 
 	# Example trajectories ====
 	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
@@ -460,7 +460,7 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_cache_sizes = max_size_of_cache
+				max_cache_size = max_size_of_cache
 			)
 		),
 		class = c("hrqolr_results", "list")
