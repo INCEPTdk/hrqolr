@@ -35,7 +35,7 @@ which is primarily supported by a grant from Sygeforsikringen "danmark"
 
 * [Website](https://inceptdk.github.io/hrqolr/index.html) - stand-alone website with full
 package documentation
-* [Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study](https://doi.org/10.1111/aas.14324) -
+* [Health-related quality of life trajectories in critical illness: protocol for a Monte Carlo simulation study](https://onlinelibrary.wiley.com/doi/10.1111/aas.14324) -
 protocol article in Acta Anaesthesiologica Scandinavica outlining the first scientific study to use `hrqolr`
 
 ## Getting started
@@ -103,6 +103,12 @@ default `hrqolr` will print progress updates to the console (silence these with 
 ```{r}
 sims <- simulate_trials(scenario)
 ```
+
+Just printing the returned object gives an overview:
+```{r}
+sims
+```
+
 
 The returned object contains quite a lot of interesting information. For example, summary statistics 
 by arm:

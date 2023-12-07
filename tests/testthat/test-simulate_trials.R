@@ -23,6 +23,16 @@ test_that("simulate_trials S3 method works", {
 		verbose = FALSE
 	)
 
+	# Test that things work without a seed
+	simple_sims <- simulate_trials(scenario1, verbose = FALSE)
+	expect_s3_class(simple_sims, "hrqolr_results")
+
+	# Ascertain that resource_use has the right elements
+	expect_equal(
+		names(pseudo_resource_use),
+		names(simple_sims$resource_use)
+	)
+
 	sims_single_batch <- suppressMessages(simulate_trials(
 		scenario1,
 		n_trials = 100,
@@ -33,13 +43,6 @@ test_that("simulate_trials S3 method works", {
 		include_trial_results = TRUE,
 		seed = 42
 	))
-
-	# Intermezzo to ensure resource_use has the right elements
-	expect_equal(
-		names(pseudo_resource_use),
-		names(sims_single_batch$resource_use)
-	)
-	# end of intermezzo
 
 	sims_single_batch$resource_use <- pseudo_resource_use
 	sims_single_batch$args$test_fun <- "welch_t_test"

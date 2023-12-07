@@ -13,3 +13,4 @@ legacy/
 ^\.github$
 ^README\.Rmd$
 .covrignore
+^cran-comments\.md$
