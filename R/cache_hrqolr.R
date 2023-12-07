@@ -1,8 +1,5 @@
 #' Caching of hrqolr functions
 #'
-#' TODO: Later on, we may implement our own memoisation logic that is lighter than that of
-#' `memoise`.
-#'
 #' @inheritParams cachem::cache_mem
 #'
 #' @rdname cache_hrqolr

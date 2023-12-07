@@ -44,7 +44,7 @@ SEXP welch_t_test(SEXP x, SEXP y, SEXP alpha)
 	}
 	double sey = sqrt((Ey2 - pow(Ey, 2)/ny) / (ny - 1) / ny);
 
-	// Carry out actual null-hypothesis test
+	// Carry out actual null-hypothesis significance test
 	double se = sqrt(pow(sex, 2) + pow(sey, 2));
 	double degs_free = pow(se, 4) / (pow(sex, 4) / (nx - 1) + pow(sey, 4) / (ny - 1));
 	double t_stat = (mux - muy) / se;
