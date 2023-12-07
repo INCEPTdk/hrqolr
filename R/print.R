@@ -72,7 +72,7 @@ print.hrqolr_results <- function(x, decimals = 3, prefix_outcome = "primary", ..
 	)
 	pad_length <- max(sapply(names(sim_metadata), nchar))
 	for (name in names(sim_metadata)) {
-		val <- sim_metadata[[name]]
+		val <- sim_metadata[[name]] %||% "NULL"
 		cat("- ")
 		cat(crayon_style(pad(name, pad_length), "blue"), val, "\n", sep = "   ")
 	}

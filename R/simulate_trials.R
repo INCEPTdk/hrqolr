@@ -487,7 +487,6 @@ simulate_trials.default <- function(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())
 	)
-	args$seed <- seed %||% list(NULL)
 
 	# Example trajectories ====
 	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
