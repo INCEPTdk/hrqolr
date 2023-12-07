@@ -41,6 +41,7 @@ select \code{hrqolr} functions.
 Nothing, used for its side effect
 }
 \description{
-TODO: Later on, we may implement our own memoisation logic that is lighter than that of
-\code{memoise}.
+Caching of hrqolr functions
+
+Caching hrqolr functions
 }

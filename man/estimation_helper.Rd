@@ -38,13 +38,16 @@ trajectory}
 
 \item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
 
-\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
-More digits will yield greater precision but also cause longer run-times.}
+\item{n_digits}{single integer, the number of decimal places of in the first
+HRQoL values of patients. More digits will yield greater precision but also
+cause longer run-times.}
 
-\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
-values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper
+bounds of valid HRQoL values. The default (\code{c(-0.757, 1.0)}) corresponds to
+the Danish EQ-5D-5L index values.}
 
-\item{verbose}{single logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+\item{verbose}{single logical, should the function give progress timestamped
+updates? Default: \code{TRUE}}
 }
 \value{
 data.table with outcome results for all patients. NB! There is no \code{trial_id} indicator as

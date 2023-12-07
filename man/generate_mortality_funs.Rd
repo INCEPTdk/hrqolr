@@ -2,22 +2,39 @@
 % Please edit documentation in R/generate_mortality_funs.R
 \name{generate_mortality_funs}
 \alias{generate_mortality_funs}
-\title{Generate density, probability, quantile and random generation functions for (scaled) empirical
-mortality distribution}
+\title{Generate density, probability, quantile and random generation functions for
+(scaled) empirical mortality distribution}
 \usage{
 generate_mortality_funs(cum_mortality = NULL, censoring_value = NA)
 }
 \arguments{
-\item{cum_mortality}{scalar in \verb{[0, 1]}, the cumulative mortality at end of follow-up (= time of
-censoring)}
+\item{cum_mortality}{scalar in \verb{[0, 1]}, the cumulative mortality at end of
+follow-up (= time of censoring)}
 
-\item{censoring_value}{the value assigned when a patient is censored, default is \code{NA}}
+\item{censoring_value}{the value assigned when a patient is censored, default
+is \code{NA}}
 }
 \value{
-A list with the four functions, named \code{d}, \code{p}, \code{q} and \code{r} to follow R conventions (see,
-e.g., \code{?rnorm})
+A list with the four functions, named \code{d}, \code{p}, \code{q} and \code{r} to follow
+R conventions (see, e.g., \code{?rnorm})
 }
 \description{
-The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
-to achieve a desired mortality at end of follow-up
+The cumulative mortality functions is modelled over that of the CLASSIC trial
+(see details), but can be scaled to achieve a desired mortality at end of
+follow-up
+}
+\details{
+The built-in cumulative mortality function is based on results from
+the standard arm in the Conservative versus Liberal Approach to Fluid
+Therapy of Septic Shock in Intensive Care (CLASSIC) trial (see references
+below).
+}
+\references{
+Meyhoff TS et al. (2022). Restriction of Intravenous Fluid in ICU
+Patients with Septic Shock. N Engl J Med
+(https://doi.org/10.1056/NEJMoa2202707).
+
+Kjaer M-BN et al. (2023). Long-term effects of restriction of intravenous
+fluid in adult ICU patients with septic shock. Intensive Care Med
+(https://doi.org/10.1007/s00134-023-07114-8)
 }

@@ -1,7 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 internal/
-preproc/
+preproc/'
+inst/misc/
 pipeline/
 .vscode/
 legacy/
