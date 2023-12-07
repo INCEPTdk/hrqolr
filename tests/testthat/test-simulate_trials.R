@@ -1,6 +1,13 @@
 test_that("simulate_trials S3 method works", {
 	cache_hrqolr() # needed to use caching also during tests
 
+	# Resource use will change between runs, so this is a fixed yet equivalent list
+	pseudo_resource_use <- list(
+		elapsed_time = structure(0, class = "difftime", units = "secs"),
+		peak_memory_use = structure(0, class = "hrqolr_bytes"),
+		max_cache_size = structure(0, class = "hrqolr_bytes")
+	)
+
 	scenario1 <- setup_scenario(
 		arms = c("Active", "Control"),
 		n_patients = 50,
@@ -16,6 +23,16 @@ test_that("simulate_trials S3 method works", {
 		verbose = FALSE
 	)
 
+	# Test that things work without a seed
+	simple_sims <- simulate_trials(scenario1, verbose = FALSE)
+	expect_s3_class(simple_sims, "hrqolr_results")
+
+	# Ascertain that resource_use has the right elements
+	expect_equal(
+		names(pseudo_resource_use),
+		names(simple_sims$resource_use)
+	)
+
 	sims_single_batch <- suppressMessages(simulate_trials(
 		scenario1,
 		n_trials = 100,
@@ -26,7 +43,8 @@ test_that("simulate_trials S3 method works", {
 		include_trial_results = TRUE,
 		seed = 42
 	))
-	sims_single_batch$resource_use <- NULL # will change from run to run
+
+	sims_single_batch$resource_use <- pseudo_resource_use
 	sims_single_batch$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_single_batch)
 
@@ -40,7 +58,7 @@ test_that("simulate_trials S3 method works", {
 		test_fun = welch_t_test,
 		seed = 42
 	))
-	sims_two_batches_verbose$resource_use <- NULL # will change from run to run
+	sims_two_batches_verbose$resource_use <- pseudo_resource_use
 	sims_two_batches_verbose$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_two_batches_verbose)
 
@@ -54,7 +72,7 @@ test_that("simulate_trials S3 method works", {
 		include_trial_results = TRUE,
 		seed = 42
 	))
-	sims_single_batch_without_examples$resource_use <- NULL # will change from run to run
+	sims_single_batch_without_examples$resource_use <- pseudo_resource_use
 	sims_single_batch_without_examples$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_single_batch_without_examples)
 
@@ -83,7 +101,7 @@ test_that("simulate_trials S3 method works", {
 		include_trial_results = TRUE,
 		seed = 42
 	))
-	sims_single_batch_no_mort_benefitters$resource_use <- NULL # will change from run to run
+	sims_single_batch_no_mort_benefitters$resource_use <- pseudo_resource_use
 	sims_single_batch_no_mort_benefitters$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_single_batch_no_mort_benefitters)
 })

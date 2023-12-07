@@ -28,15 +28,15 @@ games_howell_test <- function(vals, grps, arms = unique(grps), na_replacement = 
 	comparisons <- apply(grp_combos, 2, function(col) {
 		mean_diff <- diff(mu[col])
 
-		n_grp1 <- n_vals[col[1]]
-		n_grp2 <- n_vals[col[2]]
-		var_grp1 <- sigma2[col[1]]
-		var_grp2 <- sigma2[col[2]]
+		n1 <- n_vals[col[1]]
+		n2 <- n_vals[col[2]]
+		var1 <- sigma2[col[1]]
+		var2 <- sigma2[col[2]]
 
-		t_stat <- abs(mean_diff) / sqrt(var_grp1 / n_grp1 + var_grp2 / n_grp2)
-		df <- (var_grp1 / n_grp1 + var_grp2 / n_grp2)^2 /
-			((var_grp1 / n_grp1)^2 / (n_grp1 - 1) + (var_grp2 / n_grp2)^2 / (n_grp2 - 1))
-		se <- sqrt(0.5 * (var_grp1 / n_grp1 + var_grp2 / n_grp2))
+		t_stat <- abs(mean_diff) / sqrt(var1 / n1 + var2 / n2)
+		df <- (var1 / n1 + var2 / n2)^2 /
+			((var1 / n1)^2 / (n1 - 1) + (var2 / n2)^2 / (n2 - 1))
+		se <- sqrt(0.5 * (var1 / n1 + var2 / n2))
 
 		p_value <- stats::ptukey(t_stat * sqrt(2), n_grps, df, lower.tail = FALSE)
 		conf_int <- mean_diff + c(-1, 1) * stats::qtukey(1 - alpha, nmeans = n_grps, df = df) * se

@@ -24,52 +24,101 @@ simulate_trials(scenario, ...)
 )
 }
 \arguments{
-\item{scenario}{object of class 'hrqolr_scenario', the output of \link{setup_scenario}}
+\item{scenario}{object of class 'hrqolr_scenario', the output of
+\link{setup_scenario}}
 
 \item{...}{passed on to methods}
 
-\item{n_trials}{integer vector. If length > 1, simulations will be run in batches of size given}
+\item{n_trials}{integer vector. If length > 1, simulations will be run in
+batches of size given}
 
-\item{n_patients_ground_truth}{single integer, how many patients (per arm) to use when estimating the ground
-truth}
+\item{n_patients_ground_truth}{single integer, how many patients (per arm) to
+use when estimating the ground truth}
 
-\item{n_example_trajectories_per_arm}{single integer, the number of example trajectories to include in the
-returned object}
+\item{n_example_trajectories_per_arm}{single integer, the number of example
+trajectories to include in the returned object}
 
-\item{test_fun}{function used to compare estimates. The default is \code{welch_t_test} (built into
-\code{hrqolr}). Note that the function should handle the number of arms provided. See \strong{Details}
-below.}
+\item{test_fun}{function used to compare estimates. The default is
+\code{welch_t_test} (built into \code{hrqolr}). Note that the function should handle
+the number of arms provided. See \strong{Details} below.}
 
-\item{include_trial_results}{single logical, indicates whether trial-level results are kept. Default is
-\code{FALSE} because the resulting object may be very large if many trials are simulated.}
+\item{include_trial_results}{single logical, indicates whether trial-level
+results are kept. Default is \code{FALSE} because the resulting object may be
+very large if many trials are simulated.}
 
-\item{verbose}{single logical, should the function give progress timestamped updates? Default: \code{TRUE}}
+\item{verbose}{single logical, should the function give progress timestamped
+updates? Default: \code{TRUE}}
 
-\item{n_digits}{single integer, the number of decimal places of in the first HRQoL values of patients.
-More digits will yield greater precision but also cause longer run-times.}
+\item{n_digits}{single integer, the number of decimal places of in the first
+HRQoL values of patients. More digits will yield greater precision but also
+cause longer run-times.}
 
-\item{valid_hrqol_range}{two-element numeric vector, the lower and upper bounds of valid HRQoL
-values. The default (\code{c(-0.757, 1.0)}) corresponds to the Danish EQ-5D-5L index values.}
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper
+bounds of valid HRQoL values. The default (\code{c(-0.757, 1.0)}) corresponds to
+the Danish EQ-5D-5L index values.}
 
-\item{alpha}{single numerical value in \verb{[0, 1]}, the desired type 1 error rate used when comparing HRQoL in the
-arms.}
+\item{alpha}{single numerical value in \verb{[0, 1]}, the desired type 1 error
+rate used when comparing HRQoL in the arms.}
 
-\item{max_batch_size}{single integer, the maximum number of patients to process in each batch. The default
-is to use run one batch (i.e. no upper limit).}
+\item{max_batch_size}{single integer, the maximum number of patients to
+process in each batch. The default is to use run one batch (i.e. no upper
+limit).}
 
-\item{seed}{single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
-deterministic value based on the arguments given (ensuring reproducibility by default).}
+\item{seed}{single integer, optional seed for reproducible pseudo-random
+number generation. Defaults to a deterministic value based on the arguments
+given (ensuring reproducibility by default).}
 }
 \value{
-An object of class \code{hrqolr_results}, which is a specialised list with four elements:
-summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
-elapsed time.
+An object of class \code{hrqolr_results}, which is a specialised list with
+six elements:
+\itemize{
+\item \code{summary_stats} contains summary statistics for each arm
+\item \code{comparisons} contains comparisons against the ground truth and
+performance metrics
+\item \code{args} is a list with all arguments
+\item \code{trial_results} contains trial-level results, if
+\code{include_trial_results = TRUE}
+\item \code{example_trajectories} contains example trajectories is
+\code{n_example_trajectories_per_arm} is greater than 0
+\item \code{resource_use} documents approximate run-time, peak memory use and
+maximum cache size. This information can be helpful for orchestration if
+several (hundreds or thousands) scenarios are simulated in parallel on
+e.g. high-performance computing systems
+}
 }
 \description{
 This is the key user-facing function for simulating trials.
 }
 \details{
+\strong{test_fun}
+
+\code{hrqolr} comes with three built-in test functions:
+\code{welch_t_test} and \code{bootstrap_estimates} work with two-armed trials,
+\code{games_howell_test} with three-arm trials. If you use case so requires, you
+can specify your own \code{test_fun}. It must accept five arguments:
 \itemize{
-\item \code{test_fun}: [pending]
+\item \code{vals} is a vector all outcome values
+\item \code{grps} is a vector with the same length as \code{vals} with grouping indices
+\item \code{arms} is the unique values in the \code{grps} vector
+\item \code{na_replacement} is the value to put in place of NA's (which would be
+patients for whom no outcome values are available because they have died
+before follow-up started)
+\item \code{alpha} the significance level specified when calling
+\code{simulate_trials()}
 }
+
+--and it must return a list with six elements:
+\itemize{
+\item \code{comparator} string, the name of comparator arm in the comparison
+\item \code{target} string, the name of target arm in the comparison
+\item \code{est} numeric, the point estimate
+\item \code{p_value} numeric
+\item \code{ci_lo} numeric, lower bound of the confidence interval
+\item \code{ci_hi} numeric, upper bound of the confidence interval
+}
+}
+\references{
+Jensen CE et al. (20219. The Danish EQ-5D-5L Value Set: A Hybrid Model Using
+cTTO and DCE Data. Appl Health Econ Health Policy 19, 579–591
+(https://doi.org/10.1007/s40258-021-00639-3)
 }

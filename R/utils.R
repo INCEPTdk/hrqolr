@@ -30,7 +30,7 @@ fast_mean <- function(x) {
 #' @param a,b numeric vectors of length 1, coefficients
 #' @keywords internal
 #'
-compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
+compute_hosp_discharge <- function(t_icu_discharge, a, b) {
 	ceiling(t_icu_discharge^a * b)
 }
 
@@ -38,7 +38,7 @@ compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
 #'
 #' Infix function for easy replacement of NULL with a default value.
 #'
-#' @param a,b arbitrary vectors
+#' @param a,b arbitrary single-valued vectors
 #' @keywords internal
 #' @name replace_null
 #'
@@ -49,7 +49,7 @@ compute_hosp_discharge <- function(t_icu_discharge, a = 0.518, b = 9.310) {
 #'
 #' Infix function for easy replacement of -Inf/Inf with a default value.
 #'
-#' @param a,b arbitrary vectors
+#' @param a,b arbitrary single-valued vectors
 #' @keywords internal
 #' @name replace_infinite
 #'

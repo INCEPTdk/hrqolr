@@ -21,7 +21,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 		return(res)
 	}
 
-	t_hosp_discharge <- compute_hosp_discharge(t_icu_discharge)
+	t_hosp_discharge <- compute_hosp_discharge(t_icu_discharge, a = 0.518, b = 9.310)
 	eof <- traj[nrow(traj), "x"] # end of follow-up
 	index_hrqol <- traj[1, "y"]
 

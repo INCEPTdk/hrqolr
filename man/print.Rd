@@ -3,6 +3,7 @@
 \name{print}
 \alias{print}
 \alias{print.hrqolr_trajectories}
+\alias{print.hrqolr_results}
 \alias{print.hrqolr_scenario_validation_results}
 \alias{print.hrqolr_scenario}
 \alias{print.hrqolr_comparisons}
@@ -11,6 +12,8 @@
 \title{Print methods for HRQoL results}
 \usage{
 \method{print}{hrqolr_trajectories}(x, prop_decimals = 3, ...)
+
+\method{print}{hrqolr_results}(x, decimals = 3, prefix_outcome = "primary", ...)
 
 \method{print}{hrqolr_scenario_validation_results}(x, ...)
 
@@ -30,7 +33,11 @@ when printing proportions.}
 
 \item{...}{not used}
 
-\item{decimals}{single integer (default is \code{3}), the number of digits}
+\item{decimals}{single integer, number of decimals in summary statistics and
+comparisons}
+
+\item{prefix_outcome}{character, name of the primary outcome(s). Will print
+comparisons for all values given.}
 
 \item{digits}{a non-null value for \code{digits} specifies the minimum
     number of significant digits to be printed in values.  The default,

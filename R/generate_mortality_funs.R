@@ -1,17 +1,32 @@
-# TODO: Add reference link to CLASSIC trial paper, perhaps write out abbreviation
-
-#' Generate density, probability, quantile and random generation functions for (scaled) empirical
-#' mortality distribution
+#' Generate density, probability, quantile and random generation functions for
+#' (scaled) empirical mortality distribution
 #'
-#' The cumulative mortality functions is modelled over that of the CLASSIC trial, but can be scaled
-#' to achieve a desired mortality at end of follow-up
+#' The cumulative mortality functions is modelled over that of the CLASSIC trial
+#' (see details), but can be scaled to achieve a desired mortality at end of
+#' follow-up
 #'
-#' @param cum_mortality scalar in `[0, 1]`, the cumulative mortality at end of follow-up (= time of
-#'   censoring)
-#' @param censoring_value the value assigned when a patient is censored, default is `NA`
+#' @param cum_mortality scalar in `[0, 1]`, the cumulative mortality at end of
+#'   follow-up (= time of censoring)
+#' @param censoring_value the value assigned when a patient is censored, default
+#'   is `NA`
 #'
-#' @return A list with the four functions, named `d`, `p`, `q` and `r` to follow R conventions (see,
-#'   e.g., `?rnorm`)
+#' @details The built-in cumulative mortality function is based on results from
+#'   the standard arm in the Conservative versus Liberal Approach to Fluid
+#'   Therapy of Septic Shock in Intensive Care (CLASSIC) trial (see references
+#'   below).
+#'
+#' @references
+#'
+#' Meyhoff TS et al. (2022). Restriction of Intravenous Fluid in ICU
+#' Patients with Septic Shock. N Engl J Med
+#' (https://doi.org/10.1056/NEJMoa2202707).
+#'
+#' Kjaer M-BN et al. (2023). Long-term effects of restriction of intravenous
+#' fluid in adult ICU patients with septic shock. Intensive Care Med
+#' (https://doi.org/10.1007/s00134-023-07114-8)
+#'
+#' @return A list with the four functions, named `d`, `p`, `q` and `r` to follow
+#'   R conventions (see, e.g., `?rnorm`)
 #'
 generate_mortality_funs <- function(
     cum_mortality = NULL,
@@ -25,7 +40,7 @@ generate_mortality_funs <- function(
 		return(out)
 	}
 
-  cdf <- with(CLASSIC_cum_mortality_curve, create_smooth_trajectory(t, p_death))
+  cdf <- with(cum_mort_classic_standard_arm, create_smooth_trajectory(t, p_death))
 	cum_mortality <- cum_mortality %||% max(cdf$y)
 
 	cdf$y <- cumsum(c(0, rescale(diff(cdf$y)) * cum_mortality))

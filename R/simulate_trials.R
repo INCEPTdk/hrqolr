@@ -4,9 +4,22 @@
 #'
 #' @param ... passed on to methods
 #'
-#' @return An object of class `hrqolr_results`, which is a specialised list with four elements:
-#'   summary statistics for each arm, comparisons (incl. performance metrics), the seed and the
-#'   elapsed time.
+#' @return An object of class `hrqolr_results`, which is a specialised list with
+#'   six elements:
+#' \itemize{
+#'   \item `summary_stats` contains summary statistics for each arm
+#'   \item `comparisons` contains comparisons against the ground truth and
+#'     performance metrics
+#'   \item `args` is a list with all arguments
+#'   \item `trial_results` contains trial-level results, if
+#'     `include_trial_results = TRUE`
+#'   \item `example_trajectories` contains example trajectories is
+#'     `n_example_trajectories_per_arm` is greater than 0
+#'   \item `resource_use` documents approximate run-time, peak memory use and
+#'     maximum cache size. This information can be helpful for orchestration if
+#'     several (hundreds or thousands) scenarios are simulated in parallel on
+#'     e.g. high-performance computing systems
+#' }
 #'
 #' @name simulate_trials
 #'
@@ -19,36 +32,75 @@ simulate_trials <- function(scenario, ...) {
 }
 
 
-# TODO: Add reference to paper with Danish EQ-5D-5L reference values
 #' Helper for when scenario given as first argument
 #'
-#' @param scenario object of class 'hrqolr_scenario', the output of [setup_scenario]
+#' @param scenario object of class 'hrqolr_scenario', the output of
+#'   [setup_scenario]
 #'
-#' @param n_trials integer vector. If length > 1, simulations will be run in batches of size given
-#' @param n_patients_ground_truth single integer, how many patients (per arm) to use when estimating the ground
-#'   truth
-#' @param n_example_trajectories_per_arm single integer, the number of example trajectories to include in the
-#'   returned object
+#' @param n_trials integer vector. If length > 1, simulations will be run in
+#'   batches of size given
+#' @param n_patients_ground_truth single integer, how many patients (per arm) to
+#'   use when estimating the ground truth
+#' @param n_example_trajectories_per_arm single integer, the number of example
+#'   trajectories to include in the returned object
 #'
-#' @param test_fun function used to compare estimates. The default is `welch_t_test` (built into
-#'   `hrqolr`). Note that the function should handle the number of arms provided. See **Details**
-#'   below.
-#' @param verbose single logical, should the function give progress timestamped updates? Default: `TRUE`
-#' @param seed single integer, optional seed for reproducible pseudo-random number generation. Defaults to a
-#'   deterministic value based on the arguments given (ensuring reproducibility by default).
-#' @param n_digits single integer, the number of decimal places of in the first HRQoL values of patients.
-#'   More digits will yield greater precision but also cause longer run-times.
-#' @param valid_hrqol_range two-element numeric vector, the lower and upper bounds of valid HRQoL
-#'   values. The default (`c(-0.757, 1.0)`) corresponds to the Danish EQ-5D-5L index values. 
-#' @param alpha single numerical value in `[0, 1]`, the desired type 1 error rate used when comparing HRQoL in the
-#'   arms.
-#' @param include_trial_results single logical, indicates whether trial-level results are kept. Default is
-#'   `FALSE` because the resulting object may be very large if many trials are simulated.
-#' @param max_batch_size single integer, the maximum number of patients to process in each batch. The default
-#'   is to use run one batch (i.e. no upper limit).
+#' @param test_fun function used to compare estimates. The default is
+#'   `welch_t_test` (built into `hrqolr`). Note that the function should handle
+#'   the number of arms provided. See **Details** below.
+#' @param verbose single logical, should the function give progress timestamped
+#'   updates? Default: `TRUE`
+#' @param seed single integer, optional seed for reproducible pseudo-random
+#'   number generation. Defaults to a deterministic value based on the arguments
+#'   given (ensuring reproducibility by default).
+#' @param n_digits single integer, the number of decimal places of in the first
+#'   HRQoL values of patients. More digits will yield greater precision but also
+#'   cause longer run-times.
+#' @param valid_hrqol_range two-element numeric vector, the lower and upper
+#'   bounds of valid HRQoL values. The default (`c(-0.757, 1.0)`) corresponds to
+#'   the Danish EQ-5D-5L index values.
+#' @param alpha single numerical value in `[0, 1]`, the desired type 1 error
+#'   rate used when comparing HRQoL in the arms.
+#' @param include_trial_results single logical, indicates whether trial-level
+#'   results are kept. Default is `FALSE` because the resulting object may be
+#'   very large if many trials are simulated.
+#' @param max_batch_size single integer, the maximum number of patients to
+#'   process in each batch. The default is to use run one batch (i.e. no upper
+#'   limit).
 #'
 #' @details
-#' * `test_fun`: \[pending\]
+#'
+#' \strong{test_fun}
+#'
+#' `hrqolr` comes with three built-in test functions:
+#' `welch_t_test` and `bootstrap_estimates` work with two-armed trials,
+#' `games_howell_test` with three-arm trials. If you use case so requires, you
+#' can specify your own `test_fun`. It must accept five arguments:
+#' \itemize{
+#'   \item `vals` is a vector all outcome values
+#'   \item `grps` is a vector with the same length as `vals` with grouping indices
+#'   \item `arms` is the unique values in the `grps` vector
+#'   \item `na_replacement` is the value to put in place of NA's (which would be
+#'     patients for whom no outcome values are available because they have died
+#'     before follow-up started)
+#'   \item `alpha` the significance level specified when calling
+#'     `simulate_trials()`
+#' }
+#'
+#' --and it must return a list with six elements:
+#' \itemize{
+#'   \item `comparator` string, the name of comparator arm in the comparison
+#'   \item `target` string, the name of target arm in the comparison
+#'   \item `est` numeric, the point estimate
+#'   \item `p_value` numeric
+#'   \item `ci_lo` numeric, lower bound of the confidence interval
+#'   \item `ci_hi` numeric, upper bound of the confidence interval
+#' }
+#'
+#' @references
+#'
+#' Jensen CE et al. (20219. The Danish EQ-5D-5L Value Set: A Hybrid Model Using
+#' cTTO and DCE Data. Appl Health Econ Health Policy 19, 579–591
+#' (https://doi.org/10.1007/s40258-021-00639-3)
 #'
 #' @rdname simulate_trials
 #' @export
@@ -136,8 +188,8 @@ simulate_trials.default <- function(
 	start_time <- Sys.time()
 	mortality_funs <- sapply(mortality, generate_mortality_funs, simplify = FALSE)
 
-	# Handling seeds ====
-	try({ # will fail e.g. if called from parallel::parLapply
+	# Restore RNG state after this function has been run
+	try({ # wrapped in try() just in case
 		old_seed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
 		on.exit(
 			assign(".Random.seed", value = old_seed, envir = globalenv(), inherits = FALSE),
@@ -145,7 +197,13 @@ simulate_trials.default <- function(
 			after = FALSE
 		)
 	}, silent = TRUE)
-	RNGkind("Mersenne-Twister")
+
+	old_rngkind <- RNGkind(
+		kind = "Mersenne-Twister",
+		normal.kind = "default",
+		sample.kind = "default"
+	)
+	on.exit(do.call(RNGkind, as.list(old_rngkind)), add = TRUE, after = FALSE)
 	set.seed(seed)
 
 
@@ -157,7 +215,7 @@ simulate_trials.default <- function(
 
 	trial_ids_by_batch <- split(
 		seq_len(n_trials),
-		rep(seq_len(n_batches), each = n_trials_per_batch)[1:n_trials]
+		rep(seq_len(n_batches), each = n_trials_per_batch)[seq_len(n_trials)]
 	)
 
 	n_patients_by_batch <- lapply(
@@ -191,7 +249,8 @@ simulate_trials.default <- function(
 					n_batches,
 					est_remaining_time(start_time, batch_idx, n_batches)
 				),
-				"cyan")
+				"cyan"
+			)
 		}
 
 		batch_res <- setNames(vector("list", length(arms)), arms)
@@ -204,7 +263,10 @@ simulate_trials.default <- function(
 			# Ground-truth estimation ====
 			if (batch_idx == 1) {
 				if (isTRUE(verbose)) {
-					log_timediff(start_time_batch, sprintf("Estimating ground truth of arm '%s'", arm))
+					log_timediff(
+						start_time_batch,
+						sprintf("Estimating ground truth of arm '%s'", arm)
+					)
 				}
 
 				gt_res <- estimation_helper(
@@ -310,7 +372,7 @@ simulate_trials.default <- function(
 				return(tmp)
 			},
 			col = rep(outcome_cols, each = 2),
-			label = c("all", "survivors"), # repeated to match col parameter (the longest)
+			label = c("all", "survivors"), # cycled to match col parameter (the longest)
 			na_replacement = list(0, NULL), # idem
 			SIMPLIFY = FALSE
 		)
@@ -350,10 +412,13 @@ simulate_trials.default <- function(
 	ground_truth <- rbindlist(lapply(
 		utils::combn(arms, m = 2, simplify = FALSE),
 		function(arms) {
-			tmp <- dcast(
-				melt(ground_truth[arms], id.vars = c("arm", "outcome"), variable.name = "analysis"),
-				outcome + analysis ~ arm
+			tmp <- melt(
+				ground_truth[arms],
+				id.vars = c("arm", "outcome"),
+				variable.name = "analysis"
 			)
+			tmp <- dcast(tmp, outcome + analysis ~ arm)
+
 			tmp[, .(
 				outcome,
 				comparator = arms[1],
@@ -394,7 +459,11 @@ simulate_trials.default <- function(
 		]
 	)
 
-	comparisons <- merge(comparisons, ground_truth, by = c("outcome", "comparator", "target")) # add column with ground truth mean diff
+	comparisons <- merge(
+		comparisons,
+		ground_truth,
+		by = c("outcome", "comparator", "target")
+	) # add column with ground truth mean diff
 	setnames(comparisons, "mean", "mean_estimate")
 	setcolorder(
 		comparisons,
@@ -418,7 +487,6 @@ simulate_trials.default <- function(
 		lapply(called_args, eval, parent.frame()),
 		lapply(default_args, eval, envir = environment())
 	)
-	args$seed <- seed
 
 	# Example trajectories ====
 	example_trajectories <- if (n_example_trajectories_per_arm > 0) {
@@ -443,7 +511,7 @@ simulate_trials.default <- function(
 					sum(gc()[, "max used"] * c(node_size(), 8)),
 					class = "hrqolr_bytes"
 				),
-				max_cache_sizes = max_size_of_cache
+				max_cache_size = max_size_of_cache
 			)
 		),
 		class = c("hrqolr_results", "list")

@@ -41,7 +41,7 @@ construct_arm_level_trajectory <- function(
 	# Base trajectory
 	t <- c(
 		icu_discharge = t_icu_discharge,
-		hosp_discharge = compute_hosp_discharge(t_icu_discharge),
+		hosp_discharge = compute_hosp_discharge(t_icu_discharge, a = 0.518, b = 9.310),
 		fu_3mo = 90,
 		end_of_followup = compute_eof(t_icu_discharge, 180, sampling_frequency)
 	)

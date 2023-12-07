@@ -89,13 +89,14 @@ setup_scenario <- function(
 		if (arg_name == "arms") {
 			args[[arg_name]] <- setNames(a, a)
 			result <- "valid as is"
+			remark <- deparse(a)
 		} else if (is.null(a)) {
 			remark <- "cannot be NULL"
 		} else if (length(a) == 1) {
 			if (do.call(req$fun, c(list(a), req[-1]))) {
 				args[[arg_name]] <- setNames(rep(a, length(arms)), arms)
-				result <- "modified"
-				remark <- paste(deparse(a), "-->", deparse(args[[arg_name]]))
+				result <- "expanded to"
+				remark <- deparse(args[[arg_name]])
 			} else {
 				remark <- "outside valid range or incorrect type"
 			}
@@ -107,6 +108,7 @@ setup_scenario <- function(
 					remark <- "at least one value outside valid range or of incorrect type"
 				} else {
 					result <- "valid as is"
+					remark <- deparse(args[[arg_name]])
 				}
 			}
 		}

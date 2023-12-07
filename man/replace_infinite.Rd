@@ -8,7 +8,7 @@
 a \%fi\% b
 }
 \arguments{
-\item{a, b}{arbitrary vectors}
+\item{a, b}{arbitrary single-valued vectors}
 }
 \description{
 Infix function for easy replacement of -Inf/Inf with a default value.
