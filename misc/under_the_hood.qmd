@@ -1,0 +1,161 @@
+---
+title: "Under the hood of hrqolr"
+output: 
+  html_document:
+    code_folding: show
+format:
+  html:
+    fontsize: 0.9em
+    embed-resources: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = ">",
+  fig.align = "center",
+  fig.width = 6
+)
+```
+
+### Setup
+
+```{r message=FALSE}
+library(covr)
+library(crayon)
+library(hrqolr)
+library(microbenchmark)
+library(purrr)
+```
+
+Enable crayon-coloured console output below:
+
+```{r comment = "", results = "asis"}
+options(crayon.enabled = TRUE)
+old.hooks <- fansi::set_knit_hooks(knitr::knit_hooks)
+```
+
+Helper:
+
+```{r class.source = "fold-show"}
+print_code_coverage <- function(fun, args) {
+	cat_line <- function(line, source, coverage) {
+		as <- if (coverage == "") {
+			"silver"
+		} else if (coverage == "0") {
+			"red"
+		} else {
+			"green"
+		}
+		cat(crayon::style(source, as), "\n")
+	}
+	
+	function_coverage(fun, code = do.call(fun, args)) |>
+		covr:::to_report_data() |>
+		pluck("full", 1) |>
+		apply(1, \(row) do.call(cat_line, as.list(row)))
+	
+	invisible(NULL)
+}
+```
+
+### Background
+
+The `hrqolr` packages simulates temporal trajectories of health-related quality of life (HRQoL) in patients who survive their stay at the intensive care unit (ICU), often called *ICU survivors*. Although this is the use case of origin, such trajectories could be of interest for any patient population, and so `hrqolr` will hopefully prove useful beyond the confines of the ICU setting.
+
+### Scope of document
+
+This vignettes will explain the inner workings of `hrqolr`. This understanding is completely unnecessary for the average user.
+
+### Workflow
+
+Simulating trials with `hrqolr` is, essentially, a two-step process: set up a scenario with simulation parameters using `setup_scenario()` and, then, use the resulting object in `simulate_trials()` to simulate trials.
+
+### Hierarchy of functions
+
+The philosophy of `hrqolr` is that participants belong to an arm in a trial, and that each arm has an underlying (i.e., base) trajectory representing a mean response for participants in that arm discharged from the ICU a given number of days after enrolment. One of two things can happen to a given participant: they follow their trajectory until end of follow-up (EOF) or they die before EOF. In the latter case, the participant will follow what we call a *mortality trajectory* starting at their `first_hrqol` and ending at `0.0`.
+
+This hierarchy is illustrated below. As always in R, functions internal to a package can be invoked with `:::`. `hrqolr` has a relatively low number of user-facing functions, which is a conscious decisions.
+
+```{mermaid}
+graph TB
+	subgraph User-facing
+		simulate_trials
+		simulate_trial
+		sample_ex_traj(sample_example_trajectory)
+	end
+	simulate_trials --> estimation_helper
+	simulate_trials --> perf_metrics
+	simulate_trial --> estimation_helper
+	sample_ex_traj --> patient_traj
+	sample_ex_traj --> arm_traj
+	subgraph Internal
+		estimation_helper
+		perf_metrics(compute_performance_metrics)
+		estimation_helper --> comp_est
+		subgraph Cached
+			comp_est(compute_estimates) --> final_trajs(construct_final_trajectories)
+			final_trajs --> patient_traj(construct_patient_trajectory)
+			patient_traj -- Dies before EOF --> mort_traj(construct_mortality_trajectory)
+			patient_traj -- Survives beyond EOF --> arm_traj(construct_arm_level_trajectory)
+			arm_traj --> smooth_traj(create_smooth_trajectory)
+		end
+	end
+	style Internal fill:#eee
+	style User-facing fill:#eee
+	style Cached fill:#ddd
+```
+
+For a given participant, `compute_estimates()` computes the HRQoL at EOF and the area under the trajectory (AUTC) for each of the final trajectories. These final trajectories are based on the actual trajectory but use different time points for start of follow-up. For now, these are hard-coded to fit the purpose of our paper, but later they will be parameterised to put them under the control of the user. The `estimation_helper()` is just a wrapper to avoid duplicate code in `simulate_trials()`.
+
+The crucial benefit of this hierarchy is that it facilitates memoisation where each arrow in the "Cached" region above represents a "memoisation step". Caching isn't free in terms of runtime, so simple functions are not memoised but, instead, implemented in C when this is significantly faster than native R code.
+
+### Example
+
+To make things concrete, consider `construct_arm_level_trajectory()`. The logic is only run in full at the first invocation with a given argument combination, as illustrated here (lines in green are run, those in red are skipped).
+
+#### First invocation
+
+```{r}
+fun <- hrqolr:::construct_arm_level_trajectory # needed to work during knitting
+args <- list(14, 1.0, 0.0, 0.2, 0.8, 14)
+print_code_coverage(fun, args)
+```
+
+#### Subsequent invocation
+
+But any time the function is called anew with the same arguments, `hrqolr` will pick it from the cache:
+
+```{r}
+print_code_coverage(fun, args)
+```
+
+#### Timing
+
+Fetching the result from the cache is *much* faster as illustrated here (relative difference almost 500-fold):
+
+```{r}
+uncached_timings <- map_dfr(
+	1:50,
+	function(i) {
+		clear_hrqolr_cache()
+		gc() # ensure cache is actually wiped
+		as.data.frame(microbenchmark(uncached = do.call(fun, args), times = 1))
+	}
+)
+
+timings <- rbind(
+	uncached_timings, 
+	microbenchmark(cached = do.call(fun, args), times = 50)
+)
+
+tapply(timings$time, timings$expr, \(x) summary(x) / 1000) # make microseconds
+```
+
+### Session info
+
+```{r}
+sessionInfo()
+```
