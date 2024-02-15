@@ -333,7 +333,6 @@ simulate_trials.default <- function(
 			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
-
 			batch_res[[arm]] <- res
 			rm(res)
 			gc()
