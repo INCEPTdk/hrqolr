@@ -145,7 +145,7 @@ simulate_trial.default <- function(
 	mean_diffs <- mapply(
 		function(col, analysis, na_replacement) {
 			tmp <- patient_results[
-				, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement)
+				, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement, alpha = alpha)
 			]
 			tmp[, analysis := analysis]
 			return(tmp)
