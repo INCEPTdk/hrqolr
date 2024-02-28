@@ -364,7 +364,7 @@ simulate_trials.default <- function(
 		tmp <- mapply(
 			function(col, label, na_replacement) {
 				tmp <- batch_res[
-					, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement, alpha = alpha),
+					, test_fun(vals = get(col), grps = arm, arms = arms, na_replacement = na_replacement, alpha = alpha),
 					by = "trial_id"
 				]
 				tmp[, analysis := label]
