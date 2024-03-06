@@ -81,7 +81,8 @@ estimation_helper <- function(
 					mortality_trajectory_shape = mortality_trajectory_shape,
 					mortality_dampening = mortality_dampening,
 
-					sampling_frequency = sampling_frequency
+					sampling_frequency = sampling_frequency,
+					valid_hrqol_range = valid_hrqol_range
 				)
 			},
 			t_icu_discharge,
