@@ -97,7 +97,7 @@ simulate_trials <- function(scenario, ...) {
 #'
 #' @references
 #'
-#' Jensen CE et al. (20219. The Danish EQ-5D-5L Value Set: A Hybrid Model Using
+#' Jensen CE et al. (20219). The Danish EQ-5D-5L Value Set: A Hybrid Model Using
 #' cTTO and DCE Data. Appl Health Econ Health Policy 19, 579–591
 #' (https://doi.org/10.1007/s40258-021-00639-3)
 #'
