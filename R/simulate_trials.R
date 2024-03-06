@@ -37,8 +37,7 @@ simulate_trials <- function(scenario, ...) {
 #' @param scenario object of class 'hrqolr_scenario', the output of
 #'   [setup_scenario]
 #'
-#' @param n_trials integer vector. If length > 1, simulations will be run in
-#'   batches of size given
+#' @param n_trials single integer, the number of trials to simulate in total
 #' @param n_patients_ground_truth single integer, how many patients (per arm) to
 #'   use when estimating the ground truth
 #' @param n_example_trajectories_per_arm single integer, the number of example
@@ -182,6 +181,9 @@ simulate_trials.default <- function(
 
 	# Housekeeping
 	stopifnot(n_patients_ground_truth > 0)
+	if (!verify_int(n_trials)) {
+		stop0("n_trials should be a single integer")
+	}
 
 	# Setup ====
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
