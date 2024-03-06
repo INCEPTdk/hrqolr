@@ -122,7 +122,10 @@ setup_scenario <- function(
 
 	if (any(sapply(val_results, function(arg) arg["result"] == "invalid"))) {
 		if (isFALSE(verbose)) {
-			stop0("At least one argument was invalid. Try re-running with verbose = TRUE for details.")
+			stop0(
+				"At least one argument was invalid. For details, try running \n",
+				"setup_scenario() with verbose = TRUE"
+			)
 		} else {
 			stop0("At least one argument was invalid.")
 		}
