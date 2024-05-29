@@ -1,4 +1,4 @@
-# simulate_trials S3 method works
+# simulate_trial S3 method works
 
     Code
       sims_single_batch
