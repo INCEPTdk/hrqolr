@@ -240,7 +240,7 @@ print.hrqolr_bytes <- function (x, digits = 3, ...) {
 	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
 
 	formatted <- format(
-		signif(x / (1000^power), digits = digits),
+		signif(as.numeric(x) / (1000^power), digits = digits),
 		big.mark = ",",
 		scientific = FALSE
 	)
