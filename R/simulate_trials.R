@@ -397,7 +397,7 @@ simulate_trials.default <- function(
 	}
 
 	max_size_of_cache <- tryCatch(
-		lobstr::obj_size(.hrqolr_cache_user),
+		utils::object.size(.hrqolr_cache_user),
 		error = function(e) NA
 	)
 	class(max_size_of_cache) <- c("hrqolr_bytes", class(max_size_of_cache))
