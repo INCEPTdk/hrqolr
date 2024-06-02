@@ -105,17 +105,17 @@ print.hrqolr_results <- function(x, decimals = 3, prefix_outcome = "primary", ..
 	)
 	comparisons[, statistic := new_col_names[statistic]]
 	setnames(comparisons, "statistic", "")
-	print(comparisons, row.names = FALSE)
+	print(comparisons, row.names = FALSE, class = FALSE)
 
 	cat("\n# Summary statistics\n")
 
 	cat("## All participants\n")
 	summary_stats_all <- x$summary_stats[analysis == "all"]
-	print(summary_stats_all[, analysis := NULL], row.names = FALSE)
+	print(summary_stats_all[, analysis := NULL], row.names = FALSE, class = FALSE)
 
 	cat("\n## Survivors\n")
 	summary_stats_survivors <- x$summary_stats[analysis == "survivors"]
-	print(summary_stats_survivors[, analysis := NULL], row.names = FALSE)
+	print(summary_stats_survivors[, analysis := NULL], row.names = FALSE, class = FALSE)
 
 	invisible(x)
 }
