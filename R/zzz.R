@@ -17,7 +17,6 @@ NULL
 #
 .hrqolr_cache_user <- cachem::cache_mem(
 	max_size = 2 * 1024^3,
-	evict = "lru"
 )
 
 
