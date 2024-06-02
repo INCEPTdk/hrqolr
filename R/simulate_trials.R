@@ -181,8 +181,8 @@ simulate_trials.default <- function(
 
 	# Housekeeping
 	stopifnot(n_patients_ground_truth > 0)
-	if (!verify_int(n_trials)) {
-		stop0("n_trials should be a single integer")
+	if (!verify_int(n_trials, min_value = 1)) {
+		stop0("n_trials should be a single integer greater than 0")
 	}
 
 	# Setup ====
