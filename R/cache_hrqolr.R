@@ -24,7 +24,24 @@ cache_hrqolr <- function(
 		lapply(default_args, eval, envir = environment())
 	)
 
-	utils::assignInMyNamespace(".hrqolr_cache_user", do.call(cachem::cache_mem, args))
+	cache <- do.call(cachem::cache_mem, args)
+	cache_reset_as_prune <- function(cache) {
+		structure(
+			list(
+				get = cache$get,
+				set = cache$set,
+				exists = cache$exists,
+				keys = cache$keys,
+				remove = cache$remove,
+				reset = cache$reset,
+				prune = cache$reset, # note how we just reset the cache instead of wasting time pruning it
+				size = cache$size
+			),
+			class = c("cache_reset_as_prune", class(cache))
+		)
+	}
+
+	utils::assignInMyNamespace(".hrqolr_cache_user", cache_reset_as_prune(cache))
 }
 
 
