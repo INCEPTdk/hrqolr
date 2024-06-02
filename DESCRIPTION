@@ -1,6 +1,6 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9056
+Version: 0.0.0.9057
 Date: 2024-06-02
 Authors@R: 
 	c(person("Benjamin Skov", "Kaas-Hansen",
