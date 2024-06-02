@@ -1,6 +1,6 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9057
+Version: 0.0.0.9058
 Date: 2024-06-02
 Authors@R: 
 	c(person("Benjamin Skov", "Kaas-Hansen",
@@ -36,12 +36,12 @@ Imports:
 Suggests:
 	covr,
 	crayon,
-	ggplot2,
+	ggplot2 (>= 3.5.1),
 	knitr,
 	rmarkdown,
 	scales,
 	testthat (>= 3.0.0),
-	vdiffr
+	vdiffr (>= 1.0.7)
 NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr
