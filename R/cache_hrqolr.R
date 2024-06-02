@@ -89,12 +89,13 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 	}
 
 	set <- function(key, value) {
-		if (prune_by_size && (total_size_ > max_size_)) {
-			reset()
-		}
-
 		if (prune_by_size) {
 			size <- as.numeric(object.size(value))  # imperfect, see ?object.size
+
+			if ((total_size_ + size) > max_size_) {
+				reset()
+			}
+
 			total_size_ <<- total_size_ + size
 		} else {
 			size <- NA_real_
