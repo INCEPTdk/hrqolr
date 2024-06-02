@@ -5,24 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content='hrqolr simulates randomised clinical trials with temporal 
-	trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
-	sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
-	Developed as part of the INCEPT (Intensive Care Platform Trial) project (&lt;https://incept.dk/&gt;), 
-	which is primarily supported by a grant from Sygeforsikringen "danmark" 
-	(&lt;https://www.sygeforsikring.dk/&gt;).'>
+<meta name="description" content='hrqolr simulates randomised clinical trials with temporal trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. Developed as part of the INCEPT (Intensive Care Platform Trial) project (&lt;https://incept.dk/&gt;), which is primarily supported by a grant from Sygeforsikringen "danmark" (&lt;https://www.sygeforsikring.dk/&gt;).'>
 <title>Simulator of health-related quality of life trajectories • hrqolr</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Simulator of health-related quality of life trajectories">
-<meta property="og:description" content='hrqolr simulates randomised clinical trials with temporal 
-	trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
-	sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
-	Developed as part of the INCEPT (Intensive Care Platform Trial) project (&lt;https://incept.dk/&gt;), 
-	which is primarily supported by a grant from Sygeforsikringen "danmark" 
-	(&lt;https://www.sygeforsikring.dk/&gt;).'>
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Simulator of health-related quality of life trajectories">
+<meta property="og:description" content='hrqolr simulates randomised clinical trials with temporal trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. Developed as part of the INCEPT (Intensive Care Platform Trial) project (&lt;https://incept.dk/&gt;), which is primarily supported by a grant from Sygeforsikringen "danmark" (&lt;https://www.sygeforsikring.dk/&gt;).'>
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -32,11 +22,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">hrqolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9061</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +84,7 @@
 <p>First, load the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://inceptdk.github.io/hrqolr/">hrqolr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading 'hrqolr' package v0.0.0.9021.</span></span>
+<span><span class="co">#&gt; Loading 'hrqolr' package v0.0.0.9051.</span></span>
 <span><span class="co">#&gt; For help, run 'help("hrqolr")' or check out https://inceptdk.github.io/hrqolr.</span></span></code></pre></div>
 <p>The preferred way to design a scenario is by using the <code><a href="reference/setup_scenario.html">setup_scenario()</a></code> function to validate the input and give it the right format. Set <code>verbose = FALSE</code> to silence the validation results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -110,7 +100,7 @@
 <span>    mortality <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>    mortality_dampening <span class="op">=</span> <span class="fl">0.0</span>,</span>
 <span>    mortality_trajectory_shape <span class="op">=</span> <span class="st">"exp_decay"</span>,</span>
-<span>    prop_mortality_benefitters <span class="op">=</span> <span class="fl">0.0</span>,</span>
+<span>    prop_mortality_benefitters <span class="op">=</span> <span class="fl">0.0</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scenario-parameter validation:</span></span>
 <span><span class="co">#&gt; - arms                         valid as is   c("A", "B")   </span></span>
@@ -158,81 +148,153 @@
 <p>The same scenario specification can, then, be used to simulate a desired number of trials. By default <code>hrqolr</code> will print progress updates to the console (silence these with <code>verbose = FALSE</code>):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span><span class="va">scenario</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:10:57: Estimating ground truth of arm 'A' (0 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:10:57: Starting arm 'A' (0.65 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:10:59: Estimating ground truth of arm 'B' (2.49 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:11:00: Starting arm 'B' (3.07 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:11:01: Aggregating results (4.8 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:11:02: Finished (5.07 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:11:02: Sampling example trajectories (5.37 secs)</span></span>
-<span><span class="co">#&gt; 2023-12-08 00:11:02: Wrapping up, returning output (5.78 secs)</span></span></code></pre></div>
-<p>The returned object contains quite a lot of interesting information. For example, summary statistics by arm:</p>
+<span><span class="co">#&gt; 2024-06-02 17:28:51: Estimating ground truth of arm 'A' (0 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:51: Starting arm 'A' (0.4 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:52: Estimating ground truth of arm 'B' (1.39 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:53: Starting arm 'B' (1.74 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:54: Aggregating results (2.78 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:54: Finished (2.99 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:54: Sampling example trajectories (3.13 secs)</span></span>
+<span><span class="co">#&gt; 2024-06-02 17:28:54: Wrapping up, returning output (3.36 secs)</span></span></code></pre></div>
+<p>Just printing the returned object gives an overview:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sims</span><span class="op">$</span><span class="va">summary_stats</span></span>
-<span><span class="co">#&gt;                      outcome arm  analysis    p25     p50     p75    mean    sd    se</span></span>
-<span><span class="co">#&gt;  1:    primary__hrqol_at_eof   A       all  0.454   0.484   0.512   0.482 0.039 0.004</span></span>
-<span><span class="co">#&gt;  2:    primary__hrqol_at_eof   B       all  0.396   0.418   0.438   0.416 0.036 0.004</span></span>
-<span><span class="co">#&gt;  3:       primary__hrqol_auc   A       all 65.524  69.310  73.164  69.045 5.492 0.549</span></span>
-<span><span class="co">#&gt;  4:       primary__hrqol_auc   B       all 57.170  60.289  63.167  59.997 5.169 0.517</span></span>
-<span><span class="co">#&gt;  5: secondary1__hrqol_at_eof   A       all  0.454   0.484   0.512   0.482 0.039 0.004</span></span>
-<span><span class="co">#&gt;  6: secondary1__hrqol_at_eof   B       all  0.396   0.418   0.438   0.416 0.036 0.004</span></span>
-<span><span class="co">#&gt;  7:    secondary1__hrqol_auc   A       all 65.330  69.208  72.992  68.917 5.537 0.554</span></span>
-<span><span class="co">#&gt;  8:    secondary1__hrqol_auc   B       all 56.985  60.002  62.866  59.780 5.201 0.520</span></span>
-<span><span class="co">#&gt;  9: secondary2__hrqol_at_eof   A       all  0.457   0.484   0.512   0.482 0.039 0.004</span></span>
-<span><span class="co">#&gt; 10: secondary2__hrqol_at_eof   B       all  0.396   0.418   0.438   0.416 0.036 0.004</span></span>
-<span><span class="co">#&gt; 11:    secondary2__hrqol_auc   A       all 61.300  64.935  68.724  64.884 5.237 0.524</span></span>
-<span><span class="co">#&gt; 12:    secondary2__hrqol_auc   B       all 53.425  56.452  59.183  56.038 4.916 0.492</span></span>
-<span><span class="co">#&gt; 13:    primary__hrqol_at_eof   A survivors  0.562   0.580   0.606   0.581 0.037 0.004</span></span>
-<span><span class="co">#&gt; 14:    primary__hrqol_at_eof   B survivors  0.482   0.505   0.522   0.501 0.034 0.003</span></span>
-<span><span class="co">#&gt; 15:       primary__hrqol_auc   A survivors 80.721  83.140  86.545  83.264 5.096 0.510</span></span>
-<span><span class="co">#&gt; 16:       primary__hrqol_auc   B survivors 69.305  72.786  75.463  72.297 4.797 0.480</span></span>
-<span><span class="co">#&gt; 17: secondary1__hrqol_at_eof   A survivors  0.650   0.669   0.699   0.673 0.036 0.004</span></span>
-<span><span class="co">#&gt; 18: secondary1__hrqol_at_eof   B survivors  0.561   0.584   0.610   0.583 0.033 0.003</span></span>
-<span><span class="co">#&gt; 19:    secondary1__hrqol_auc   A survivors 92.751  95.909  99.937  96.299 5.123 0.512</span></span>
-<span><span class="co">#&gt; 20:    secondary1__hrqol_auc   B survivors 80.721  83.795  87.400  83.848 4.825 0.483</span></span>
-<span><span class="co">#&gt; 21: secondary2__hrqol_at_eof   A survivors  0.740   0.756   0.770   0.754 0.023 0.002</span></span>
-<span><span class="co">#&gt; 22: secondary2__hrqol_at_eof   B survivors  0.646   0.663   0.682   0.663 0.023 0.002</span></span>
-<span><span class="co">#&gt; 23:    secondary2__hrqol_auc   A survivors 99.595 101.765 103.754 101.512 3.072 0.307</span></span>
-<span><span class="co">#&gt; 24:    secondary2__hrqol_auc   B survivors 86.993  89.424  91.520  89.280 3.206 0.321</span></span>
-<span><span class="co">#&gt;                      outcome arm  analysis    p25     p50     p75    mean    sd    se</span></span></code></pre></div>
-<p>–and head-to-head comparisons between the arms:</p>
+<code class="sourceCode R"><span><span class="va">sims</span></span>
+<span><span class="co">#&gt; # Scenario specification</span></span>
+<span><span class="co">#&gt; - arms                                    A           B</span></span>
+<span><span class="co">#&gt; - n_patients                            100         100</span></span>
+<span><span class="co">#&gt; - index_hrqol                             0           0</span></span>
+<span><span class="co">#&gt; - first_hrqol                           0.1         0.1</span></span>
+<span><span class="co">#&gt; - final_hrqol                           0.8         0.7</span></span>
+<span><span class="co">#&gt; - acceleration_hrqol                    1.1           1</span></span>
+<span><span class="co">#&gt; - mortality                             0.4         0.4</span></span>
+<span><span class="co">#&gt; - mortality_dampening                     0           0</span></span>
+<span><span class="co">#&gt; - mortality_trajectory_shape      exp_decay   exp_decay</span></span>
+<span><span class="co">#&gt; - prop_mortality_benefitters              0           0</span></span>
+<span><span class="co">#&gt; - sampling_frequency                     14          14</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Simulation metadata</span></span>
+<span><span class="co">#&gt; - No. simulated trials          100   </span></span>
+<span><span class="co">#&gt; - Max. no. patients per batch   NULL   </span></span>
+<span><span class="co">#&gt; - No. ground-truth samples      1,000   </span></span>
+<span><span class="co">#&gt; - Valid range of HRQoL          [-0.757,  1.000]   </span></span>
+<span><span class="co">#&gt; - Significance level (alpha)    0.05   </span></span>
+<span><span class="co">#&gt; - Test function                 welch_t_test   </span></span>
+<span><span class="co">#&gt; - Seed                          NULL   </span></span>
+<span><span class="co">#&gt; - Elapsed time                  3.4 secs   </span></span>
+<span><span class="co">#&gt; - Peak memory use               195 MB   </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Comparisons between arms (all patients) and select performance metrics</span></span>
+<span><span class="co">#&gt;                           primary__hrqol_at_eof primary__hrqol_auc</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt;                &lt;char&gt;             &lt;char&gt;</span></span>
+<span><span class="co">#&gt;            Comparator arm                     A                  A</span></span>
+<span><span class="co">#&gt;                Target arm                     B                  B</span></span>
+<span><span class="co">#&gt;           Mean difference                -0.055             -7.571</span></span>
+<span><span class="co">#&gt;  Std. error of mean diff.                 0.005              0.736</span></span>
+<span><span class="co">#&gt;             Relative bias                -0.046             -0.008</span></span>
+<span><span class="co">#&gt;      Rejection proportion                  0.17               0.15</span></span>
+<span><span class="co">#&gt;                  Coverage                  0.94               0.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Summary statistics</span></span>
+<span><span class="co">#&gt; ## All participants</span></span>
+<span><span class="co">#&gt;                   outcome    arm    p25    p50    p75   mean    sd    se</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt; &lt;char&gt;  &lt;num&gt;  &lt;num&gt;  &lt;num&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt;     primary__hrqol_at_eof      A  0.448  0.474  0.504  0.476 0.040 0.004</span></span>
+<span><span class="co">#&gt;     primary__hrqol_at_eof      B  0.398  0.423  0.443  0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt;        primary__hrqol_auc      A 64.367 68.122 71.961 68.295 5.707 0.571</span></span>
+<span><span class="co">#&gt;        primary__hrqol_auc      B 57.468 60.828 64.142 60.724 4.714 0.471</span></span>
+<span><span class="co">#&gt;  secondary1__hrqol_at_eof      A  0.448  0.474  0.504  0.477 0.039 0.004</span></span>
+<span><span class="co">#&gt;  secondary1__hrqol_at_eof      B  0.398  0.423  0.443  0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt;     secondary1__hrqol_auc      A 64.107 68.048 71.888 68.155 5.691 0.569</span></span>
+<span><span class="co">#&gt;     secondary1__hrqol_auc      B 57.195 60.691 63.891 60.498 4.729 0.473</span></span>
+<span><span class="co">#&gt;  secondary2__hrqol_at_eof      A  0.448  0.474  0.504  0.477 0.039 0.004</span></span>
+<span><span class="co">#&gt;  secondary2__hrqol_at_eof      B  0.398  0.423  0.443  0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt;     secondary2__hrqol_auc      A 60.384 63.871 67.890 64.166 5.341 0.534</span></span>
+<span><span class="co">#&gt;     secondary2__hrqol_auc      B 53.484 56.953 59.913 56.763 4.430 0.443</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ## Survivors</span></span>
+<span><span class="co">#&gt;                   outcome    arm    p25     p50     p75    mean    sd    se</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt; &lt;char&gt;  &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt;     primary__hrqol_at_eof      A  0.558   0.580   0.612   0.582 0.040 0.004</span></span>
+<span><span class="co">#&gt;     primary__hrqol_at_eof      B  0.484   0.509   0.524   0.508 0.032 0.003</span></span>
+<span><span class="co">#&gt;        primary__hrqol_auc      A 80.209  82.936  87.832  83.460 5.879 0.588</span></span>
+<span><span class="co">#&gt;        primary__hrqol_auc      B 69.555  73.145  75.850  73.248 4.593 0.459</span></span>
+<span><span class="co">#&gt;  secondary1__hrqol_at_eof      A  0.650   0.674   0.697   0.674 0.036 0.004</span></span>
+<span><span class="co">#&gt;  secondary1__hrqol_at_eof      B  0.572   0.588   0.606   0.589 0.028 0.003</span></span>
+<span><span class="co">#&gt;     secondary1__hrqol_auc      A 93.299  96.414  99.438  96.473 5.342 0.534</span></span>
+<span><span class="co">#&gt;     secondary1__hrqol_auc      B 81.354  84.834  87.068  84.608 4.027 0.403</span></span>
+<span><span class="co">#&gt;  secondary2__hrqol_at_eof      A  0.741   0.760   0.777   0.758 0.024 0.002</span></span>
+<span><span class="co">#&gt;  secondary2__hrqol_at_eof      B  0.652   0.664   0.677   0.663 0.020 0.002</span></span>
+<span><span class="co">#&gt;     secondary2__hrqol_auc      A 99.867 102.464 104.385 102.021 3.320 0.332</span></span>
+<span><span class="co">#&gt;     secondary2__hrqol_auc      B 87.787  89.541  91.370  89.385 2.817 0.282</span></span></code></pre></div>
+<p>The returned object contains quite a lot of interesting information. For example, summary statistics by arm:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sims</span><span class="op">$</span><span class="va">summary_stats</span></span>
+<span><span class="co">#&gt;                      outcome    arm  analysis    p25     p50     p75    mean    sd    se</span></span>
+<span><span class="co">#&gt;                       &lt;char&gt; &lt;char&gt;    &lt;fctr&gt;  &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt;  1:    primary__hrqol_at_eof      A       all  0.448   0.474   0.504   0.476 0.040 0.004</span></span>
+<span><span class="co">#&gt;  2:    primary__hrqol_at_eof      B       all  0.398   0.423   0.443   0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt;  3:       primary__hrqol_auc      A       all 64.367  68.122  71.961  68.295 5.707 0.571</span></span>
+<span><span class="co">#&gt;  4:       primary__hrqol_auc      B       all 57.468  60.828  64.142  60.724 4.714 0.471</span></span>
+<span><span class="co">#&gt;  5: secondary1__hrqol_at_eof      A       all  0.448   0.474   0.504   0.477 0.039 0.004</span></span>
+<span><span class="co">#&gt;  6: secondary1__hrqol_at_eof      B       all  0.398   0.423   0.443   0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt;  7:    secondary1__hrqol_auc      A       all 64.107  68.048  71.888  68.155 5.691 0.569</span></span>
+<span><span class="co">#&gt;  8:    secondary1__hrqol_auc      B       all 57.195  60.691  63.891  60.498 4.729 0.473</span></span>
+<span><span class="co">#&gt;  9: secondary2__hrqol_at_eof      A       all  0.448   0.474   0.504   0.477 0.039 0.004</span></span>
+<span><span class="co">#&gt; 10: secondary2__hrqol_at_eof      B       all  0.398   0.423   0.443   0.421 0.033 0.003</span></span>
+<span><span class="co">#&gt; 11:    secondary2__hrqol_auc      A       all 60.384  63.871  67.890  64.166 5.341 0.534</span></span>
+<span><span class="co">#&gt; 12:    secondary2__hrqol_auc      B       all 53.484  56.953  59.913  56.763 4.430 0.443</span></span>
+<span><span class="co">#&gt; 13:    primary__hrqol_at_eof      A survivors  0.558   0.580   0.612   0.582 0.040 0.004</span></span>
+<span><span class="co">#&gt; 14:    primary__hrqol_at_eof      B survivors  0.484   0.509   0.524   0.508 0.032 0.003</span></span>
+<span><span class="co">#&gt; 15:       primary__hrqol_auc      A survivors 80.209  82.936  87.832  83.460 5.879 0.588</span></span>
+<span><span class="co">#&gt; 16:       primary__hrqol_auc      B survivors 69.555  73.145  75.850  73.248 4.593 0.459</span></span>
+<span><span class="co">#&gt; 17: secondary1__hrqol_at_eof      A survivors  0.650   0.674   0.697   0.674 0.036 0.004</span></span>
+<span><span class="co">#&gt; 18: secondary1__hrqol_at_eof      B survivors  0.572   0.588   0.606   0.589 0.028 0.003</span></span>
+<span><span class="co">#&gt; 19:    secondary1__hrqol_auc      A survivors 93.299  96.414  99.438  96.473 5.342 0.534</span></span>
+<span><span class="co">#&gt; 20:    secondary1__hrqol_auc      B survivors 81.354  84.834  87.068  84.608 4.027 0.403</span></span>
+<span><span class="co">#&gt; 21: secondary2__hrqol_at_eof      A survivors  0.741   0.760   0.777   0.758 0.024 0.002</span></span>
+<span><span class="co">#&gt; 22: secondary2__hrqol_at_eof      B survivors  0.652   0.664   0.677   0.663 0.020 0.002</span></span>
+<span><span class="co">#&gt; 23:    secondary2__hrqol_auc      A survivors 99.867 102.464 104.385 102.021 3.320 0.332</span></span>
+<span><span class="co">#&gt; 24:    secondary2__hrqol_auc      B survivors 87.787  89.541  91.370  89.385 2.817 0.282</span></span>
+<span><span class="co">#&gt;                      outcome    arm  analysis    p25     p50     p75    mean    sd    se</span></span></code></pre></div>
+<p>–and head-to-head comparisons between the arms:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span><span class="op">$</span><span class="va">comparisons</span></span>
 <span><span class="co">#&gt;                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc</span></span>
+<span><span class="co">#&gt;                         &lt;char&gt;                &lt;char&gt;                &lt;char&gt;             &lt;char&gt;             &lt;char&gt;                   &lt;char&gt;                   &lt;char&gt;                &lt;char&gt;                &lt;char&gt;                   &lt;char&gt;                   &lt;char&gt;                &lt;char&gt;                &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1:                 comparator                     A                     A                  A                  A                        A                        A                     A                     A                        A                        A                     A                     A</span></span>
 <span><span class="co">#&gt;  2:                     target                     B                     B                  B                  B                        B                        B                     B                     B                        B                        B                     B                     B</span></span>
 <span><span class="co">#&gt;  3:                   analysis                   all             survivors                all          survivors                      all                survivors                   all             survivors                      all                survivors                   all             survivors</span></span>
-<span><span class="co">#&gt;  4:              mean_estimate                -0.066                 -0.08             -9.049            -10.967                   -0.066                    -0.09                -9.137               -12.451                   -0.066                   -0.092                -8.846               -12.233</span></span>
-<span><span class="co">#&gt;  5:          mean_ground_truth                -0.051                -0.051             -6.892             -6.892                   -0.051                   -0.051                 -6.92                 -6.92                   -0.051                   -0.051                -6.849                -6.849</span></span>
-<span><span class="co">#&gt;  6:                         sd                 0.053                 0.051              7.467              7.146                    0.053                    0.049                 7.551                 7.118                    0.053                    0.033                 7.133                 4.452</span></span>
-<span><span class="co">#&gt;  7:                         se                 0.005                 0.005              0.747              0.715                    0.005                    0.005                 0.755                 0.712                    0.005                    0.003                 0.713                 0.445</span></span>
-<span><span class="co">#&gt;  8:                       bias                -0.015                -0.029             -2.157             -4.075                   -0.015                   -0.039                -2.217                -5.531                   -0.016                   -0.041                -1.997                -5.384</span></span>
-<span><span class="co">#&gt;  9:                    bias_se                 0.005                 0.005              0.747              0.715                    0.005                    0.005                 0.755                 0.712                    0.005                    0.003                 0.713                 0.445</span></span>
-<span><span class="co">#&gt; 10:              relative_bias                 0.306                 0.582              0.313              0.591                    0.305                    0.779                  0.32                 0.799                    0.306                    0.807                 0.292                 0.786</span></span>
-<span><span class="co">#&gt; 11:           relative_bias_se                 0.104                   0.1              0.108              0.104                    0.105                    0.097                 0.109                 0.103                    0.105                    0.064                 0.104                 0.065</span></span>
-<span><span class="co">#&gt; 12:                        mse                 0.003                 0.003             59.851             67.163                    0.003                    0.004                61.359                80.752                    0.003                    0.003                54.354                48.605</span></span>
-<span><span class="co">#&gt; 13:                     mse_se                     0                     0              8.089              9.572                        0                    0.001                 8.388                10.811                        0                        0                 7.326                 5.305</span></span>
-<span><span class="co">#&gt; 14:                   coverage                  0.94                   0.9               0.95               0.92                     0.93                     0.83                  0.95                  0.85                     0.93                     0.73                  0.94                  0.75</span></span>
-<span><span class="co">#&gt; 15:                coverage_se                 0.024                  0.03              0.022              0.027                    0.026                    0.038                 0.022                 0.036                    0.026                    0.044                 0.024                 0.043</span></span>
+<span><span class="co">#&gt;  4:              mean_estimate                -0.055                -0.074             -7.571            -10.212                   -0.056                   -0.086                -7.657               -11.866                   -0.056                   -0.095                -7.403               -12.636</span></span>
+<span><span class="co">#&gt;  5:          mean_ground_truth                -0.058                -0.058             -7.633             -7.633                   -0.058                   -0.058                -7.795                -7.795                   -0.058                   -0.058                -7.801                -7.801</span></span>
+<span><span class="co">#&gt;  6:                         sd                 0.051                 0.053              7.357              7.617                    0.051                    0.043                 7.366                 6.345                    0.051                    0.032                 6.897                 4.346</span></span>
+<span><span class="co">#&gt;  7:                         se                 0.005                 0.005              0.736              0.762                    0.005                    0.004                 0.737                 0.635                    0.005                    0.003                  0.69                 0.435</span></span>
+<span><span class="co">#&gt;  8:                       bias                 0.003                -0.016              0.062             -2.579                    0.003                   -0.028                 0.138                -4.071                    0.003                   -0.037                 0.398                -4.835</span></span>
+<span><span class="co">#&gt;  9:                    bias_se                 0.005                 0.005              0.736              0.762                    0.005                    0.004                 0.737                 0.635                    0.005                    0.003                  0.69                 0.435</span></span>
+<span><span class="co">#&gt; 10:              relative_bias                -0.046                 0.279             -0.008              0.338                   -0.045                    0.474                -0.018                 0.522                   -0.045                    0.629                -0.051                  0.62</span></span>
+<span><span class="co">#&gt; 11:           relative_bias_se                 0.088                  0.09              0.096                0.1                    0.088                    0.074                 0.094                 0.081                    0.088                    0.054                 0.088                 0.056</span></span>
+<span><span class="co">#&gt; 12:                        mse                 0.003                 0.003             53.588             64.086                    0.003                    0.003                53.728                56.432                    0.003                    0.002                47.249                42.073</span></span>
+<span><span class="co">#&gt; 13:                     mse_se                     0                     0              7.672              8.952                        0                        0                 7.647                  7.59                        0                        0                 6.596                 4.689</span></span>
+<span><span class="co">#&gt; 14:                   coverage                  0.94                  0.94               0.95               0.93                     0.94                     0.91                  0.94                   0.9                     0.94                     0.76                  0.94                  0.77</span></span>
+<span><span class="co">#&gt; 15:                coverage_se                 0.024                 0.024              0.022              0.026                    0.024                    0.029                 0.024                  0.03                    0.024                    0.043                 0.024                 0.042</span></span>
 <span><span class="co">#&gt; 16:    bias_corrected_coverage                     1                     1                  1                  1                        1                        1                     1                     1                        1                        1                     1                     1</span></span>
 <span><span class="co">#&gt; 17: bias_corrected_coverage_se                     0                     0                  0                  0                        0                        0                     0                     0                        0                        0                     0                     0</span></span>
-<span><span class="co">#&gt; 18:       rejection_proportion                  0.21                  0.31               0.19               0.27                     0.21                     0.49                  0.19                  0.46                     0.21                      0.8                  0.22                  0.77</span></span>
-<span><span class="co">#&gt; 19:    rejection_proportion_se                 0.041                 0.046              0.039              0.044                    0.041                     0.05                 0.039                  0.05                    0.041                     0.04                 0.041                 0.042</span></span>
+<span><span class="co">#&gt; 18:       rejection_proportion                  0.17                  0.27               0.15               0.27                     0.17                     0.42                  0.15                   0.4                     0.17                     0.79                  0.16                  0.79</span></span>
+<span><span class="co">#&gt; 19:    rejection_proportion_se                 0.038                 0.044              0.036              0.044                    0.038                    0.049                 0.036                 0.049                    0.038                    0.041                 0.037                 0.041</span></span>
 <span><span class="co">#&gt; 20:                      n_sim                   100                   100                100                100                      100                      100                   100                   100                      100                      100                   100                   100</span></span>
-<span><span class="co">#&gt; 21:                        p25                -0.098                -0.111            -13.493            -15.189                   -0.098                   -0.128               -13.647               -17.587                   -0.098                   -0.114               -13.126                -15.63</span></span>
-<span><span class="co">#&gt; 22:                        p50                -0.071                 -0.08             -9.189            -11.245                   -0.072                   -0.087                -9.391               -12.255                   -0.072                   -0.093                -9.525               -12.312</span></span>
-<span><span class="co">#&gt; 23:                        p75                -0.023                -0.045             -3.276             -6.505                   -0.023                   -0.055                -3.163                -7.614                   -0.027                   -0.066                -3.151                -8.883</span></span>
+<span><span class="co">#&gt; 21:                        p25                -0.091                -0.104            -12.485             -15.08                   -0.091                    -0.12                -12.59               -17.017                   -0.091                   -0.118               -12.216               -15.627</span></span>
+<span><span class="co">#&gt; 22:                        p50                -0.061                -0.078             -8.664            -10.964                   -0.061                   -0.083                -8.904               -11.358                   -0.061                   -0.095                -8.336               -12.696</span></span>
+<span><span class="co">#&gt; 23:                        p75                -0.026                -0.038             -3.246             -4.941                   -0.026                   -0.053                -3.486                -7.002                   -0.026                   -0.071                -3.654                -9.537</span></span>
 <span><span class="co">#&gt;                      statistic primary__hrqol_at_eof primary__hrqol_at_eof primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc secondary2__hrqol_auc</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p><code>hrqolr</code> isn’t on CRAN yet but can be installed from GitHub if you have the <code>remotes</code> package installed:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes") </span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"INCEPTdk/hrqolr"</span><span class="op">)</span></span></code></pre></div>
 <p>You can also install the <strong>development version</strong> from directly from GitHub. Doing this requires the <code>remotes</code> package installed. The development version may contain additional features not yet available in the stable CRAN version, but may be unstable or lack documentation.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"INCEPTdk/hrqolr@dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -259,7 +321,7 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If using <code>hrqolr</code>, please consider citing it:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"hrqolr"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; To cite package 'hrqolr' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -322,13 +384,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Benjamin Skov Kaas-Hansen, Anders Granholm.</p>
+  <p>Developed by Benjamin Skov Kaas-Hansen, Anders Granholm.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
     </footer>
