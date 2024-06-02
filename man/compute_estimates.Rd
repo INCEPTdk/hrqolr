@@ -15,7 +15,8 @@ compute_estimates(
   final_hrqol_arm,
   mortality_trajectory_shape,
   mortality_dampening,
-  sampling_frequency
+  sampling_frequency,
+  valid_hrqol_range
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ trajectory}
 \item{final_hrqol_arm}{scalar HRQoL at end of follow-up (at arm level)}
 
 \item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper
+bounds of valid HRQoL values. The default (\code{c(-0.757, 1.0)}) corresponds to
+the Danish EQ-5D-5L index values.}
 }
 \value{
 A six-element named numeric vector with single-sampled HRQoL at end of follow-up and area

@@ -29,8 +29,7 @@ simulate_trials(scenario, ...)
 
 \item{...}{passed on to methods}
 
-\item{n_trials}{integer vector. If length > 1, simulations will be run in
-batches of size given}
+\item{n_trials}{single integer, the number of trials to simulate in total}
 
 \item{n_patients_ground_truth}{single integer, how many patients (per arm) to
 use when estimating the ground truth}
@@ -118,7 +117,7 @@ before follow-up started)
 }
 }
 \references{
-Jensen CE et al. (20219. The Danish EQ-5D-5L Value Set: A Hybrid Model Using
+Jensen CE et al. (20219). The Danish EQ-5D-5L Value Set: A Hybrid Model Using
 cTTO and DCE Data. Appl Health Econ Health Policy 19, 579–591
 (https://doi.org/10.1007/s40258-021-00639-3)
 }

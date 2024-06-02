@@ -2,19 +2,21 @@
 % Please edit documentation in R/utils.R
 \name{verify}
 \alias{verify}
+\alias{verify_chr}
 \alias{verify_int}
 \alias{verify_num}
-\alias{verify_chr}
-\title{Verify input is single integer or numeric (potentially within range)}
+\title{Verify input is single integer or numeric (potentially within range) or string}
 \usage{
+verify_chr(x, valid_values = NULL)
+
 verify_int(x, min_value = -Inf, max_value = Inf, open = "no")
 
 verify_num(x, min_value = -Inf, max_value = Inf, open = "no")
-
-verify_chr(x, valid_values = NULL)
 }
 \arguments{
 \item{x}{value to check.}
+
+\item{valid_values}{vector of valid values (only for characters)}
 
 \item{min_value, max_value}{single integers or decimal numbers, lower and upper bounds
 between which \code{x} should lie.}
@@ -23,8 +25,6 @@ between which \code{x} should lie.}
 are excluded or not. Valid values: \code{"no"} (= closed interval; \code{min_value}
 and \code{max_value} included; default value), \code{"right"}, \code{"left"}, \code{"yes"}
 (= open interval, \code{min_value} and \code{max_value} excluded).}
-
-\item{valid_values}{vector of valid values (only for characters)}
 }
 \value{
 Single logical.
@@ -34,11 +34,11 @@ Used internally.
 }
 \section{Functions}{
 \itemize{
+\item \code{verify_chr()}: Verify input is a string of characters, having specific values (if specified)
+
 \item \code{verify_int()}: Verify input is an integer
 
 \item \code{verify_num()}: Verify input is a numeric
-
-\item \code{verify_chr()}: Verify input is a string of characters, having specific values (if specified)
 
 }}
 \keyword{internal}
