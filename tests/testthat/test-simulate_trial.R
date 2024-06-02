@@ -35,6 +35,9 @@ test_that("simulate_trial S3 method works", {
 		seed = 42
 	))
 
+	# Overcome precision errors without any impact on different system during checks
+	trial_sim_two_arms$mean_diffs$p_value <- round(trial_sim_two_arms$mean_diffs$p_value, 10)
+
 	expect_snapshot(trial_sim_two_arms)
 	expect_true(all(trial_sim_two_arms$mean_diffs$test_fun == "welch_t_test"))
 
@@ -60,6 +63,9 @@ test_that("simulate_trial S3 method works", {
 		test_fun = games_howell_test,
 		seed = 42
 	))
+
+	# Overcome precision errors without any impact on different system during checks
+	trial_sim_three_arms$mean_diffs$p_value <- round(trial_sim_three_arms$mean_diffs$p_value, 10)
 
 	expect_snapshot(trial_sim_three_arms)
 	expect_true(all(trial_sim_three_arms$mean_diffs$test_fun == "games_howell_test"))
