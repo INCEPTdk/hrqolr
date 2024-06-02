@@ -8,7 +8,7 @@ test_that("simulate_trial S3 method works", {
 		max_cache_size = structure(0, class = "hrqolr_bytes")
 	)
 
-	scenario1 <- setup_scenario(
+	scenario_two_arms <- setup_scenario(
 		arms = c("Active", "Control"),
 		n_patients = 50,
 		index_hrqol = 0,
@@ -24,84 +24,43 @@ test_that("simulate_trial S3 method works", {
 	)
 
 	# Test that things work without a seed
-	simple_sims <- simulate_trials(scenario1, verbose = FALSE)
-	expect_s3_class(simple_sims, "hrqolr_results")
+	trial_sim_without_seed <- simulate_trial(scenario_two_arms, verbose = FALSE)
+	expect_s3_class(trial_sim_without_seed, "hrqolr_trial")
 
-	# Ascertain that resource_use has the right elements
-	expect_equal(
-		names(pseudo_resource_use),
-		names(simple_sims$resource_use)
-	)
-
-	sims_single_batch <- suppressMessages(simulate_trials(
-		scenario1,
-		n_trials = 100,
-		n_patients_ground_truth = 10,
-		n_example_trajectories_per_arm = 1000,
-		verbose = TRUE,
-		test_fun = welch_t_test,
-		include_trial_results = TRUE,
-		seed = 42
-	))
-
-	sims_single_batch$resource_use <- pseudo_resource_use
-	sims_single_batch$args$test_fun <- "welch_t_test"
-	expect_snapshot(sims_single_batch)
-
-	sims_two_batches_verbose <- suppressMessages(simulate_trials(
-		scenario1,
-		n_trials = 500,
-		max_batch_size = 500,
-		n_patients_ground_truth = 1000,
-		n_example_trajectories_per_arm = 10,
+	# Test reproducible results using a seed, for two-arm trial
+	trial_sim_two_arms <- suppressMessages(simulate_trial(
+		scenario_two_arms,
 		verbose = TRUE,
 		test_fun = welch_t_test,
 		seed = 42
 	))
-	sims_two_batches_verbose$resource_use <- pseudo_resource_use
-	sims_two_batches_verbose$args$test_fun <- "welch_t_test"
-	expect_snapshot(sims_two_batches_verbose)
 
-	sims_single_batch_without_examples <- suppressMessages(simulate_trials(
-		scenario1,
-		n_trials = 100,
-		n_patients_ground_truth = 1000,
-		n_example_trajectories_per_arm = 0,
-		verbose = TRUE,
-		test_fun = welch_t_test,
-		include_trial_results = TRUE,
-		seed = 42
-	))
-	sims_single_batch_without_examples$resource_use <- pseudo_resource_use
-	sims_single_batch_without_examples$args$test_fun <- "welch_t_test"
-	expect_snapshot(sims_single_batch_without_examples)
+	expect_snapshot(trial_sim_two_arms)
+	expect_true(all(trial_sim_two_arms$mean_diffs$test_fun == "welch_t_test"))
 
-	scenario2 <- setup_scenario(
-		arms = c("Active", "Control"),
+	# Test reproducible results using a seed, for three-arm trial
+	scenario_three_arms <- setup_scenario(
+		arms = c("Active1", "Active2", "Control"),
 		n_patients = 50,
 		index_hrqol = 0,
 		first_hrqol = 0.2,
-		final_hrqol = c(Active = 0.7, Control = 0.5),
+		final_hrqol = c(Active1 = 0.7, Active2 = 0.6, Control = 0.5),
 		acceleration_hrqol = 1,
 		mortality = 0.2,
 		mortality_dampening = 0,
-		mortality_trajectory_shape = "exp_decay",
+		mortality_trajectory_shape = "linear",
 		prop_mortality_benefitters = 0.0,
 		sampling_frequency = 14,
 		verbose = FALSE
 	)
 
-	sims_single_batch_no_mort_benefitters <- suppressMessages(simulate_trials(
-		scenario2,
-		n_trials = 100,
-		n_patients_ground_truth = 1000,
-		n_example_trajectories_per_arm = 10,
+	trial_sim_three_arms <- suppressMessages(simulate_trial(
+		scenario_three_arms,
 		verbose = TRUE,
-		test_fun = welch_t_test,
-		include_trial_results = TRUE,
+		test_fun = games_howell_test,
 		seed = 42
 	))
-	sims_single_batch_no_mort_benefitters$resource_use <- pseudo_resource_use
-	sims_single_batch_no_mort_benefitters$args$test_fun <- "welch_t_test"
-	expect_snapshot(sims_single_batch_no_mort_benefitters)
+
+	expect_snapshot(trial_sim_three_arms)
+	expect_true(all(trial_sim_three_arms$mean_diffs$test_fun == "games_howell_test"))
 })

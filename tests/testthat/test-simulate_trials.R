@@ -23,9 +23,11 @@ test_that("simulate_trials S3 method works", {
 		verbose = FALSE
 	)
 
-	# Test that things work without a seed
+	# Test simple things
 	simple_sims <- simulate_trials(scenario1, verbose = FALSE)
 	expect_s3_class(simple_sims, "hrqolr_results")
+
+	expect_snapshot_error(simulate_trials(scenario1, n_trials = 0))
 
 	# Ascertain that resource_use has the right elements
 	expect_equal(
