@@ -65,7 +65,7 @@ scenario <- setup_scenario(
 	mortality = 0.4,
 	mortality_dampening = 0.0,
 	mortality_trajectory_shape = "exp_decay",
-	prop_mortality_benefitters = 0.0,
+	prop_mortality_benefitters = 0.0
 )
 ```
 
