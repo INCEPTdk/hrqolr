@@ -10,7 +10,7 @@ test_that("simulate_trial S3 method works", {
 
 	scenario_two_arms <- setup_scenario(
 		arms = c("Active", "Control"),
-		n_patients = 50,
+		n_patients = 1000,
 		index_hrqol = 0,
 		first_hrqol = 0.2,
 		final_hrqol = c(Active = 0.7, Control = 0.5),
@@ -41,7 +41,7 @@ test_that("simulate_trial S3 method works", {
 	# Test reproducible results using a seed, for three-arm trial
 	scenario_three_arms <- setup_scenario(
 		arms = c("Active1", "Active2", "Control"),
-		n_patients = 50,
+		n_patients = 1000,
 		index_hrqol = 0,
 		first_hrqol = 0.2,
 		final_hrqol = c(Active1 = 0.7, Active2 = 0.6, Control = 0.5),
