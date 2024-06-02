@@ -1,5 +1,9 @@
 # simulate_trials S3 method works
 
+    n_trials should be a single integer greater than 0
+
+---
+
     Code
       sims_single_batch
     Output
