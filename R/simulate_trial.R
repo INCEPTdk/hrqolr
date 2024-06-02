@@ -25,7 +25,6 @@ simulate_trial <- function(scenario, ...) {
 #'
 simulate_trial.hrqolr_scenario <- function(
 		scenario,
-		n_patients_ground_truth = 1000,
 		test_fun = welch_t_test,
 		n_digits = 2,
 		valid_hrqol_range = c(-0.757, 1.0),
