@@ -34,7 +34,7 @@ compute_estimates <- function(
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
-	if (!cachem::is.key_missing(res)) {
+	if (!fastmap::is.key_missing(res)) {
 		return(res)
 	}
 

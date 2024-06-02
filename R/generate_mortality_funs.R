@@ -36,7 +36,7 @@ generate_mortality_funs <- function(
 	hash <- rlang::hash(c("generate_mortality_funs", cum_mortality, censoring_value))
 	out <- .hrqolr_cache_user$get(hash)
 
-	if (!cachem::is.key_missing(out)) {
+	if (!fastmap::is.key_missing(out)) {
 		return(out)
 	}
 

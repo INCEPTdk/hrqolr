@@ -34,7 +34,7 @@ construct_arm_level_trajectory <- function(
 	))
 	out <- .hrqolr_cache_user$get(hash)
 
-	if (!cachem::is.key_missing(out)) {
+	if (!fastmap::is.key_missing(out)) {
 		return(out)
 	}
 

@@ -17,7 +17,7 @@ construct_final_trajectories <- function(traj, t_icu_discharge, sampling_frequen
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
-	if (!cachem::is.key_missing(res)) {
+	if (!fastmap::is.key_missing(res)) {
 		return(res)
 	}
 
