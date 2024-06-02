@@ -5,43 +5,20 @@
 \alias{clear_hrqolr_cache}
 \title{Caching of hrqolr functions}
 \usage{
-cache_hrqolr(
-  max_size = 2 * 1024^3,
-  max_age = Inf,
-  max_n = Inf,
-  logfile = NULL,
-  evict = "lru"
-)
+cache_hrqolr(max_size = 2 * 1024^3)
 
 clear_hrqolr_cache()
 }
 \arguments{
 \item{max_size}{Maximum size of the cache, in bytes. If the cache exceeds
-this size, cached objects will be removed according to the value of the
-\code{evict}. Use \code{Inf} for no size limit. The default is 512 megabytes.}
-
-\item{max_age}{Maximum age of files in cache before they are evicted, in
-seconds. Use \code{Inf} for no age limit.}
-
-\item{max_n}{Maximum number of objects in the cache. If the number of objects
-exceeds this value, then cached objects will be removed according to the
-value of \code{evict}. Use \code{Inf} for no limit of number of items.}
-
-\item{logfile}{An optional filename or connection object to where logging
-information will be written. To log to the console, use \code{stderr()} or
-\code{stdout()}.}
-
-\item{evict}{The eviction policy to use to decide which objects are removed
-when a cache pruning occurs. Currently, \code{"lru"} and \code{"fifo"} are supported.}
+this size, the entire cache is wiped; this is much faster than using an
+eviction policy for how the cache is used in \code{hrqolr} objects will be
+removed according to the value of the}
 }
 \value{
 \code{NULL}, these functions are called for their side effects: caching (or clearing caches) of
 select \code{hrqolr} functions.
-
-Nothing, used for its side effect
 }
 \description{
 Caching of hrqolr functions
-
-Caching hrqolr functions
 }

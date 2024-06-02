@@ -13,11 +13,8 @@ cache_hrqolr <- function(max_size = 2 * 1024^3) {
 }
 
 
-#' Caching hrqolr functions
-#'
 #' @export
 #' @rdname cache_hrqolr
-#' @return Nothing, used for its side effect
 #'
 clear_hrqolr_cache <- function() {
 	.hrqolr_cache_user$reset()
