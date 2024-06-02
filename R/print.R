@@ -230,11 +230,17 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 #' @rdname print
 #'
 print.hrqolr_bytes <- function (x, digits = 3, ...) {
+	if (is.na(x)) {
+		cat("Not available\n")
+
+		return(invisible(x))
+	}
+
 	power <- min(floor(log(abs(x), 1000)), 4) %fi% 0
 	unit <- c("B", "kB", "MB", "GB", "TB")[[power + 1]]
 
 	formatted <- format(
-		signif(x / (1000^power), digits = digits),
+		signif(as.numeric(x) / (1000^power), digits = digits),
 		big.mark = ",",
 		scientific = FALSE
 	)

@@ -37,8 +37,7 @@ simulate_trials <- function(scenario, ...) {
 #' @param scenario object of class 'hrqolr_scenario', the output of
 #'   [setup_scenario]
 #'
-#' @param n_trials integer vector. If length > 1, simulations will be run in
-#'   batches of size given
+#' @param n_trials single integer, the number of trials to simulate in total
 #' @param n_patients_ground_truth single integer, how many patients (per arm) to
 #'   use when estimating the ground truth
 #' @param n_example_trajectories_per_arm single integer, the number of example
@@ -98,7 +97,7 @@ simulate_trials <- function(scenario, ...) {
 #'
 #' @references
 #'
-#' Jensen CE et al. (20219. The Danish EQ-5D-5L Value Set: A Hybrid Model Using
+#' Jensen CE et al. (20219). The Danish EQ-5D-5L Value Set: A Hybrid Model Using
 #' cTTO and DCE Data. Appl Health Econ Health Policy 19, 579–591
 #' (https://doi.org/10.1007/s40258-021-00639-3)
 #'
@@ -182,6 +181,9 @@ simulate_trials.default <- function(
 
 	# Housekeeping
 	stopifnot(n_patients_ground_truth > 0)
+	if (!verify_int(n_trials, min_value = 1)) {
+		stop0("n_trials should be a single integer greater than 0")
+	}
 
 	# Setup ====
 	gc(reset = TRUE) # so gc() can be used to estimate peak memory use
@@ -333,7 +335,6 @@ simulate_trials.default <- function(
 			# Assign trial IDs
 			res[, trial_id := sample(rep(trial_ids_by_batch[[batch_idx]], n_patients[arm]))]
 
-
 			batch_res[[arm]] <- res
 			rm(res)
 			gc()
@@ -365,7 +366,7 @@ simulate_trials.default <- function(
 		tmp <- mapply(
 			function(col, label, na_replacement) {
 				tmp <- batch_res[
-					, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement),
+					, test_fun(vals = get(col), grps = arm, arms = arms, na_replacement = na_replacement, alpha = alpha),
 					by = "trial_id"
 				]
 				tmp[, analysis := label]
@@ -395,11 +396,7 @@ simulate_trials.default <- function(
 		}
 	}
 
-	max_size_of_cache <- tryCatch(
-		lobstr::obj_size(.hrqolr_cache_user),
-		error = function(e) NA
-	)
-	class(max_size_of_cache) <- c("hrqolr_bytes", class(max_size_of_cache))
+	max_size_of_cache <- .hrqolr_cache_user$info("max_total_size")
 	clear_hrqolr_cache()
 	gc()
 

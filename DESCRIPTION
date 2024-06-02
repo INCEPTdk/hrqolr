@@ -1,7 +1,7 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9023
-Date: 2023-12-08
+Version: 0.0.0.9061
+Date: 2024-06-02
 Authors@R: 
 	c(person("Benjamin Skov", "Kaas-Hansen",
 	         email = "epiben@hey.com",
@@ -25,24 +25,23 @@ Language: en-GB
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: 
 	R (>= 2.10)
 Imports:
-	cachem (>= 1.0.8),
+	fastmap (>= 1.2.0),
 	data.table (>= 1.14.2),
 	Hmisc (>= 5.1.1),
 	rlang (>= 1.1.1)
 Suggests:
 	covr,
 	crayon,
-	ggplot2,
+	ggplot2 (>= 3.5.1),
 	knitr,
-	lobstr,
 	rmarkdown,
 	scales,
 	testthat (>= 3.0.0),
-	vdiffr
+	vdiffr (>= 1.0.7)
 NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr

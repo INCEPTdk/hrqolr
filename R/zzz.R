@@ -15,10 +15,7 @@ NULL
 # probably enough for most uses; at least, it was enough for simulating 100k trials with N = 4000.
 # If not, the user should increase it.
 #
-.hrqolr_cache_user <- cachem::cache_mem(
-	max_size = 2 * 1024^3,
-	evict = "lru"
-)
+.hrqolr_cache_user <- in_memory_cache(max_size = 2 * 1024^3)
 
 
 #' Print package startup message

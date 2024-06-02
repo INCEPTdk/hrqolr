@@ -9,7 +9,6 @@ simulate_trial(scenario, ...)
 
 \method{simulate_trial}{hrqolr_scenario}(
   scenario,
-  n_patients_ground_truth = 1000,
   test_fun = welch_t_test,
   n_digits = 2,
   valid_hrqol_range = c(-0.757, 1),
@@ -23,9 +22,6 @@ simulate_trial(scenario, ...)
 \link{setup_scenario}}
 
 \item{...}{passed on to methods}
-
-\item{n_patients_ground_truth}{single integer, how many patients (per arm) to
-use when estimating the ground truth}
 
 \item{test_fun}{function used to compare estimates. The default is
 \code{welch_t_test} (built into \code{hrqolr}). Note that the function should handle

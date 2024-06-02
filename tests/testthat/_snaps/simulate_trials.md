@@ -1,5 +1,9 @@
 # simulate_trials S3 method works
 
+    n_trials should be a single integer greater than 0
+
+---
+
     Code
       sims_single_batch
     Output
@@ -29,6 +33,7 @@
       
       # Comparisons between arms (all patients) and select performance metrics
                                 primary__hrqol_at_eof primary__hrqol_auc
+                         <char>                <char>             <char>
                  Comparator arm                Active             Active
                      Target arm               Control            Control
                 Mean difference                -0.155            -21.447
@@ -40,6 +45,7 @@
       # Summary statistics
       ## All participants
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.522  0.557  0.584  0.554 0.042 0.004
           primary__hrqol_at_eof Control  0.379  0.400  0.419  0.398 0.033 0.003
              primary__hrqol_auc  Active 78.698 83.636 88.164 83.488 6.520 0.652
@@ -55,6 +61,7 @@
       
       ## Survivors
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.586  0.604  0.626  0.606 0.034 0.003
           primary__hrqol_at_eof Control  0.419  0.435  0.456  0.436 0.026 0.003
              primary__hrqol_auc  Active 87.783 91.138 95.122 91.282 5.445 0.545
@@ -99,6 +106,7 @@
       
       # Comparisons between arms (all patients) and select performance metrics
                                 primary__hrqol_at_eof primary__hrqol_auc
+                         <char>                <char>             <char>
                  Comparator arm                Active             Active
                      Target arm               Control            Control
                 Mean difference                -0.161            -22.135
@@ -110,6 +118,7 @@
       # Summary statistics
       ## All participants
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.532  0.565  0.593  0.562 0.042 0.002
           primary__hrqol_at_eof Control  0.379  0.403  0.423  0.401 0.033 0.001
              primary__hrqol_auc  Active 80.010 85.079 89.148 84.639 6.331 0.283
@@ -125,6 +134,7 @@
       
       ## Survivors
                         outcome     arm    p25    p50     p75   mean    sd    se
+                         <char>  <char>  <num>  <num>   <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.593  0.617   0.640  0.615 0.036 0.002
           primary__hrqol_at_eof Control  0.420  0.440   0.457  0.438 0.029 0.001
              primary__hrqol_auc  Active 89.342 92.815  96.077 92.546 5.470 0.245
@@ -169,6 +179,7 @@
       
       # Comparisons between arms (all patients) and select performance metrics
                                 primary__hrqol_at_eof primary__hrqol_auc
+                         <char>                <char>             <char>
                  Comparator arm                Active             Active
                      Target arm               Control            Control
                 Mean difference                -0.155            -21.264
@@ -180,6 +191,7 @@
       # Summary statistics
       ## All participants
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.529  0.559  0.588  0.556 0.046 0.005
           primary__hrqol_at_eof Control  0.377  0.400  0.422  0.402 0.035 0.003
              primary__hrqol_auc  Active 78.722 83.768 88.480 83.752 6.969 0.697
@@ -195,6 +207,7 @@
       
       ## Survivors
                         outcome     arm    p25    p50     p75   mean    sd    se
+                         <char>  <char>  <num>  <num>   <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.583  0.612   0.639  0.609 0.040 0.004
           primary__hrqol_at_eof Control  0.417  0.437   0.462  0.437 0.030 0.003
              primary__hrqol_auc  Active 87.671 91.534  96.273 91.735 6.021 0.602
@@ -239,6 +252,7 @@
       
       # Comparisons between arms (all patients) and select performance metrics
                                 primary__hrqol_at_eof primary__hrqol_auc
+                         <char>                <char>             <char>
                  Comparator arm                Active             Active
                      Target arm               Control            Control
                 Mean difference                -0.151            -20.908
@@ -250,6 +264,7 @@
       # Summary statistics
       ## All participants
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.525  0.547  0.578  0.551 0.037 0.004
           primary__hrqol_at_eof Control  0.376  0.399  0.424  0.400 0.037 0.004
              primary__hrqol_auc  Active 79.071 82.483 86.772 83.005 5.645 0.564
@@ -265,6 +280,7 @@
       
       ## Survivors
                         outcome     arm    p25    p50    p75   mean    sd    se
+                         <char>  <char>  <num>  <num>  <num>  <num> <num> <num>
           primary__hrqol_at_eof  Active  0.584  0.605  0.621  0.605 0.033 0.003
           primary__hrqol_at_eof Control  0.417  0.438  0.461  0.438 0.032 0.003
              primary__hrqol_auc  Active 87.807 91.375 93.476 91.095 5.074 0.507

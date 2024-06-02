@@ -25,7 +25,8 @@ construct_patient_trajectory <- function(
 		mortality_dampening,
 
 		# Constant across patients
-		sampling_frequency
+		sampling_frequency,
+		valid_hrqol_range
 ) {
 
 	mc <- match.call()
@@ -35,7 +36,7 @@ construct_patient_trajectory <- function(
 	))
 	res <- .hrqolr_cache_user$get(hash)
 
-	if (!cachem::is.key_missing(res)) {
+	if (!fastmap::is.key_missing(res)) {
 		return(res)
 	}
 
@@ -52,7 +53,10 @@ construct_patient_trajectory <- function(
 
 		# Enforce between-patient noise throughout trajectory
 		noise_offset <- (first_hrqol_patient - first_hrqol_arm * acceleration_hrqol)
-		y_new <- pmin(1, traj[-1, "y"] + noise_offset)
+		y_new <- pmax(
+			min(valid_hrqol_range),
+			pmin(max(valid_hrqol_range), traj[-1, "y"] + noise_offset)
+		)
 
 		# Mortality-benefitter logic
 		y_new <- y_new * (1 - mortality_dampening * is_mortality_benefitter)

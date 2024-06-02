@@ -15,7 +15,8 @@ construct_patient_trajectory(
   is_mortality_benefitter,
   mortality_trajectory_shape,
   mortality_dampening,
-  sampling_frequency
+  sampling_frequency,
+  valid_hrqol_range
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ trajectory}
 \item{is_mortality_benefitter}{single logical value, is patient a mortality benefitters? Defaults to \code{FALSE}.}
 
 \item{sampling_frequency}{integer (single value or named vector), span between HRQoL sampling from patients}
+
+\item{valid_hrqol_range}{two-element numeric vector, the lower and upper
+bounds of valid HRQoL values. The default (\code{c(-0.757, 1.0)}) corresponds to
+the Danish EQ-5D-5L index values.}
 }
 \value{
 A three-element list with trajectories for each of the three assumptions as to when

@@ -25,7 +25,6 @@ simulate_trial <- function(scenario, ...) {
 #'
 simulate_trial.hrqolr_scenario <- function(
 		scenario,
-		n_patients_ground_truth = 1000,
 		test_fun = welch_t_test,
 		n_digits = 2,
 		valid_hrqol_range = c(-0.757, 1.0),
@@ -145,7 +144,7 @@ simulate_trial.default <- function(
 	mean_diffs <- mapply(
 		function(col, analysis, na_replacement) {
 			tmp <- patient_results[
-				, test_fun(get(col), grps = arm, arms = arms, na_replacement = na_replacement)
+				, test_fun(vals = get(col), grps = arm, arms = arms, na_replacement = na_replacement, alpha = alpha)
 			]
 			tmp[, analysis := analysis]
 			return(tmp)
