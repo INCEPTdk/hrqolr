@@ -126,12 +126,24 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 		key_idx_map_$keys()
 	}
 
-	info <- function() {
-		list(
-			max_size = max_size_,
-			total_size = total_size_,
-			max_total_size = max(max_total_size_, total_size_)
+	info <- function(x = NULL) {
+		options <- lapply(
+			list(
+				max_size = max_size_,
+				total_size = total_size_,
+				max_total_size = max(max_total_size_, total_size_)
+			),
+			function(o) structure(o, class = c("hrqolr_bytes", class(o)))
 		)
+
+		if (is.null(x)) {
+			return(options)
+		}
+		else if (length(x) == 1) {
+			return(options[[x]])
+		} else {
+			return(options[x])
+		}
 	}
 
 	reset() # set defaults before returning cache object below
