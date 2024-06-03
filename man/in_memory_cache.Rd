@@ -4,13 +4,16 @@
 \alias{in_memory_cache}
 \title{Create an in-memory cache}
 \usage{
-in_memory_cache(max_size = 2 * 1024^3)
+in_memory_cache(max_size = 2 * 1024^3, pruning_factor = 0.5)
 }
 \arguments{
-\item{max_size}{Maximum size of the cache, in bytes. If the cache exceeds
-this size, the entire cache is wiped; this is much faster than using an
-eviction policy for how the cache is used in \code{hrqolr} objects will be
-removed according to the value of the}
+\item{max_size}{number, maximum size of the cache, in bytes. If the cache
+exceeds this size, the entire cache is wiped; this is much faster than
+using an eviction policy for how the cache is used in \code{hrqolr} objects will
+be removed according to the value of the}
+
+\item{pruning_factor}{number, the fraction of elements to remove from the
+cache when it's full.}
 }
 \value{
 A memory caching object, with class \code{hrqolr_memory_cache}.
