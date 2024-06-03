@@ -84,17 +84,12 @@ in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 	}
 
 	prune <- function() {
-		if (total_size_ <= max_size_) {
-			return(invisible(TRUE))
-		}
+		to_keep <- seq_along(key_) >= (pruning_factor * length(key_))
 
-		keep_idx <- seq_along(key_) >= (pruning_factor * length(key_))
-		keys_to_keep <- key_[keep_idx]
-
-		idx_to_keep <- unlist(key_idx_map_$mget(keys_to_keep))
-		key_ <<- keys_to_keep
-		value_ <<- value_[!prune_idx]
-		size_ <<- size_[!prune_idx]
+		idx_to_keep <- unlist(key_idx_map_$mget(key_[to_keep]))
+		key_ <<- key_[idx_to_keep]
+		value_ <<- value_[idx_to_keep]
+		size_ <<- size_[idx_to_keep]
 
 		# We have to re-initialise the key-idx map
 		key_idx_map_ <<- fastmap::fastmap()
@@ -144,7 +139,9 @@ in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 		value_[[new_idx]] <<- value
 		size_[new_idx] <<- size
 
-		prune()
+		if (total_size_ > max_size_) {
+			prune()
+		}
 
 		invisible(TRUE)
 	}
