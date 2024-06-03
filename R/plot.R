@@ -114,11 +114,11 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
 		ggplot2::theme(legend.title = ggplot2::element_blank())
 
 	if (isTRUE(ecdf)) {
-		p_base +
+		p_final <- p_base +
 			ggplot2::stat_ecdf(na.rm = TRUE, pad = FALSE) +
 			ggplot2::scale_y_continuous(labels = scales::percent)
 	} else {
-		p_base +
+		p_final <- p_base +
 			ggplot2::stat_density(geom = "line", position = "identity", na.rm = TRUE, trim = TRUE) +
 			ggplot2::theme(
 				axis.text.y = ggplot2::element_blank(),
@@ -126,4 +126,5 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
 			)
 	}
 
+	return(p_final)
 }
