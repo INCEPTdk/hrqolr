@@ -50,6 +50,11 @@ test_that("simulate_trials S3 method works", {
 	sims_single_batch$args$test_fun <- "welch_t_test"
 	expect_snapshot(sims_single_batch)
 
+	# Test raw printing of results with their own methods
+	expect_snapshot(sims_single_batch$summary_stats)
+	expect_snapshot(sims_single_batch$comparisons)
+	expect_snapshot(sims_single_batch$trial_results)
+
 	sims_two_batches_verbose <- suppressMessages(simulate_trials(
 		scenario1,
 		n_trials = 500,

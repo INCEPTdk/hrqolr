@@ -1,12 +1,20 @@
 test_that("Caching works", {
-	expect_silent(cache_hrqolr(max_size = 1024))
-	expect_silent(in_memory_cache(Inf))
-
-	# Invalid argument
-	expect_snapshot_error(in_memory_cache(NA))
-
 	long_vector <- rep(1.0, 5e2)
-	cache <- hrqolr:::in_memory_cache(max_size = 10000)
+
+	# Invalid arguments
+	expect_snapshot_error(in_memory_cache(NA))
+	expect_snapshot_error(in_memory_cache("none"))
+	expect_snapshot_error(in_memory_cache(max_size = 1024, pruning_factor = 1.1))
+	expect_snapshot_error(in_memory_cache(max_size = 1024, pruning_factor = -0.3))
+
+	# Cache without size limit
+	limitless_cache <- in_memory_cache(Inf)
+	limitless_cache$set("x", long_vector)
+	expect_equal("x", limitless_cache$keys())
+
+	# Valid arguments
+	expect_silent(cache_hrqolr(max_size = 1024))
+	cache <- in_memory_cache(max_size = 10000, pruning_factor = 0.5)
 
 	# Ascertain validity of the subsequent expectations
 	expect_equal(
