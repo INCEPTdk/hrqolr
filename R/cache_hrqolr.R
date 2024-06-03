@@ -97,7 +97,7 @@ in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 
 		max_total_size_ <<- max(max_total_size_, total_size_)
 		total_size_ <<- sum(size_)
-		last_idx_x_ <<- length(key_)
+		last_idx_ <<- length(key_)
 		n_pruned_ <<- n_pruned_ + 1
 
 		invisible(TRUE)
