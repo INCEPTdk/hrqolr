@@ -1,5 +1,6 @@
 .covrignore
 .vscode/
+.gitattributes
 ^_pkgdown\.yml$
 ^.*\.Rproj$
 ^\.github$
