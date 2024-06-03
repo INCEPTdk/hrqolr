@@ -7,7 +7,7 @@
       10.2 kB
       
       $total_size
-      8.1 kB
+      4.1 kB
       
       $max_total_size
       12.1 kB
