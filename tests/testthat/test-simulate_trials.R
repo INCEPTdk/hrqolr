@@ -1,4 +1,6 @@
 test_that("simulate_trials S3 method works", {
+	skip_on_cran()
+
 	cache_hrqolr() # needed to use caching also during tests
 
 	# Resource use will change between runs, so this is a fixed yet equivalent list
