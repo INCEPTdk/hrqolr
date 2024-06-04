@@ -110,19 +110,7 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, n = 512, ...) {
 
 	dt <- melt.data.table(x, id.vars = id_cols, measure.vars = outcome_cols)
 
-	compute_y <- function(x, ecdf, n) {
-		if (isTRUE(ecdf)) {
-			x_grid <- seq(min(x), max(x), length.out = n)
-			list(x = x_grid, y = stats::ecdf(x)(x_grid))
-		} else {
-			stats::density(x, n = n)[c("x", "y")]
-		}
-	}
-
-	dt <- dt[, compute_y(x = value, ecdf = ecdf, n = n), by = c("arm", "variable")]
-
-	p_base <- ggplot2::ggplot(dt, ggplot2::aes(x = x, y = y, colour = arm)) +
-		ggplot2::geom_line(na.rm = TRUE) +
+	p_base <- ggplot2::ggplot(dt, ggplot2::aes(x = value, colour = arm)) +
 		ggplot2::facet_wrap(~ variable, scales = "free") +
 		ggplot2::theme(
 			legend.title = ggplot2::element_blank(),
@@ -131,10 +119,12 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, n = 512, ...) {
 
 	if (isTRUE(ecdf)) {
 		p_base +
+			ggplot2::stat_ecdf(geom = "line", position = "identity", na.rm = TRUE, pad = TRUE) +
 			ggplot2::scale_y_continuous(labels = scales::percent) +
 			ggplot2::labs(y = "Cumulative density")
 	} else {
 		p_base +
+			ggplot2::stat_density(geom = "line", position = "identity", na.rm = TRUE) +
 			ggplot2::theme(
 				axis.text.y = ggplot2::element_blank(),
 				axis.ticks.y = ggplot2::element_blank()
