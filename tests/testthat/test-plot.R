@@ -201,10 +201,8 @@ test_that("Single trials plot correctly", {
 
 	# Can't make vdiffr work on GitHub actions, so we're resorting to ggbuild
 	p <- plot(single_trial, ecdf = TRUE)
-	p_build <- ggplot2::ggplot_build(p)
-	expect_snapshot(p_build[c("data", "layout")], variant = "ecdf")
+	vdiffr::expect_doppelganger("single_trial_ecdf", p)
 
 	p <- plot(single_trial, ecdf = FALSE)
-	p_build <- ggplot2::ggplot_build(p)
-	expect_snapshot(p_build[c("data", "layout")], variant = "pdf")
+	vdiffr::expect_doppelganger("single_trial_pdf", p)
 })
