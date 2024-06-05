@@ -80,6 +80,7 @@ in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 		total_size_ <<- 0
 		last_idx_ <<- 0L
 
+		gc()
 		invisible(TRUE)
 	}
 
@@ -100,6 +101,7 @@ in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 		last_idx_ <<- length(key_)
 		n_pruned_ <<- n_pruned_ + 1
 
+		gc()
 		invisible(TRUE)
 	}
 
