@@ -4,7 +4,7 @@
       cache$info()
     Output
       $max_size
-      10.2 kB
+      10 kB
       
       $total_size
       8.1 kB

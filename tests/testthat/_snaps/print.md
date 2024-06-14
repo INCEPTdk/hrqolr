@@ -28,3 +28,13 @@
       Not available
       
 
+# Printing hrqolr bytes works
+
+    Code
+      x
+    Output
+      1 kB
+      2 kB
+      4 kB
+      1 MB
+

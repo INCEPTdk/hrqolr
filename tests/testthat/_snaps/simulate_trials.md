@@ -75,6 +75,247 @@
 ---
 
     Code
+      sims_single_batch$summary_stats
+    Output
+                           outcome     arm  analysis    p25    p50    p75   mean
+                            <char>  <char>    <fctr>  <num>  <num>  <num>  <num>
+       1:    primary__hrqol_at_eof  Active       all  0.522  0.557  0.584  0.554
+       2:    primary__hrqol_at_eof Control       all  0.379  0.400  0.419  0.398
+       3:       primary__hrqol_auc  Active       all 78.698 83.636 88.164 83.488
+       4:       primary__hrqol_auc Control       all 58.955 62.349 64.542 62.041
+       5: secondary1__hrqol_at_eof  Active       all  0.522  0.557  0.584  0.554
+       6: secondary1__hrqol_at_eof Control       all  0.379  0.400  0.419  0.399
+       7:    secondary1__hrqol_auc  Active       all 77.565 82.682 86.926 82.445
+       8:    secondary1__hrqol_auc Control       all 57.653 61.181 63.240 60.790
+       9: secondary2__hrqol_at_eof  Active       all  0.522  0.557  0.584  0.554
+      10: secondary2__hrqol_at_eof Control       all  0.379  0.400  0.419  0.399
+      11:    secondary2__hrqol_auc  Active       all 70.875 75.601 79.573 75.290
+      12:    secondary2__hrqol_auc Control       all 51.643 54.642 57.128 54.479
+      13:    primary__hrqol_at_eof  Active survivors  0.586  0.604  0.626  0.606
+      14:    primary__hrqol_at_eof Control survivors  0.419  0.435  0.456  0.436
+      15:       primary__hrqol_auc  Active survivors 87.783 91.138 95.122 91.282
+      16:       primary__hrqol_auc Control survivors 65.327 67.608 70.816 67.896
+      17: secondary1__hrqol_at_eof  Active survivors  0.633  0.653  0.669  0.650
+      18: secondary1__hrqol_at_eof Control survivors  0.453  0.471  0.483  0.468
+      19:    secondary1__hrqol_auc  Active survivors 94.157 97.072 99.154 96.735
+      20:    secondary1__hrqol_auc Control survivors 68.697 71.718 73.680 71.371
+      21: secondary2__hrqol_at_eof  Active survivors  0.669  0.683  0.698  0.683
+      22: secondary2__hrqol_at_eof Control survivors  0.478  0.488  0.503  0.490
+      23:    secondary2__hrqol_auc  Active survivors 90.900 92.661 94.861 92.817
+      24:    secondary2__hrqol_auc Control survivors 65.220 66.714 68.847 66.922
+                           outcome     arm  analysis    p25    p50    p75   mean
+             sd    se
+          <num> <num>
+       1: 0.042 0.004
+       2: 0.033 0.003
+       3: 6.520 0.652
+       4: 5.151 0.515
+       5: 0.042 0.004
+       6: 0.033 0.003
+       7: 6.421 0.642
+       8: 5.076 0.508
+       9: 0.042 0.004
+      10: 0.033 0.003
+      11: 5.707 0.571
+      12: 4.494 0.449
+      13: 0.034 0.003
+      14: 0.026 0.003
+      15: 5.445 0.545
+      16: 4.102 0.410
+      17: 0.029 0.003
+      18: 0.025 0.002
+      19: 4.516 0.452
+      20: 3.875 0.388
+      21: 0.022 0.002
+      22: 0.019 0.002
+      23: 3.126 0.313
+      24: 2.615 0.262
+             sd    se
+
+---
+
+    Code
+      sims_single_batch$comparisons
+    Output
+                           statistic primary__hrqol_at_eof primary__hrqol_at_eof
+                              <char>                <char>                <char>
+       1:                 comparator                Active                Active
+       2:                     target               Control               Control
+       3:                   analysis                   all             survivors
+       4:              mean_estimate                -0.155                 -0.17
+       5:          mean_ground_truth                -0.155                -0.155
+       6:                         sd                 0.049                  0.04
+       7:                         se                 0.005                 0.004
+       8:                       bias                     0                -0.015
+       9:                    bias_se                 0.005                 0.004
+      10:              relative_bias                 0.003                 0.094
+      11:           relative_bias_se                 0.031                 0.026
+      12:                        mse                 0.002                 0.002
+      13:                     mse_se                     0                     0
+      14:                   coverage                  0.96                  0.98
+      15:                coverage_se                  0.02                 0.014
+      16:    bias_corrected_coverage                     1                     1
+      17: bias_corrected_coverage_se                     0                     0
+      18:       rejection_proportion                  0.84                  0.92
+      19:    rejection_proportion_se                 0.037                 0.027
+      20:                      n_sim                   100                   100
+      21:                        p25                -0.189                -0.193
+      22:                        p50                -0.157                -0.171
+      23:                        p75                -0.127                -0.146
+                           statistic primary__hrqol_at_eof primary__hrqol_at_eof
+          primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
+                      <char>             <char>                   <char>
+       1:             Active             Active                   Active
+       2:            Control            Control                  Control
+       3:                all          survivors                      all
+       4:            -21.447            -23.386                   -0.155
+       5:            -17.509            -17.509                   -0.155
+       6:              7.576              6.332                    0.049
+       7:              0.758              0.633                    0.005
+       8:             -3.938             -5.877                        0
+       9:              0.758              0.633                    0.005
+      10:              0.225              0.336                    0.003
+      11:              0.043              0.036                    0.031
+      12:             72.328             74.233                    0.002
+      13:              9.253              8.403                        0
+      14:               0.95               0.88                     0.96
+      15:              0.022              0.032                     0.02
+      16:                  1                  1                        1
+      17:                  0                  0                        0
+      18:               0.76               0.88                     0.84
+      19:              0.043              0.032                    0.037
+      20:                100                100                      100
+      21:            -26.354            -26.949                   -0.189
+      22:            -21.712            -23.779                   -0.157
+      23:             -16.42            -19.691                   -0.127
+          primary__hrqol_auc primary__hrqol_auc secondary1__hrqol_at_eof
+          secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
+                            <char>                <char>                <char>
+       1:                   Active                Active                Active
+       2:                  Control               Control               Control
+       3:                survivors                   all             survivors
+       4:                   -0.182               -21.654               -25.364
+       5:                   -0.155               -18.468               -18.468
+       6:                    0.037                 7.471                 5.672
+       7:                    0.004                 0.747                 0.567
+       8:                   -0.027                -3.186                -6.896
+       9:                    0.004                 0.747                 0.567
+      10:                    0.175                 0.173                 0.373
+      11:                    0.024                  0.04                 0.031
+      12:                    0.002                 65.41                79.403
+      13:                        0                 8.475                 8.048
+      14:                     0.89                  0.95                  0.82
+      15:                    0.031                 0.022                 0.038
+      16:                        1                     1                     1
+      17:                        0                     0                     0
+      18:                     0.99                  0.77                  0.96
+      19:                     0.01                 0.042                  0.02
+      20:                      100                   100                   100
+      21:                   -0.202               -26.463               -29.184
+      22:                   -0.183               -22.029               -25.381
+      23:                   -0.159                -16.87                -22.06
+          secondary1__hrqol_at_eof secondary1__hrqol_auc secondary1__hrqol_auc
+          secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
+                            <char>                   <char>                <char>
+       1:                   Active                   Active                Active
+       2:                  Control                  Control               Control
+       3:                      all                survivors                   all
+       4:                   -0.155                   -0.193               -20.811
+       5:                   -0.155                   -0.155               -20.898
+       6:                    0.049                    0.026                 6.612
+       7:                    0.005                    0.003                 0.661
+       8:                        0                   -0.038                 0.087
+       9:                    0.005                    0.003                 0.661
+      10:                    0.003                    0.248                -0.004
+      11:                    0.031                    0.017                 0.032
+      12:                    0.002                    0.002                43.293
+      13:                        0                        0                 5.799
+      14:                     0.96                     0.79                  0.96
+      15:                     0.02                    0.041                  0.02
+      16:                        1                        1                     1
+      17:                        0                        0                     0
+      18:                     0.84                        1                  0.81
+      19:                    0.037                        0                 0.039
+      20:                      100                      100                   100
+      21:                   -0.189                   -0.208               -25.273
+      22:                   -0.157                   -0.192               -21.115
+      23:                   -0.127                   -0.175               -16.661
+          secondary2__hrqol_at_eof secondary2__hrqol_at_eof secondary2__hrqol_auc
+          secondary2__hrqol_auc
+                         <char>
+       1:                Active
+       2:               Control
+       3:             survivors
+       4:               -25.895
+       5:               -20.898
+       6:                 3.613
+       7:                 0.361
+       8:                -4.997
+       9:                 0.361
+      10:                 0.239
+      11:                 0.017
+      12:                37.897
+      13:                 4.522
+      14:                  0.81
+      15:                 0.039
+      16:                     1
+      17:                     0
+      18:                     1
+      19:                     0
+      20:                   100
+      21:               -27.737
+      22:               -25.999
+      23:               -23.296
+          secondary2__hrqol_auc
+
+---
+
+    Code
+      sims_single_batch$trial_results
+    Output
+                 arm primary__hrqol_at_eof primary__hrqol_auc
+              <char>                 <num>              <num>
+          1:  Active                  0.80          125.72890
+          2:  Active                  0.80          125.72890
+          3:  Active                  0.80          125.72890
+          4:  Active                  0.80          125.72890
+          5:  Active                  0.80          125.72890
+         ---                                                 
+       9996: Control                  0.63           91.33126
+       9997: Control                  0.40           55.85026
+       9998: Control                    NA                 NA
+       9999: Control                    NA                 NA
+      10000: Control                  0.44           59.68898
+             secondary1__hrqol_at_eof secondary1__hrqol_auc secondary2__hrqol_at_eof
+                                <num>                 <num>                    <num>
+          1:                     0.80             123.30160                     0.80
+          2:                     0.80             123.30160                     0.80
+          3:                     0.80             123.30160                     0.80
+          4:                     0.80             123.30160                     0.80
+          5:                     0.80             123.30160                     0.80
+         ---                                                                        
+       9996:                     0.63              88.67601                     0.63
+       9997:                     0.40              55.46753                     0.40
+       9998:                       NA                    NA                       NA
+       9999:                       NA                    NA                       NA
+      10000:                     0.44              59.60447                     0.44
+             secondary2__hrqol_auc trial_id
+                             <num>    <int>
+          1:             112.26954       82
+          2:             112.26954       22
+          3:             112.26954       10
+          4:             112.26954       67
+          5:             112.26954       70
+         ---                               
+       9996:              86.41995       46
+       9997:              54.15163       12
+       9998:                    NA       42
+       9999:                    NA       64
+      10000:              60.87672       19
+
+---
+
+    Code
       sims_two_batches_verbose
     Output
       # Scenario specification

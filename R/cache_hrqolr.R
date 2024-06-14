@@ -8,8 +8,11 @@
 #' @export
 #' @importFrom utils assignInMyNamespace
 #'
-cache_hrqolr <- function(max_size = 2 * 1024^3) {
-	utils::assignInMyNamespace(".hrqolr_cache_user", in_memory_cache(max_size))
+cache_hrqolr <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
+	utils::assignInMyNamespace(
+		".hrqolr_cache_user",
+		in_memory_cache(max_size, pruning_factor)
+	)
 }
 
 
@@ -27,10 +30,12 @@ clear_hrqolr_cache <- function() {
 #' overhead due to housekeeping as this is an internal function that users
 #' should never use.
 #'
-#' @param max_size Maximum size of the cache, in bytes. If the cache exceeds
-#'   this size, the entire cache is wiped; this is much faster than using an
-#'   eviction policy for how the cache is used in `hrqolr` objects will be
-#'   removed according to the value of the
+#' @param max_size number, maximum size of the cache, in bytes. If the cache
+#'   exceeds this size, the entire cache is wiped; this is much faster than
+#'   using an eviction policy for how the cache is used in `hrqolr` objects will
+#'   be removed according to the value of the
+#' @param pruning_factor number, the fraction of elements to remove from the
+#'   cache when it's full.
 #'
 #' @importFrom utils object.size
 #' @importFrom rlang as_quosure eval_tidy
@@ -38,12 +43,16 @@ clear_hrqolr_cache <- function() {
 #'
 #' @return A memory caching object, with class `hrqolr_memory_cache`.
 #'
-in_memory_cache <- function(max_size = 2 * 1024^3) {
+in_memory_cache <- function(max_size = 2 * 1024^3, pruning_factor = 0.5) {
 	if (!verify_num(max_size)) {
 		stop0("max_size must be a number. Use `Inf` for no limit.")
 	}
 
-	key_idx_map_  <- fastmap::fastmap()
+	if (!verify_num(pruning_factor, min_value = 0, max_value = 1)) {
+		stop0("pruning_factor must be a number between 0 and 1.")
+	}
+
+	key_idx_map_ <- fastmap::fastmap()
 
 	# These values are set in the reset() method.
 	key_ <- NULL
@@ -58,20 +67,41 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 	# Internal dynamic metadata
 	total_size_ <- 0  # Total number of bytes used
 	max_total_size_ <- 0  # The largest cache size in bytes, can be useful if pruned
+	n_pruned_ <- 0L  # The number of times the cache was reset
 	last_idx_ <- 0L  # Most recent (and largest) index used
 
 	# Methods
 	reset <- function() {
 		key_idx_map_$reset()
-		key_ <<- rep_len(NA_character_, initial_size)
-		value_ <<- vector("list", initial_size)
-		size_ <<- rep_len(NA_real_, initial_size)
-
-		# Update before resetting
-		max_total_size_ <<- max(max_total_size_, total_size_)
+		key_ <<- vector("character")
+		value_ <<- vector("list")
+		size_ <<- vector("numeric")
 
 		total_size_ <<- 0
 		last_idx_ <<- 0L
+
+		gc()
+		invisible(TRUE)
+	}
+
+	prune <- function() {
+		to_keep <- seq_along(key_) >= (pruning_factor * length(key_))
+
+		idx_to_keep <- unlist(key_idx_map_$mget(key_[to_keep]))
+		key_ <<- key_[idx_to_keep]
+		value_ <<- value_[idx_to_keep]
+		size_ <<- size_[idx_to_keep]
+
+		# We have to re-initialise the key-idx map
+		key_idx_map_ <<- fastmap::fastmap()
+		key_idx_map_$mset(.list = setNames(seq_along(key_), key_))
+
+		max_total_size_ <<- max(max_total_size_, total_size_)
+		total_size_ <<- sum(size_)
+		last_idx_ <<- length(key_)
+		n_pruned_ <<- n_pruned_ + 1
+
+		gc()
 		invisible(TRUE)
 	}
 
@@ -88,11 +118,6 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 	set <- function(key, value) {
 		if (prune_by_size) {
 			size <- as.numeric(object.size(value))  # imperfect, see ?object.size
-
-			if ((total_size_ + size) > max_size_) {
-				reset()
-			}
-
 			total_size_ <<- total_size_ + size
 		} else {
 			size <- NA_real_
@@ -112,9 +137,13 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 			new_idx <- last_idx_
 		}
 
-		key_  [new_idx]   <<- key
+		key_[new_idx] <<- key
 		value_[[new_idx]] <<- value
-		size_ [new_idx]   <<- size
+		size_[new_idx] <<- size
+
+		if (total_size_ > max_size_) {
+			prune()
+		}
 
 		invisible(TRUE)
 	}
@@ -124,13 +153,11 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 	}
 
 	info <- function(x = NULL) {
-		options <- lapply(
-			list(
-				max_size = max_size_,
-				total_size = total_size_,
-				max_total_size = max(max_total_size_, total_size_)
-			),
-			function(o) structure(o, class = c("hrqolr_bytes", class(o)))
+		options <- list(
+			max_size = structure(max_size_, class = "hrqolr_bytes"),
+			total_size = structure(total_size_, class = "hrqolr_bytes"),
+			max_total_size = structure(max(max_total_size_, total_size_), class = "hrqolr_bytes"),
+			n_pruned = n_pruned_
 		)
 
 		if (is.null(x)) {
@@ -151,7 +178,8 @@ in_memory_cache <- function(max_size = 2 * 1024^3) {
 			set = set,
 			keys = keys,
 			info = info,
-			reset = reset
+			reset = reset,
+			prune = prune
 		),
 		class = c("hrqolr_memory_cache")
 	)

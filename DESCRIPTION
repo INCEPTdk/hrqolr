@@ -1,8 +1,8 @@
 Package: hrqolr
 Title: Simulator of health-related quality of life trajectories
-Version: 0.0.0.9068
-Date: 2024-06-02
-Authors@R: 
+Version: 0.0.0.9083
+Date: 2024-06-14
+Authors@R:
 	c(person("Benjamin Skov", "Kaas-Hansen",
 	         email = "epiben@hey.com",
 	         role = c("aut", "cre", "cph"),
@@ -11,11 +11,11 @@ Authors@R:
 	         email = "andersgran@gmail.com",
 	         role = c("aut"),
 	         comment = c(ORCID = "0000-0001-5799-7655")))
-Description: hrqolr simulates randomised clinical trials with temporal 
-	trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect 
-	sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories. 
-	Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>), 
-	which is primarily supported by a grant from Sygeforsikringen "danmark" 
+Description: hrqolr simulates randomised clinical trials with temporal
+	trajectories of health-related quality of life (HRQoL) as the outcome and quantifies effect
+	sizes as single-sampled HRQoL values at end of follow-up and as the area under the trajectories.
+	Developed as part of the INCEPT (Intensive Care Platform Trial) project (<https://incept.dk/>),
+	which is primarily supported by a grant from Sygeforsikringen "danmark"
 	(<https://www.sygeforsikring.dk/>).
 Type: Package
 BugReports: https://github.com/INCEPTdk/hrqolr/issues
@@ -26,7 +26,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-Depends: 
+Depends:
 	R (>= 2.10)
 Imports:
 	fastmap (>= 1.2.0),

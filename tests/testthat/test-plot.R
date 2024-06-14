@@ -181,27 +181,30 @@ test_that("Arm and patient trajectories are plotted correctly", {
 	vdiffr::expect_doppelganger("arm_trajs_only__dashed_lines2", p)
 })
 
-# test_that("Single trials plot correctly", {
-# 	scenario <- setup_scenario(
-# 		arms = c("Active", "Control"),
-# 		n_patients = 1000,
-# 		index_hrqol = 0,
-# 		first_hrqol = 0.3,
-# 		final_hrqol = c(Active = 0.7, Control = 0.7),
-# 		acceleration_hrqol = c(Active = 1.2, Control = 1),
-# 		mortality = 0.0,
-# 		mortality_dampening = 0,
-# 		mortality_trajectory_shape = "linear",
-# 		prop_mortality_benefitters = 0.0,
-# 		sampling_frequency = 14,
-# 		verbose = FALSE
-# 	)
-#
-# 	single_trial <- simulate_trial(scenario, seed = 42)
-#
-# 	p <- plot(single_trial, ecdf = TRUE)
-# 	vdiffr::expect_doppelganger("single_trial_cdf", p)
-#
-# 	p <- plot(single_trial, ecdf = FALSE)
-# 	vdiffr::expect_doppelganger("single_trial_pdf", p)
-# })
+test_that("Single trials plot correctly", {
+	scenario <- setup_scenario(
+		arms = c("Active1", "Active2", "Control"),
+		n_patients = c(Active1 = 1000, Active2 = 500, Control = 500),
+		index_hrqol = 0,
+		first_hrqol = 0.3,
+		final_hrqol = c(Active1 = 0.7, Active2 = 0.6, Control = 0.6),
+		acceleration_hrqol = c(Active1 = 1.2, Active2 = 1.1, Control = 1),
+		mortality = 0.0,
+		mortality_dampening = 0,
+		mortality_trajectory_shape = "linear",
+		prop_mortality_benefitters = 0.0,
+		sampling_frequency = 14,
+		verbose = FALSE
+	)
+
+	single_trial <- simulate_trial(scenario, seed = 42)
+
+	# Can't make vdiffr work on GitHub actions, so we're resorting to ggbuild
+	p <- plot(single_trial, ecdf = TRUE)
+	p_build <- ggplot2::ggplot_build(p)
+	expect_snapshot(p_build[c("data", "layout")], variant = "ecdf")
+
+	p <- plot(single_trial, ecdf = FALSE)
+	p_build <- ggplot2::ggplot_build(p)
+	expect_snapshot(p_build[c("data", "layout")], variant = "pdf")
+})

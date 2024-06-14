@@ -16,7 +16,7 @@
   ...
 )
 
-\method{plot}{hrqolr_trial}(x, analysis = "all", ecdf = TRUE, ...)
+\method{plot}{hrqolr_trial}(x, analysis = "all", ecdf = TRUE, n = 512, ...)
 }
 \arguments{
 \item{x}{object to plot, see \emph{Details}.}
@@ -36,6 +36,13 @@ drawn to summarise patient trajectories}
 \item{analysis}{character, \code{"all"} (include non-survivors and set their HRQoL to 0) or \code{"survivors"}.}
 
 \item{ecdf}{logical, whether to plot the empiricial cumulative distribution (default) or not}
+
+\item{n}{the number of equally spaced points at which the density is
+    to be estimated.  When \code{n > 512}, it is rounded up to a power
+    of 2 during the calculations (as \code{\link[stats]{fft}} is used) and the
+    final result is interpolated by \code{\link[stats]{approx}}.  So it almost
+    always makes sense to specify \code{n} as a power of two.
+  }
 }
 \value{
 A ggplot2 object.

@@ -91,12 +91,13 @@ plot.hrqolr_trajectories <- function(
 #'
 #' @param analysis character, `"all"` (include non-survivors and set their HRQoL to 0) or `"survivors"`.
 #' @param ecdf logical, whether to plot the empiricial cumulative distribution (default) or not
+#' @inheritParams stats::density
 #'
 #' @import data.table
 #' @export
 #' @describeIn plot Single trial
 #'
-plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
+plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, n = 512, ...) {
 	assert_pkgs("ggplot2")
 	x <- copy(x$patient_results) # don't corrupt input object
 
@@ -111,19 +112,23 @@ plot.hrqolr_trial <- function(x, analysis = "all", ecdf = TRUE, ...) {
 
 	p_base <- ggplot2::ggplot(dt, ggplot2::aes(x = value, colour = arm)) +
 		ggplot2::facet_wrap(~ variable, scales = "free") +
-		ggplot2::theme(legend.title = ggplot2::element_blank())
+		ggplot2::theme(
+			legend.title = ggplot2::element_blank(),
+			axis.title.x = ggplot2::element_blank()
+		)
 
 	if (isTRUE(ecdf)) {
 		p_base +
-			ggplot2::stat_ecdf(na.rm = TRUE, pad = FALSE) +
-			ggplot2::scale_y_continuous(labels = scales::percent)
+			ggplot2::stat_ecdf(geom = "line", position = "identity", na.rm = TRUE, pad = TRUE) +
+			ggplot2::scale_y_continuous(labels = scales::percent) +
+			ggplot2::labs(y = "Cumulative density")
 	} else {
 		p_base +
-			ggplot2::stat_density(geom = "line", position = "identity", na.rm = TRUE, trim = TRUE) +
+			ggplot2::stat_density(geom = "line", position = "identity", na.rm = TRUE) +
 			ggplot2::theme(
 				axis.text.y = ggplot2::element_blank(),
 				axis.ticks.y = ggplot2::element_blank()
-			)
+			) +
+			ggplot2::labs(y = "Density")
 	}
-
 }

@@ -5,15 +5,18 @@
 \alias{clear_hrqolr_cache}
 \title{Caching of hrqolr functions}
 \usage{
-cache_hrqolr(max_size = 2 * 1024^3)
+cache_hrqolr(max_size = 2 * 1024^3, pruning_factor = 0.5)
 
 clear_hrqolr_cache()
 }
 \arguments{
-\item{max_size}{Maximum size of the cache, in bytes. If the cache exceeds
-this size, the entire cache is wiped; this is much faster than using an
-eviction policy for how the cache is used in \code{hrqolr} objects will be
-removed according to the value of the}
+\item{max_size}{number, maximum size of the cache, in bytes. If the cache
+exceeds this size, the entire cache is wiped; this is much faster than
+using an eviction policy for how the cache is used in \code{hrqolr} objects will
+be removed according to the value of the}
+
+\item{pruning_factor}{number, the fraction of elements to remove from the
+cache when it's full.}
 }
 \value{
 \code{NULL}, these functions are called for their side effects: caching (or clearing caches) of
