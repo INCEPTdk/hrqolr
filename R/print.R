@@ -230,6 +230,11 @@ print.hrqolr_summary_stats <- function(x, decimals = 3, ...) {
 #' @rdname print
 #'
 print.hrqolr_bytes <- function (x, digits = 3, ...) {
+	if (length(x) > 1) {
+		sapply(x, print.hrqolr_bytes)
+		return(invisible(x))
+	}
+
 	if (is.na(x)) {
 		cat("Not available\n")
 
